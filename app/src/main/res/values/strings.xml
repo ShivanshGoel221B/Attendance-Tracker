@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Attendance Tracker</string>
+    <string name="home_page_title">Your Organisations</string>
+    <string name="add_new_organisation">New Organisation</string>
+    <string name="add">Add</string>
+    <string name="overall_attendance">Overall Attendance</string>
+</resources>
