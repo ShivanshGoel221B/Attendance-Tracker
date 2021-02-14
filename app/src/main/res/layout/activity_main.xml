@@ -10,9 +10,14 @@
         android:id="@+id/text_your_organisations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:background="@color/ultra_light_grey"
+        android:elevation="7dp"
+        android:fontFamily="@font/halant_semibold"
+        android:paddingStart="25dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
         android:text="@string/home_page_title"
+        android:textColor="@color/teal_dark"
         android:textSize="26sp" />
 
     <Button
@@ -22,7 +27,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:background="@drawable/button_gradient"
-        android:fontFamily="@font/halant_semibold"
+        android:elevation="7dp"
+        android:fontFamily="@font/poly"
         android:onClick="addOrganisationButton"
         android:paddingLeft="35dp"
         android:paddingTop="20dp"
