@@ -1,5 +1,6 @@
 package com.goel.attendancetracker.classes;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -10,10 +11,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.goel.attendancetracker.R;
-import com.goel.attendancetracker.organisations.OrganisationsAdapter;
 
 import java.util.ArrayList;
 
@@ -36,19 +37,21 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
         return new viewHolder(view, clickListener);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         ClassesModel model = classList.get(position);
         int percentage = model.getClassAttendancePercentage();
         int requiredPercentage = model.getRequiredAttendance();
         if (percentage>=requiredPercentage)
-            progress = context.getDrawable(R.drawable.attendance_progress);
+            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress);
         else if (percentage > requiredPercentage*0.75f)
-            progress = context.getDrawable(R.drawable.attendance_progress_low);
+            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress_low);
         else
-            progress = context.getDrawable(R.drawable.attendance_progress_danger);
+            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress_danger);
         holder.attendancePercentage.setText(percentage + "%");
         holder.attendanceProgressBar.setProgressDrawable(progress);
+        holder.attendanceProgressBar.setProgress(0);
         holder.attendanceProgressBar.setProgress(percentage);
         holder.requiredAttendanceBar.setProgress(requiredPercentage);
         holder.className.setText(model.getClassName());
@@ -93,51 +96,39 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
             deleteIcon = itemView.findViewById(R.id.class_delete_icon);
             markIcon = itemView.findViewById(R.id.class_mark_icon);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position !=RecyclerView.NO_POSITION)
-                            listener.onItemClick(position);
-                    }
+            itemView.setOnClickListener(v -> {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position !=RecyclerView.NO_POSITION)
+                        listener.onItemClick(position);
                 }
             });
 
-            editIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position !=RecyclerView.NO_POSITION)
-                            listener.onEditClick(position);
-                    }
+            editIcon.setOnClickListener(v -> {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position !=RecyclerView.NO_POSITION)
+                        listener.onEditClick(position);
                 }
             });
 
-            deleteIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position !=RecyclerView.NO_POSITION)
-                            listener.onDeleteClick(position);
-                    }
+            deleteIcon.setOnClickListener(v -> {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position !=RecyclerView.NO_POSITION)
+                        listener.onDeleteClick(position);
                 }
             });
 
-            markIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position !=RecyclerView.NO_POSITION)
-                            listener.onMarkClick(position);
-                    }
+            markIcon.setOnClickListener(v -> {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position !=RecyclerView.NO_POSITION)
+                        listener.onMarkClick(position);
                 }
             });
         }

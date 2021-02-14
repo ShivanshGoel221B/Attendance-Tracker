@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.goel.attendancetracker.classes.ClassesModel;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.Iterator;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -76,8 +78,67 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void markAttendance(String organisationName, ClassesModel model, String markDate, int[] attendance){
 
-        SQLiteDatabase writableDatabase = this.getWritableDatabase();
+        JSONObject history;
+        try {
+            history = new JSONObject(model.getClassHistory());
+        } catch (JSONException e) {
+            return;
+        }
+        // INITIALIZING INITIAL DATE HISTORY
+        JSONArray dateHistory;
+        try {
+            dateHistory = (JSONArray) history.get(markDate);
+        } catch (JSONException e) {
+            dateHistory = new JSONArray();
+            try {
+                dateHistory.put(0,0);
+                dateHistory.put(1,0);
+            } catch (JSONException jsonException) {
+                return;
+            }
+        }
 
+        // UPDATE MODEL HISTORY
+        try {
+            dateHistory.put(0, attendance[0] + dateHistory.getInt(0));
+            dateHistory.put(1, attendance[1] + dateHistory.getInt(1));
+        } catch (JSONException e) {
+            return;
+        }
+
+        try {
+            history.put(markDate, dateHistory);
+            model.setClassHistory(history.toString());
+        } catch (JSONException e) {
+            return;
+        }
+
+        // UPDATE NEW ATTENDANCE
+        int present = 0;
+        int absent = 0;
+        try {
+            Iterator<String> keys = history.keys();
+            while (keys.hasNext()){
+                JSONArray dateData = (JSONArray) history.get(keys.next());
+                present += dateData.getInt(0);
+                absent += dateData.getInt(1);
+            }
+        }catch (JSONException e) {
+            return;
+        }
+
+        int newAttendance = 100;
+        if (present != 0 || absent != 0){
+            newAttendance = (present * 100)/(present + absent);
+        }
+        model.setClassAttendancePercentage(newAttendance);
+
+        // UPDATE IN DATABASE
+        SQLiteDatabase writableDatabase = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Params.HISTORY, history.toString());
+        values.put(Params.ATTENDANCE, newAttendance);
+        this.updateClass(organisationName, values, String.valueOf(model.getId()));
         writableDatabase.close();
     }
 

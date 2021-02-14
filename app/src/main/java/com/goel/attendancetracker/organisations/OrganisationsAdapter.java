@@ -1,19 +1,17 @@
-                                                                                                                                            package com.goel.attendancetracker.organisations;
+package com.goel.attendancetracker.organisations;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.shapes.Shape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.goel.attendancetracker.MainActivity;
 import com.goel.attendancetracker.R;
 
 import java.util.ArrayList;
@@ -37,19 +35,21 @@ public class OrganisationsAdapter extends RecyclerView.Adapter<OrganisationsAdap
         return new viewHolder(view, clickListener);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         OrganisationsModel model = organisationList.get(position);
         int percentage = model.getOrganisationAttendancePercentage();
         int requiredPercentage = model.getRequiredAttendance();
         if (percentage>=requiredPercentage)
-            progress = context.getDrawable(R.drawable.attendance_progress);
+            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress);
         else if (percentage > requiredPercentage*0.75f)
-            progress = context.getDrawable(R.drawable.attendance_progress_low);
+            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress_low);
         else
-            progress = context.getDrawable(R.drawable.attendance_progress_danger);
+            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress_danger);
         holder.attendancePercentage.setText(percentage + "%");
         holder.attendanceProgressBar.setProgressDrawable(progress);
+        holder.attendanceProgressBar.setProgress(0);
         holder.attendanceProgressBar.setProgress(percentage);
         holder.requiredAttendanceBar.setProgress(requiredPercentage);
         holder.organisationName.setText(model.getOrganisationName());
@@ -88,39 +88,30 @@ public class OrganisationsAdapter extends RecyclerView.Adapter<OrganisationsAdap
             organisationName = itemView.findViewById(R.id.organisation_name);
             editIcon = itemView.findViewById(R.id.edit_organisation_icon);
             deleteIcon = itemView.findViewById(R.id.delete_organisation_icon);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position !=RecyclerView.NO_POSITION)
-                            listener.onItemClick(position);
-                    }
+            itemView.setOnClickListener(v -> {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position !=RecyclerView.NO_POSITION)
+                        listener.onItemClick(position);
                 }
             });
 
-            deleteIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position !=RecyclerView.NO_POSITION)
-                            listener.onDeleteClick(position);
-                    }
+            deleteIcon.setOnClickListener(v -> {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position !=RecyclerView.NO_POSITION)
+                        listener.onDeleteClick(position);
                 }
             });
 
-            editIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position !=RecyclerView.NO_POSITION)
-                            listener.onEditClick(position);
-                    }
+            editIcon.setOnClickListener(v -> {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position !=RecyclerView.NO_POSITION)
+                        listener.onEditClick(position);
                 }
             });
         }
