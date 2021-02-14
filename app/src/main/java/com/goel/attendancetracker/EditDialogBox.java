@@ -3,7 +3,6 @@ package com.goel.attendancetracker;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,18 +35,8 @@ public class EditDialogBox extends AppCompatDialogFragment {
 
         builder.setView(view)
                 .setTitle("Edit")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.submitDetails(newNameText, newTargetText);
-                    }
-                });
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton("Save", (dialog, which) -> listener.submitDetails(newNameText, newTargetText));
 
         newNameText.setText(name);
         newTargetText.setText(String.valueOf(target));

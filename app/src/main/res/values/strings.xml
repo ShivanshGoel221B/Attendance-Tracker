@@ -8,4 +8,10 @@
     <string name="decrement">-</string>
     <string name="reset">Reset</string>
     <string name="update">Update</string>
+    <string name="enter_organisation_name">Enter Organisation Name</string>
+    <string name="enter_target_attendance">Enter Target Attendance</string>
+    <string name="add_class_appointment">Add Class/Appointment</string>
+    <string name="app_logo">App Logo</string>
+    <string name="enter_new_name">Enter new name</string>
+    <string name="enter_new_target">Enter new target</string>
 </resources>

@@ -45,7 +45,7 @@
             android:background="@drawable/form_control_background"
             android:ems="10"
             android:fontFamily="@font/poly"
-            android:hint="Enter Organisation Name"
+            android:hint="@string/enter_organisation_name"
             android:inputType="textPersonName"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
@@ -57,7 +57,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/edit_new_organisation_target"
@@ -67,7 +68,7 @@
             android:background="@drawable/form_control_background"
             android:ems="10"
             android:fontFamily="@font/poly"
-            android:hint="Enter Target Attendance"
+            android:hint="@string/enter_target_attendance"
             android:inputType="number"
             android:maxLength="100"
             android:paddingLeft="10dp"
@@ -79,7 +80,8 @@
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_new_organisation_name" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_new_organisation_name"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/new_organisation_submit"

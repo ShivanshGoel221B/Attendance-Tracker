@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.goel.attendancetracker.database.DatabaseHandler;
-
 import java.util.Objects;
 
 

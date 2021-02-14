@@ -14,8 +14,6 @@ import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.OrganisationsDataModel;
 import com.goel.attendancetracker.database.Params;
 
-import java.sql.SQLException;
-
 public class NewOrganisationActivity extends AppCompatActivity {
 
     DatabaseHandler databaseHandler;

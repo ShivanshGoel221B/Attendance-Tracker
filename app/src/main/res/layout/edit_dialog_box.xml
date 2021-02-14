@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,13 +24,14 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:fontFamily="@font/halant_medium"
-            android:hint="Enter new name"
+            android:hint="@string/enter_new_name"
             android:inputType="textPersonName"
             android:paddingStart="17dp"
             android:paddingTop="10dp"
             android:paddingEnd="15dp"
             android:paddingBottom="6dp"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/edit_target"
@@ -40,13 +40,14 @@
             android:layout_marginTop="10dp"
             android:ems="10"
             android:fontFamily="@font/halant_medium"
-            android:hint="Enter new target"
+            android:hint="@string/enter_new_target"
             android:inputType="number"
             android:paddingStart="17dp"
             android:paddingTop="10dp"
             android:paddingEnd="15dp"
             android:paddingBottom="6dp"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:autofillHints="" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

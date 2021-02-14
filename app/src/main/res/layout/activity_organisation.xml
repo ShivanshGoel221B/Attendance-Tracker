@@ -89,7 +89,7 @@
                 android:paddingTop="0dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="0dp"
-                android:text="Add Class/Appointment"
+                android:text="@string/add_class_appointment"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"

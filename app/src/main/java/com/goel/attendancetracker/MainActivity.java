@@ -1,7 +1,6 @@
 package com.goel.attendancetracker;
 
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -113,21 +112,13 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
     private void deleteOrganisation(int position) {
         new AlertDialog.Builder(MainActivity.this)
                 .setMessage("Are you sure you want to delete " + organisationList.get(position).getOrganisationName() + " ?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        organisationsAdapter.notifyItemRemoved(position);
-                        databaseHandler.deleteOrganisation(String.valueOf(organisationList.get(position).getId()), organisationList.get(position).getOrganisationName());
-                        Toast.makeText(MainActivity.this, "Deleted " + organisationList.get(position).getOrganisationName(), Toast.LENGTH_LONG).show();
-                        organisationList.remove(position);
-                    }
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    organisationsAdapter.notifyItemRemoved(position);
+                    databaseHandler.deleteOrganisation(String.valueOf(organisationList.get(position).getId()), organisationList.get(position).getOrganisationName());
+                    Toast.makeText(MainActivity.this, "Deleted " + organisationList.get(position).getOrganisationName(), Toast.LENGTH_LONG).show();
+                    organisationList.remove(position);
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 

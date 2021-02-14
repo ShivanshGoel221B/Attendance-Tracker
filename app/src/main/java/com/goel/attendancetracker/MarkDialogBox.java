@@ -34,20 +34,14 @@ public class MarkDialogBox extends AppCompatDialogFragment {
         markPresent = view.findViewById(R.id.attendance_check);
         markAbsent = view.findViewById(R.id.attendance_cross);
 
-        markPresent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.performHapticFeedback(1);
-                presentCount++;
-            }
+        markPresent.setOnClickListener(v -> {
+            v.performHapticFeedback(1);
+            presentCount++;
         });
 
-        markAbsent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.performHapticFeedback(1);
-                absentCount++;
-            }
+        markAbsent.setOnClickListener(v -> {
+            v.performHapticFeedback(1);
+            absentCount++;
         });
 
 
