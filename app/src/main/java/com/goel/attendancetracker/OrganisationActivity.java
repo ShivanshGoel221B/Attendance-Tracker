@@ -288,7 +288,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
 
         if (overallAttendance >= overallRequiredAttendance)
             overallProgress.setProgressDrawable(ContextCompat.getDrawable(OrganisationActivity.this, R.drawable.attendance_progress));
-        else if (overallRequiredAttendance > overallRequiredAttendance * 0.75f)
+        else if (overallAttendance > overallRequiredAttendance * 0.75f)
             overallProgress.setProgressDrawable(ContextCompat.getDrawable(OrganisationActivity.this, R.drawable.attendance_progress_low));
         else
             overallProgress.setProgressDrawable(ContextCompat.getDrawable(OrganisationActivity.this, R.drawable.attendance_progress_danger));
