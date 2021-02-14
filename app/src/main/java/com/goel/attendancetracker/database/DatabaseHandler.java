@@ -3,6 +3,7 @@ package com.goel.attendancetracker.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.goel.attendancetracker.classes.ClassesModel;
 import org.json.JSONArray;
@@ -44,10 +45,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void createNewOrganisation(OrganisationsDataModel newOrganisation){
-        SQLiteDatabase writableDatabase = this.getWritableDatabase();
-        String tableCommand = "CREATE TABLE " + "\"" + newOrganisation.getName() + "\"" + Params.NEW_TABLE;
-        writableDatabase.execSQL(tableCommand);
-        writableDatabase.close();
+        try (SQLiteDatabase writableDatabase = this.getWritableDatabase()) {
+            String tableCommand = "CREATE TABLE " + "\"" + newOrganisation.getName() + "\"" + Params.NEW_TABLE;
+            writableDatabase.execSQL(tableCommand);
+        }
+        catch (SQLiteException e){
+            throw new SQLiteException();
+        }
     }
 
     public void insertOrganisation(ContentValues values){

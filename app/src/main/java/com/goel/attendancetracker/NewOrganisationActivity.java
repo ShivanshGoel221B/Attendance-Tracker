@@ -2,6 +2,7 @@ package com.goel.attendancetracker;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.OrganisationsDataModel;
 import com.goel.attendancetracker.database.Params;
+
+import java.sql.SQLException;
 
 public class NewOrganisationActivity extends AppCompatActivity {
 
@@ -59,8 +62,13 @@ public class NewOrganisationActivity extends AppCompatActivity {
 
         OrganisationsDataModel newOrganisation = new OrganisationsDataModel(organisationName, organisationTarget);
 
-        databaseHandler.createNewOrganisation(newOrganisation);
-        insertOrganisation(newOrganisation);
+        try {
+            databaseHandler.createNewOrganisation(newOrganisation);
+            insertOrganisation(newOrganisation);
+        } catch (SQLiteException e) {
+            name.setError("Organisation already exists");
+            Toast.makeText(this, "Organisation already exists", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
