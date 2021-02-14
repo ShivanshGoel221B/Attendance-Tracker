@@ -24,4 +24,6 @@ public class Params {
                                             + HISTORY + " TEXT)";
 
     public static String OPEN_ORG;
+
+    public static final String CLASS_DATA_ARRAY = "com.goel.attendancetracker.database.classDataArray";
 }
