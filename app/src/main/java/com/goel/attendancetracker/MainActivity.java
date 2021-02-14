@@ -135,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
             values.put("name", newNameText.getText().toString());
             values.put("target", Integer.parseInt(newTargetText.getText().toString()));
             databaseHandler.updateOrganisation(values, String.valueOf(focusedOrganisation.getId()));
+            if (!newNameText.getText().toString().equals(focusedOrganisation.getOrganisationName()))
+                databaseHandler.renameOrganisationTable(focusedOrganisation.getOrganisationName(), newNameText.getText().toString());
             focusedOrganisation.setOrganisationName(newNameText.getText().toString());
             focusedOrganisation.setRequiredAttendance(Integer.parseInt(newTargetText.getText().toString()));
             organisationsAdapter.notifyItemChanged(organisationList.indexOf(focusedOrganisation));

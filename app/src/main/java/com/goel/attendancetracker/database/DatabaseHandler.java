@@ -44,6 +44,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         writableDatabase.close();
     }
 
+    public void renameOrganisationTable(String oldName, String  newName){
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.execSQL("ALTER TABLE " + "\"" + oldName + "\"" + " RENAME TO " + "\"" + newName + "\"");
+        database.close();
+    }
+
     public void createNewOrganisation(OrganisationsDataModel newOrganisation){
         try (SQLiteDatabase writableDatabase = this.getWritableDatabase()) {
             String tableCommand = "CREATE TABLE " + "\"" + newOrganisation.getName() + "\"" + Params.NEW_TABLE;
