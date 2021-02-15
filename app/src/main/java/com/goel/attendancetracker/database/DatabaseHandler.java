@@ -1,7 +1,9 @@
 package com.goel.attendancetracker.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -38,9 +40,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         writableDatabase.close();
     }
 
-    public void updateOrganisation(ContentValues values, String organisationId){
+    public void updateOrganisation(ContentValues values, String organisationName){
         SQLiteDatabase writableDatabase = this.getWritableDatabase();
-        writableDatabase.update(Params.ORGANISATIONS, values, "s_no=?", new String[]{organisationId});
+        writableDatabase.update(Params.ORGANISATIONS, values, "name=?", new String[]{organisationName});
         writableDatabase.close();
     }
 
@@ -74,10 +76,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         writableDatabase.close();
     }
 
-    public void addNewClass(String name, ContentValues values){
+    public int addNewClass(String name, ContentValues values){
         SQLiteDatabase writableDatabase = this.getWritableDatabase();
+        SQLiteDatabase readableDatabase = this.getReadableDatabase();
         writableDatabase.insert( "\"" + name + "\"", null, values);
+        @SuppressLint("Recycle") Cursor cursor = readableDatabase.rawQuery("SELECT * FROM" + "\"" + name + "\"" + "ORDER BY class_sno DESC LIMIT 1", null);
+        cursor.moveToFirst();
+        int id = cursor.getInt(0);
+        readableDatabase.close();
         writableDatabase.close();
+        return id;
     }
 
     public void updateClass(String organisationName, ContentValues values, String classId){
@@ -150,6 +158,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Params.ATTENDANCE, newAttendance);
         this.updateClass(organisationName, values, String.valueOf(model.getId()));
         writableDatabase.close();
+    }
+
+    public int refreshOverAttendance(String organisationName){
+        int overallAttendance = 100;
+        SQLiteDatabase readable = this.getReadableDatabase();
+        String getCommand = "SELECT * FROM " + "\"" + organisationName + "\"";
+        @SuppressLint("Recycle") Cursor cursor = readable.rawQuery(getCommand, null);
+
+        int sum = 0;
+        int counter = 0;
+        if (cursor.moveToFirst())
+        {
+            do {
+                sum += cursor.getInt(2);
+                counter++;
+            } while (cursor.moveToNext());
+        }
+        if (counter > 0){
+            overallAttendance = sum/counter;
+        }
+
+        cursor.close();
+        readable.close();
+
+        ContentValues newOrganisationValues = new ContentValues();
+        newOrganisationValues.put(Params.ATTENDANCE, overallAttendance);
+        this.updateOrganisation(newOrganisationValues, organisationName);
+        return overallAttendance;
     }
 
 }

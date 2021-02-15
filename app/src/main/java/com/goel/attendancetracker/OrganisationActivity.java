@@ -112,7 +112,8 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
             values.put(Params.ATTENDANCE, model.getClassAttendancePercentage());
             values.put(Params.HISTORY, model.getClassHistory());
 
-            databaseHandler.addNewClass(organisationName, values);
+            int classId = databaseHandler.addNewClass(organisationName, values);
+            model.setId(classId);
 
             classList.add(model);
             classAdapter.notifyItemInserted(classList.indexOf(model));
@@ -124,7 +125,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     //=================================================================================//
 
 
-    // Methods for overall progress
+    // Click Listeners
 
     private void setClickListeners(){
         classAdapter.setOnItemClickListener(new ClassesAdapter.OnItemClickListener() {
@@ -267,20 +268,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     @SuppressLint("SetTextI18n")
     private void refreshProgress() {
 
-        int sum = 0;
-        for (ClassesModel classesModel : classList) {
-            sum += classesModel.getClassAttendancePercentage();
-        }
-        try {
-            overallAttendance = sum/classAdapter.getItemCount();
-        } catch (ArithmeticException e) {
-            overallAttendance = 100;
-        }
-
-        ContentValues newOrganisationValues = new ContentValues();
-        newOrganisationValues.put(Params.ATTENDANCE, overallAttendance);
-        databaseHandler.updateOrganisation(newOrganisationValues, organisationId);
-
+        overallAttendance = databaseHandler.refreshOverAttendance(organisationName);
 
         ((TextView) findViewById(R.id.overall_percentage_counter)).setText(overallAttendance + "%");
 

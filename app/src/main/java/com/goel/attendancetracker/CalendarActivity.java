@@ -144,6 +144,7 @@ public class CalendarActivity extends AppCompatActivity {
         attendance[0] = newPresent - present;
         attendance[1] = newAbsent - absent;
         databaseHandler.markAttendance(organisationName, openClass, focusedDate, attendance);
+        databaseHandler.refreshOverAttendance(organisationName);
         setAttendance();
 
         Toast toast = Toast.makeText(CalendarActivity.this, "Updated Successfully", Toast.LENGTH_LONG);
