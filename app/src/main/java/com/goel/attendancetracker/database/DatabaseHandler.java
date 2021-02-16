@@ -150,6 +150,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             newAttendance = (present * 100)/(present + absent);
         }
         model.setClassAttendancePercentage(newAttendance);
+        model.setClassCounter();
 
         // UPDATE IN DATABASE
         SQLiteDatabase writableDatabase = this.getWritableDatabase();

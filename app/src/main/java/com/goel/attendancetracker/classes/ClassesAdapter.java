@@ -55,6 +55,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
         holder.attendanceProgressBar.setProgress(percentage);
         holder.requiredAttendanceBar.setProgress(requiredPercentage);
         holder.className.setText(model.getClassName());
+        holder.classCounter.setText(model.getClassCounter());
         holder.editIcon.setImageResource(R.drawable.icon_edit);
         holder.deleteIcon.setImageResource(R.drawable.icon_delete);
         holder.markIcon.setImageResource(R.drawable.icon_mark);
@@ -81,6 +82,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
         ProgressBar requiredAttendanceBar;
         TextView attendancePercentage;
         TextView className;
+        TextView classCounter;
         ImageView editIcon;
         ImageView deleteIcon;
         ImageView markIcon;
@@ -92,6 +94,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
             requiredAttendanceBar = itemView.findViewById(R.id.required_class_progress);
             attendancePercentage = itemView.findViewById(R.id.class_attendance);
             className = itemView.findViewById(R.id.class_name);
+            classCounter = itemView.findViewById(R.id.class_counter);
             editIcon = itemView.findViewById(R.id.class_edit_icon);
             deleteIcon = itemView.findViewById(R.id.class_delete_icon);
             markIcon = itemView.findViewById(R.id.class_mark_icon);

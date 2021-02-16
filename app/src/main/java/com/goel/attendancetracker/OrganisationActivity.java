@@ -85,6 +85,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
                 model.setClassAttendancePercentage(cursor.getInt(2));
                 model.setRequiredAttendance(cursor.getInt(3));
                 model.setClassHistory(cursor.getString(4));
+                model.setClassCounter();
                 classList.add(model);
                 classAdapter.notifyItemInserted(classList.indexOf(model));
             }while (cursor.moveToNext());
