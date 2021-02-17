@@ -16,7 +16,7 @@
                 android:shape="ring"
                 android:thicknessRatio="12"
                 android:useLevel="true">
-                <solid android:color="@color/primary_light" />
+                <solid android:color="?attr/progress_target" />
             </shape>
         </rotate>
     </item></layer-list>

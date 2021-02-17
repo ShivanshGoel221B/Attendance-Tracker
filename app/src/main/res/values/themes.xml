@@ -12,5 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="card_background">@color/ultra_light_grey</item>
+        <item name="text_color">@color/teal_dark</item>
+        <item name="base_background">@color/ultra_light_grey</item>
+        <item name="contrast_color">@color/mild_dark</item>
+        <item name="progress_background">@color/light_grey</item>
+        <item name="progress_target">@color/primary_light</item>
     </style>
 </resources>

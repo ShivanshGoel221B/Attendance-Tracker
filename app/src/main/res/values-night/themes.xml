@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.AttendanceTracker" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primary_dark</item>
-        <item name="colorPrimaryVariant">@color/secondary</item>
+        <item name="colorPrimary">@color/mild_black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/primary_light</item>
@@ -12,5 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="card_background">@color/mild_dark</item>
+        <item name="text_color">@color/white</item>
+        <item name="base_background">@color/dark_black</item>
+        <item name="contrast_color">@color/ultra_light_grey</item>
+        <item name="progress_background">@color/progress_dark</item>
+        <item name="progress_target">@color/primary_dark</item>
     </style>
 </resources>

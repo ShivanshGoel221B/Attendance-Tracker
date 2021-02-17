@@ -5,7 +5,7 @@
             android:shape="ring"
             android:thicknessRatio="6"
             android:useLevel="false">
-            <solid android:color="@color/grey" />
+            <solid android:color="?attr/progress_background" />
         </shape>
     </item>
     <item>
