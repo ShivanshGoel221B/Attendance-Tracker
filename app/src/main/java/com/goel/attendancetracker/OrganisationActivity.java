@@ -133,7 +133,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(OrganisationActivity.this, CalendarActivity.class);
-                String[] dataArray = {organisationName, String.valueOf(classList.get(position).getId())};
+                String[] dataArray = {organisationName, String.valueOf(classList.get(position).getId()), classList.get(position).getClassName()};
                 intent.putExtra(Params.CLASS_DATA_ARRAY, dataArray);
                 startActivity(intent);
             }

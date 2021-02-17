@@ -24,7 +24,7 @@ import java.util.Calendar;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private String classId, organisationName, focusedDate;
+    private String classId, className, organisationName, focusedDate;
     TextView presentCounter, absentCounter;
     int present, absent;
     DatabaseHandler databaseHandler;
@@ -37,6 +37,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         focusedDate = getCurrentDate();
         initializeClassData();
+        ((TextView) findViewById(R.id.class_title)).setText(className);
         initializeDatabase();
         initializeViews();
         setAttendance();
@@ -47,6 +48,7 @@ public class CalendarActivity extends AppCompatActivity {
         String[] dataArray = classData.getStringArray(Params.CLASS_DATA_ARRAY);
         organisationName = dataArray[0];
         classId = dataArray[1];
+        className = dataArray[2];
     }
 
     private void initializeDatabase() {
