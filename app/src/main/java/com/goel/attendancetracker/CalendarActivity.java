@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class CalendarActivity extends AppCompatActivity {
 
@@ -37,6 +38,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         focusedDate = getCurrentDate();
         initializeClassData();
+        Objects.requireNonNull(getSupportActionBar()).setTitle(organisationName.toUpperCase());
         ((TextView) findViewById(R.id.class_title)).setText(className);
         initializeDatabase();
         initializeViews();
