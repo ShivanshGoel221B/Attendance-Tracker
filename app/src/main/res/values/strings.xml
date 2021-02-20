@@ -14,4 +14,7 @@
     <string name="app_logo">App Logo</string>
     <string name="enter_new_name">Enter new name</string>
     <string name="enter_new_target">Enter new target</string>
+    <string name="backup_amp_restore"><![CDATA[Backup & Restore]]></string>
+    <string name="share">Share</string>
+    <string name="rate_us">Rate Us</string>
 </resources>

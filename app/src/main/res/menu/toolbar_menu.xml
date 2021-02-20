@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/share"
+        android:id="@+id/menu_share"
+        android:icon="@android:drawable/ic_menu_share">
+
+    </item>
+
+    <item android:title="@string/rate_us"
+        android:id="@+id/menu_rate_us"
+        android:icon="@android:drawable/star_big_on">
+
+    </item>
+
+    <item android:title="@string/backup_amp_restore"
+        android:id="@+id/menu_backup_restore">
+
+    </item>
+
+</menu>

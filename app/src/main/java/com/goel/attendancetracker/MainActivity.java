@@ -1,14 +1,18 @@
 package com.goel.attendancetracker;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,6 +47,25 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
         Params.OPEN_ORG = null;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_backup_restore:
+                break;
+            case R.id.menu_share:
+                break;
+            case R.id.menu_rate_us:
+                break;
+        }
+        return true;
+    }
 
     private void setOrganisationAdapter() {
         organisationsAdapter = new OrganisationsAdapter(organisationList, this);
