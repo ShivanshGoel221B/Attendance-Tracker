@@ -3,11 +3,17 @@ package com.goel.attendancetracker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -19,12 +25,70 @@ public class BackupRestoreActivity extends AppCompatActivity {
     public static String SIGN_OUT = "com.goel.attendancetracker.signout";
 
 
+    private AdView mAdView_1;
+    private AdView mAdView_2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backup_restore);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Backup & Restore");
         ((TextView) findViewById(R.id.user_email)).setText(user.getEmail());
+
+        // Implementing ads
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView_1 = findViewById(R.id.adView);
+        AdRequest adRequest_1 = new AdRequest.Builder().build();
+        mAdView_1.loadAd(adRequest_1);
+
+        mAdView_2 = findViewById(R.id.adView1);
+        AdRequest adRequest_2 = new AdRequest.Builder().build();
+        mAdView_2.loadAd(adRequest_2);
+
+        setAdEventListeners(mAdView_1, adRequest_1);
+        setAdEventListeners(mAdView_2, adRequest_2);
+    }
+
+    private void setAdEventListeners(AdView mAdView, AdRequest adRequest){
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                super.onAdFailedToLoad(adError);
+                mAdView.loadAd(adRequest);
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                super.onAdClicked();
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                super.onAdClosed();
+            }
+        });
     }
 
     public void createBackup(View view){
