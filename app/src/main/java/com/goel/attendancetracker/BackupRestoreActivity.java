@@ -27,6 +27,14 @@ public class BackupRestoreActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.user_email)).setText(user.getEmail());
     }
 
+    public void createBackup(View view){
+
+    }
+
+    public void createRestore(View view){
+
+    }
+
     public void logOut(View view){
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(BackupRestoreActivity.this, SignInActivity.class).putExtra(SIGN_OUT, true));

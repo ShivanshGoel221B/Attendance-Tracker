@@ -21,4 +21,6 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="please_wait">Please Wait</string>
     <string name="sign_out">Sign out</string>
+    <string name="restore">Restore</string>
+    <string name="backup">Backup</string>
 </resources>
