@@ -1,19 +1,17 @@
 package com.goel.attendancetracker;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,9 +23,6 @@ public class BackupRestoreActivity extends AppCompatActivity {
     public static String SIGN_OUT = "com.goel.attendancetracker.signout";
 
 
-    private AdView mAdView_1;
-    private AdView mAdView_2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,18 +30,18 @@ public class BackupRestoreActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle("Backup & Restore");
         ((TextView) findViewById(R.id.user_email)).setText(user.getEmail());
 
+        setAds();
         // Implementing ads
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
+        MobileAds.initialize(this, initializationStatus -> {
         });
+    }
 
-        mAdView_1 = findViewById(R.id.adView);
+    private void setAds() {
+        AdView mAdView_1 = findViewById(R.id.adView);
         AdRequest adRequest_1 = new AdRequest.Builder().build();
         mAdView_1.loadAd(adRequest_1);
 
-        mAdView_2 = findViewById(R.id.adView1);
+        AdView mAdView_2 = findViewById(R.id.adView1);
         AdRequest adRequest_2 = new AdRequest.Builder().build();
         mAdView_2.loadAd(adRequest_2);
 

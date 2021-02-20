@@ -6,19 +6,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -47,6 +49,62 @@ public class SignInActivity extends AppCompatActivity {
 
         if (getIntent().getBooleanExtra(BackupRestoreActivity.SIGN_OUT, false))
             logOut();
+
+        setAds();
+    }
+
+    private void setAds() {
+        // Implementing ads
+        MobileAds.initialize(this, initializationStatus -> {
+        });
+
+        AdView mAdView_1 = findViewById(R.id.adView3);
+        AdRequest adRequest_1 = new AdRequest.Builder().build();
+        mAdView_1.loadAd(adRequest_1);
+
+        AdView mAdView_2 = findViewById(R.id.adView4);
+        AdRequest adRequest_2 = new AdRequest.Builder().build();
+        mAdView_2.loadAd(adRequest_2);
+
+        setAdEventListeners(mAdView_1, adRequest_1);
+        setAdEventListeners(mAdView_2, adRequest_2);
+    }
+
+    private void setAdEventListeners(AdView mAdView, AdRequest adRequest){
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                super.onAdFailedToLoad(adError);
+                mAdView.loadAd(adRequest);
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                super.onAdClicked();
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                super.onAdClosed();
+            }
+        });
     }
 
     public void signIn(View view) {
@@ -82,25 +140,22 @@ public class SignInActivity extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Success", "signInWithCredential:success");
-                            FirebaseUser user = auth.getCurrentUser();
-                            assert user != null;
-                            BackupRestoreActivity.user = user;
-                            Toast.makeText(SignInActivity.this, "Signed in as " + user.getDisplayName(), Toast.LENGTH_LONG).show();
-                            loading.setVisibility(View.GONE);
-                            startActivity(new Intent(SignInActivity.this, BackupRestoreActivity.class));
-                            finish();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("Error", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(SignInActivity.this, "Sign in failed", Toast.LENGTH_LONG).show();
-                            loading.setVisibility(View.GONE);
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("Success", "signInWithCredential:success");
+                        FirebaseUser user = auth.getCurrentUser();
+                        assert user != null;
+                        BackupRestoreActivity.user = user;
+                        Toast.makeText(SignInActivity.this, "Signed in as " + user.getDisplayName(), Toast.LENGTH_LONG).show();
+                        loading.setVisibility(View.GONE);
+                        startActivity(new Intent(SignInActivity.this, BackupRestoreActivity.class));
+                        finish();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("Error", "signInWithCredential:failure", task.getException());
+                        Toast.makeText(SignInActivity.this, "Sign in failed", Toast.LENGTH_LONG).show();
+                        loading.setVisibility(View.GONE);
                     }
                 });
     }
