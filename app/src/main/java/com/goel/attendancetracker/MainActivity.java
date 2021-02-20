@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.menu_backup_restore:
+                startActivity(new Intent(MainActivity.this, SignInActivity.class));
                 break;
             case R.id.menu_share:
                 break;

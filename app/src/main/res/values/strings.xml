@@ -17,4 +17,8 @@
     <string name="backup_amp_restore"><![CDATA[Backup & Restore]]></string>
     <string name="share">Share</string>
     <string name="rate_us">Rate Us</string>
+    <string name="sign_in_prompt">You need to sign in with Google to backup and restore</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="sign_out">Sign out</string>
 </resources>

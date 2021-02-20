@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "148134091288",
+    "project_id": "attendance-tracker-221b",
+    "storage_bucket": "attendance-tracker-221b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148134091288:android:db02e05ef7d1926f7e016d",
+        "android_client_info": {
+          "package_name": "com.goel.attendancetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148134091288-up0sos5e2s6s3laiqbfq2boj5b5artt9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.goel.attendancetracker",
+            "certificate_hash": "4316272f9bce3ea7643f00ac26250de9c781bc5b"
+          }
+        },
+        {
+          "client_id": "148134091288-79omia1i59j2l2prpmj9bi9mseccci83.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNsorTy3EmJWqBed027oHvPjHFfOSV6Yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148134091288-79omia1i59j2l2prpmj9bi9mseccci83.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

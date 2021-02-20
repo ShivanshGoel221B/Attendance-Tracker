@@ -9,7 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceTracker">
-        <activity android:name=".CalendarActivity"
+        <activity android:name=".BackupRestoreActivity"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
+        <activity android:name=".SignInActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".CalendarActivity"
             android:parentActivityName=".OrganisationActivity" />
         <activity
             android:name=".OrganisationActivity"
