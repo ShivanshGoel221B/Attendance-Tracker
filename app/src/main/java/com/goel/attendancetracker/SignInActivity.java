@@ -3,6 +3,7 @@ package com.goel.attendancetracker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -128,7 +129,9 @@ public class SignInActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("Error", "Google sign in failed", e);
-                Toast.makeText(SignInActivity.this, "Sign in failed", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(SignInActivity.this, "Sign in failed", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 50);
+                toast.show();
                 // ...
             }
         }
@@ -147,14 +150,18 @@ public class SignInActivity extends AppCompatActivity {
                         FirebaseUser user = auth.getCurrentUser();
                         assert user != null;
                         BackupRestoreActivity.user = user;
-                        Toast.makeText(SignInActivity.this, "Signed in as " + user.getDisplayName(), Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(SignInActivity.this, "Signed in as " + user.getDisplayName(), Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 50);
+                        toast.show();
                         loading.setVisibility(View.GONE);
                         startActivity(new Intent(SignInActivity.this, BackupRestoreActivity.class));
                         finish();
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("Error", "signInWithCredential:failure", task.getException());
-                        Toast.makeText(SignInActivity.this, "Sign in failed", Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(SignInActivity.this, "Sign in failed", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 50);
+                        toast.show();
                         loading.setVisibility(View.GONE);
                     }
                 });
@@ -172,7 +179,9 @@ public class SignInActivity extends AppCompatActivity {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null){
             BackupRestoreActivity.user = currentUser;
-            Toast.makeText(this, "Signed in as " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(this, "Signed in as " + currentUser.getDisplayName(), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 50);
+            toast.show();
             startActivity(new Intent(SignInActivity.this, BackupRestoreActivity.class));
             finish();
         }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,11 +118,15 @@ public class BackupRestoreActivity extends AppCompatActivity {
         Uri databaseUri = Uri.fromFile(getDatabasePath(Params.DB_NAME));
         UploadTask backupTask = storageRef.putFile(databaseUri);
         backupTask.addOnSuccessListener(taskSnapshot -> {
-            Toast.makeText(BackupRestoreActivity.this, "Backed Up Successfully", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(BackupRestoreActivity.this, "Backed Up Successfully", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 50);
+            toast.show();
             loading.setVisibility(View.INVISIBLE);
         });
         backupTask.addOnFailureListener(e -> {
-            Toast.makeText(BackupRestoreActivity.this, "Back Up Failed", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(BackupRestoreActivity.this, "Back Up Failed", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 50);
+            toast.show();
             loading.setVisibility(View.INVISIBLE);
         });
 
@@ -148,15 +153,19 @@ public class BackupRestoreActivity extends AppCompatActivity {
 
         storageRef.getFile(databaseFile)
                 .addOnSuccessListener(taskSnapshot -> {
-                    Toast.makeText(BackupRestoreActivity.this, "Data Restored Successfully", Toast.LENGTH_LONG).show();
-                    loading.setVisibility(View.INVISIBLE);
+                    Toast toast = Toast.makeText(BackupRestoreActivity.this, "Data Restored Successfully", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 50);
+                    toast.show();
+                            loading.setVisibility(View.INVISIBLE);
                 })
                 .addOnFailureListener(e -> {
                     loading.setVisibility(View.INVISIBLE);
                     if (e.getMessage().equals("Object does not exist at location.")){
                         backupNotFound();
                     }
-                    Toast.makeText(BackupRestoreActivity.this, "Restore Failed", Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(BackupRestoreActivity.this, "Restore Failed", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 50);
+                    toast.show();
                 });
     }
 
