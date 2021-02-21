@@ -23,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.Objects;
 
 public class BackupRestoreActivity extends AppCompatActivity {
@@ -106,7 +107,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
                 })
 
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
     }
 
@@ -127,7 +128,45 @@ public class BackupRestoreActivity extends AppCompatActivity {
     }
 
     public void createRestore(View view){
+        new AlertDialog.Builder(BackupRestoreActivity.this)
+                .setTitle("Confirm Restore")
+                .setMessage("Performing the restore will overwrite the existing data. Do want to continue?")
+                .setPositiveButton("Confirm", (dialog, which) -> {
+                    dialog.dismiss();
+                    restoreDatabase();
+                })
 
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
+    }
+
+    private void restoreDatabase() {
+        ConstraintLayout loading = findViewById(R.id.backup_restore_loading);
+        loading.setVisibility(View.VISIBLE);
+        File databaseFile = new File(getDatabasePath(Params.DB_NAME).getPath());
+
+        storageRef.getFile(databaseFile)
+                .addOnSuccessListener(taskSnapshot -> {
+                    Toast.makeText(BackupRestoreActivity.this, "Data Restored Successfully", Toast.LENGTH_LONG).show();
+                    loading.setVisibility(View.INVISIBLE);
+                })
+                .addOnFailureListener(e -> {
+                    loading.setVisibility(View.INVISIBLE);
+                    if (e.getMessage().equals("Object does not exist at location.")){
+                        backupNotFound();
+                    }
+                    Toast.makeText(BackupRestoreActivity.this, "Restore Failed", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void backupNotFound() {
+        new AlertDialog.Builder(BackupRestoreActivity.this)
+                .setTitle("Backup Not Found")
+                .setMessage("No backup found on this account. Please try with a different account")
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void logOut(View view){
