@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "148134091288",
-    "project_id": "attendance-tracker-221b",
-    "storage_bucket": "attendance-tracker-221b.appspot.com"
+    "project_number": "309585357357",
+    "project_id": "attendance-tracker-718d8",
+    "storage_bucket": "attendance-tracker-718d8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:148134091288:android:db02e05ef7d1926f7e016d",
+        "mobilesdk_app_id": "1:309585357357:android:494942c6a643c73ae7a6a4",
         "android_client_info": {
           "package_name": "com.goel.attendancetracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "148134091288-up0sos5e2s6s3laiqbfq2boj5b5artt9.apps.googleusercontent.com",
+          "client_id": "309585357357-a5pm721f33lrk0hqk1b9tvcfotloo191.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.goel.attendancetracker",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "148134091288-79omia1i59j2l2prpmj9bi9mseccci83.apps.googleusercontent.com",
+          "client_id": "309585357357-uc4eobqtefavvbknmsla6ibicimqgjlv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDNsorTy3EmJWqBed027oHvPjHFfOSV6Yw"
+          "current_key": "AIzaSyCuTuhD5wTeVyL09cJKksJW_WbVEVbbi5g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "148134091288-79omia1i59j2l2prpmj9bi9mseccci83.apps.googleusercontent.com",
+              "client_id": "309585357357-uc4eobqtefavvbknmsla6ibicimqgjlv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
