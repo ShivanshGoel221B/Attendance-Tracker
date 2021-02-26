@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,13 +57,23 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String APP_URL = "https://play.google.com/store/apps/details?id=com.goel.attendancetracker";
         switch(item.getItemId()){
             case R.id.menu_backup_restore:
                 startActivity(new Intent(MainActivity.this, SignInActivity.class));
                 break;
             case R.id.menu_share:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, APP_URL);
+                shareIntent.setType("text/plain");
+                Intent.createChooser(shareIntent,"Share via");
+                startActivity(shareIntent);
                 break;
             case R.id.menu_rate_us:
+                Uri appUri = Uri.parse(APP_URL);
+                Intent rateIntent = new Intent(Intent.ACTION_VIEW, appUri);
+                startActivity(rateIntent);
                 break;
         }
         return true;
