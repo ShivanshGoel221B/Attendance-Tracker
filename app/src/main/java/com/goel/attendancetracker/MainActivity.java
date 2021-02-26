@@ -257,4 +257,11 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+        System.exit(0);
+    }
 }
