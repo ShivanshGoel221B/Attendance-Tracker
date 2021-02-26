@@ -23,6 +23,11 @@ import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;
 import com.goel.attendancetracker.organisations.OrganisationsAdapter;
 import com.goel.attendancetracker.organisations.OrganisationsModel;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setAd();
         organisationContainer = findViewById(R.id.organisations_container);
         organisationList = new ArrayList<>();
         databaseHandler = new DatabaseHandler(MainActivity.this);
@@ -46,6 +52,51 @@ public class MainActivity extends AppCompatActivity implements EditDialogBox.Edi
         getOrganisationList();
         setClickListeners();
         Params.OPEN_ORG = null;
+    }
+
+    private void setAd() {
+        // Implementing ads
+        MobileAds.initialize(this, initializationStatus -> {
+        });
+
+        AdView mAdView = findViewById(R.id.adView5);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                super.onAdFailedToLoad(adError);
+                mAdView.loadAd(adRequest);
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                super.onAdClicked();
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                super.onAdClosed();
+            }
+        });
     }
 
     @Override

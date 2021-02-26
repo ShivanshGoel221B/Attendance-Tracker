@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="?attr/base_background"
     tools:context=".MainActivity">
@@ -44,7 +45,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="1" />
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:adSize="FULL_BANNER"
+        app:adUnitId="@string/ad_id_5" />
 
 
 </LinearLayout>
