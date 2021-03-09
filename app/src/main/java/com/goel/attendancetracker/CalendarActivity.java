@@ -38,7 +38,8 @@ public class CalendarActivity extends AppCompatActivity {
 
         focusedDate = getCurrentDate();
         initializeClassData();
-        Objects.requireNonNull(getSupportActionBar()).setTitle(className.toUpperCase());
+        Objects.requireNonNull(getSupportActionBar()).setTitle(organisationName.toUpperCase());
+        ((TextView) findViewById(R.id.class_name_calendar)).setText(className.toUpperCase());
         initializeDatabase();
         initializeViews();
         setAttendance();
