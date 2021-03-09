@@ -14,11 +14,11 @@
         android:background="@drawable/list_background"
         android:elevation="7dp"
         android:fontFamily="@font/poly"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:textAlignment="center"
         android:textColor="?attr/text_color"
-        android:textSize="24sp"
+        android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/class_name_calendar" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/class_controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,8 +56,8 @@
 
         <TextView
             android:id="@+id/present_counter"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/list_background"
             android:backgroundTint="@color/green"
@@ -65,60 +65,15 @@
             android:fontFamily="@font/lily_script_one"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="40sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/present_controls"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="0.5"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="vertical"
-            app:layout_constraintStart_toEndOf="@+id/present_counter"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <Button
-                android:id="@+id/present_increase"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_horizontal|top"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/button_gradient"
-                android:backgroundTint="@color/primary_light"
-                android:onClick="increasePresent"
-                android:text="@string/increment"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/present_decrease"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="2dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/button_gradient"
-                android:backgroundTint="@color/primary_light"
-                android:gravity="center"
-                android:onClick="decreasePresent"
-                android:text="@string/decrement"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-        </LinearLayout>
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/absent_counter"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:background="@drawable/list_background"
             android:backgroundTint="@color/crimson"
@@ -126,102 +81,17 @@
             android:fontFamily="@font/lily_script_one"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="40sp"
-            app:layout_constraintEnd_toStartOf="@+id/absent_controls"
-            app:layout_constraintStart_toEndOf="@+id/present_controls"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="30sp" />
 
-        <LinearLayout
-            android:id="@+id/absent_controls"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+        <ImageView
+            android:id="@+id/edit_attendance"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.5"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_weight="1"
+            android:onClick="editAttendance"
+            app:srcCompat="@drawable/edit" />
 
-            <Button
-                android:id="@+id/absent_increase"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_gravity="center_horizontal|top"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/button_gradient"
-                android:backgroundTint="@color/primary_light"
-                android:onClick="increaseAbsent"
-                android:text="@string/increment"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/absent_decrease"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="2dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/button_gradient"
-                android:backgroundTint="@color/primary_light"
-                android:gravity="center"
-                android:onClick="decreaseAbsent"
-                android:text="@string/decrement"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/present_counter">
-
-            <Button
-                android:id="@+id/update_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_gradient"
-                android:fontFamily="@font/halant_medium"
-                android:onClick="updateAttendance"
-                android:text="@string/update"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/reset_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/button_gradient"
-                android:fontFamily="@font/halant_medium"
-                android:onClick="resetCounter"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:text="@string/reset"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

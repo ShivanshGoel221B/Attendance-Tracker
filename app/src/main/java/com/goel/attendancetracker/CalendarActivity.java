@@ -23,7 +23,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity implements EditAttendanceDialog.SubmitNewAttendance {
 
     private String classId, className, organisationName, focusedDate;
     TextView presentCounter, absentCounter;
@@ -115,37 +115,17 @@ public class CalendarActivity extends AppCompatActivity {
         return String.valueOf(calendar.get(Calendar.YEAR)) + calendar.get(Calendar.MONTH) + calendar.get(Calendar.DATE);
     }
 
-    /////////////////////// ========================= SET BUTTONS ========================= ///////////////////////
-    public void increasePresent(View view){
-        view.performHapticFeedback(1);
-        int initial = Integer.parseInt(presentCounter.getText().toString());
-        presentCounter.setText(String.valueOf(initial + 1));
+    public void editAttendance(View view){
+        EditAttendanceDialog.presentCount = present;
+        EditAttendanceDialog.absentCount = absent;
+
+        EditAttendanceDialog attendanceDialog = new EditAttendanceDialog();
+        attendanceDialog.show(getSupportFragmentManager(), "edit attendance");
     }
 
-    public void decreasePresent(View view){
-        view.performHapticFeedback(1);
-        int initial = Integer.parseInt(presentCounter.getText().toString());
-        if (initial>0)
-            presentCounter.setText(String.valueOf(initial - 1));
-    }
-
-    public void increaseAbsent(View view){
-        view.performHapticFeedback(1);
-        int initial = Integer.parseInt(absentCounter.getText().toString());
-        absentCounter.setText(String.valueOf(initial + 1));
-    }
-
-    public void decreaseAbsent(View view){
-        view.performHapticFeedback(1);
-        int initial = Integer.parseInt(absentCounter.getText().toString());
-        if (initial>0)
-            absentCounter.setText(String.valueOf(initial - 1));
-    }
-
-    public void updateAttendance(View view){
+    @Override
+    public void updateAttendance(int newPresent, int newAbsent) {
         int[] attendance = new int[2];
-        int newPresent = Integer.parseInt(presentCounter.getText().toString());
-        int newAbsent = Integer.parseInt(absentCounter.getText().toString());
         attendance[0] = newPresent - present;
         attendance[1] = newAbsent - absent;
         databaseHandler.markAttendance(organisationName, openClass, focusedDate, attendance);
@@ -155,11 +135,6 @@ public class CalendarActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(CalendarActivity.this, "Updated Successfully", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 20);
         toast.show();
-    }
-
-    public void resetCounter(View view){
-        view.performHapticFeedback(1);
-        setAttendance();
     }
     //==========================================================================================================//
 

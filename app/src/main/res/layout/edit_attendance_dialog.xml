@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/attendance_controls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/present"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/present_increment"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@drawable/list_background"
+                android:backgroundTint="@color/secondary"
+                android:fontFamily="@font/lily_script_one"
+                android:text="@string/increment"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/dialog_present_counter"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/list_background"
+                android:backgroundTint="@color/green"
+                android:elevation="5dp"
+                android:fontFamily="@font/lily_script_one"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="36sp" />
+
+            <Button
+                android:id="@+id/present_decrement"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@drawable/list_background"
+                android:backgroundTint="@color/secondary"
+                android:fontFamily="@font/lily_script_one"
+                android:text="@string/decrement"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/absent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/absent_increment"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@drawable/list_background"
+                android:backgroundTint="@color/secondary"
+                android:fontFamily="@font/lily_script_one"
+                android:text="@string/increment"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/dialog_absent_counter"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/list_background"
+                android:backgroundTint="@color/crimson"
+                android:elevation="5dp"
+                android:fontFamily="@font/lily_script_one"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="36sp" />
+
+            <Button
+                android:id="@+id/absent_decrement"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@drawable/list_background"
+                android:backgroundTint="@color/secondary"
+                android:fontFamily="@font/lily_script_one"
+                android:text="@string/decrement"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
