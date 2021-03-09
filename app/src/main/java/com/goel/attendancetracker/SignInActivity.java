@@ -10,11 +10,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -51,62 +46,8 @@ public class SignInActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra(BackupRestoreActivity.SIGN_OUT, false))
             logOut();
 
-        setAds();
     }
 
-    private void setAds() {
-        // Implementing ads
-        MobileAds.initialize(this, initializationStatus -> {
-        });
-
-        AdView mAdView_1 = findViewById(R.id.adView3);
-        AdRequest adRequest_1 = new AdRequest.Builder().build();
-        mAdView_1.loadAd(adRequest_1);
-
-        AdView mAdView_2 = findViewById(R.id.adView4);
-        AdRequest adRequest_2 = new AdRequest.Builder().build();
-        mAdView_2.loadAd(adRequest_2);
-
-        setAdEventListeners(mAdView_1, adRequest_1);
-        setAdEventListeners(mAdView_2, adRequest_2);
-    }
-
-    private void setAdEventListeners(AdView mAdView, AdRequest adRequest){
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-                super.onAdLoaded();
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                super.onAdFailedToLoad(adError);
-                mAdView.loadAd(adRequest);
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-                super.onAdOpened();
-            }
-
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-                super.onAdClicked();
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-                super.onAdClosed();
-            }
-        });
-    }
 
     public void signIn(View view) {
         Intent signInIntent = googleSignInClient.getSignInIntent();
