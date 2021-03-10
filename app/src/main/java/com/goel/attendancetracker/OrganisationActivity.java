@@ -3,15 +3,20 @@ package com.goel.attendancetracker;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -42,6 +47,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     private ClassesModel focusedClass;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +66,34 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
         setAdapter();
         getClassList();
         refreshProgress();
+
+        ((TextView)findViewById(R.id.target_value)).setText(overallRequiredAttendance + "%");
+
         setClickListeners();
     }
+
+    //-- Context Menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.organisation_toolbar_menu, menu);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_new_class:
+                addNewClass();
+                break;
+            case R.id.delete_all_classes:
+                deleteAllClasses();
+                break;
+        }
+        return true;
+    }
+
+    //===========================================
 
     private void setAdapter() {
         classAdapter = new ClassesAdapter(classList, this);
@@ -97,10 +129,25 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     }
 
     //  ===============  ADD CLASS METHODS  =============== //
-    public void addClassButton(View view){
+    public void addNewClass(){
         AddDialogBox addDialogBox = new AddDialogBox();
         addDialogBox.show(getSupportFragmentManager(), "add dialog");
         AddDialogBox.overallAttendance = overallRequiredAttendance;
+    }
+
+    private void deleteAllClasses(){
+        new AlertDialog.Builder(OrganisationActivity.this)
+                .setMessage("This will delete all the Classes in the organisation. Continue?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    for(ClassesModel model: classList)
+                        databaseHandler.deleteClass(organisationName, String.valueOf(model.getId()));
+                    classList.clear();
+                    classAdapter.notifyDataSetChanged();
+                    Toast.makeText(OrganisationActivity.this, "Deleted All Classes", Toast.LENGTH_LONG).show();
+                    refreshProgress();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     @Override
@@ -269,21 +316,28 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     @SuppressLint("SetTextI18n")
     private void refreshProgress() {
 
+        ImageView flag = findViewById(R.id.target_flag);
         overallAttendance = databaseHandler.refreshOverAttendance(organisationName);
 
         ((TextView) findViewById(R.id.overall_percentage_counter)).setText(overallAttendance + "%");
 
         overallProgress.setProgress(0);
 
-        if (overallAttendance >= overallRequiredAttendance)
+        if (overallAttendance >= overallRequiredAttendance) {
             overallProgress.setProgressDrawable(ContextCompat.getDrawable(OrganisationActivity.this, R.drawable.attendance_progress));
-        else if (overallAttendance > overallRequiredAttendance * 0.75f)
+            flag.setImageTintList(ColorStateList.valueOf(Color.parseColor("#00CF60")));
+        }
+        else if (overallAttendance > overallRequiredAttendance * 0.75f){
             overallProgress.setProgressDrawable(ContextCompat.getDrawable(OrganisationActivity.this, R.drawable.attendance_progress_low));
-        else
+            flag.setImageTintList(ColorStateList.valueOf(Color.parseColor("#F56600")));
+        }
+        else{
             overallProgress.setProgressDrawable(ContextCompat.getDrawable(OrganisationActivity.this, R.drawable.attendance_progress_danger));
+            flag.setImageTintList(ColorStateList.valueOf(Color.parseColor("#FF073A")));
+        }
 
-        overallProgress.setProgress(overallAttendance);
-
+        if (overallAttendance>0)
+            overallProgress.setProgress(overallAttendance);
     }
 
     private String getCurrentDate(){

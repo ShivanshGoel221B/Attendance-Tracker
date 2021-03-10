@@ -72,30 +72,49 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
+                android:fontFamily="@font/poly"
                 android:text="@string/overall_attendance"
                 android:textColor="?attr/text_color"
-                android:textSize="27sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toEndOf="@+id/overall_attendance"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/add_class_button"
+            <ImageView
+                android:id="@+id/target_flag"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toBottomOf="@+id/overall_attendance"
+                app:layout_constraintStart_toStartOf="@+id/title_organisation_name"
+                app:layout_constraintTop_toBottomOf="@+id/title_organisation_name"
+                app:srcCompat="@drawable/target"
+                app:tint="@color/neon_red" />
+
+            <TextView
+                android:id="@+id/target_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/button_gradient"
-                android:elevation="5dp"
-                android:onClick="addClassButton"
-                android:paddingStart="20dp"
-                android:paddingTop="0dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="0dp"
-                android:text="@string/add_class_appointment"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/title_organisation_name"
-                app:layout_constraintTop_toBottomOf="@+id/title_organisation_name" />
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/poly"
+                android:text="@string/target_text"
+                android:textColor="?attr/text_color"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/target_flag"
+                app:layout_constraintStart_toEndOf="@+id/target_flag"
+                app:layout_constraintTop_toTopOf="@+id/target_flag" />
+
+            <TextView
+                android:id="@+id/target_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/halant_semibold"
+                android:text="75%"
+                android:textColor="?attr/text_color"
+                android:textSize="24sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/target_text"
+                app:layout_constraintStart_toEndOf="@+id/target_text" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
