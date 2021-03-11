@@ -16,10 +16,6 @@ import com.goel.attendancetracker.classes.ClassesModel;
 import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -79,35 +75,8 @@ public class CalendarActivity extends AppCompatActivity implements EditAttendanc
     }
 
     private void setAttendance() {
-        JSONObject history;
-        try {
-            history = new JSONObject(openClass.getClassHistory());
-        } catch (JSONException e) {
-            return;
-        }
-        // INITIALIZING INITIAL DATE HISTORY
-        JSONArray dateHistory;
-        try {
-            dateHistory = (JSONArray) history.get(focusedDate);
-        } catch (JSONException e) {
-            dateHistory = new JSONArray();
-            try {
-                dateHistory.put(0,0);
-                dateHistory.put(1,0);
-            } catch (JSONException jsonException) {
-                return;
-            }
-        }
-
-        try {
-            present = dateHistory.getInt(0);
-            absent = dateHistory.getInt(1);
-        } catch (JSONException e) {
-            Toast.makeText(this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        presentCounter.setText(String.valueOf(present));
-        absentCounter.setText(String.valueOf(absent));
+        presentCounter.setText(String.valueOf(openClass.getPresentCount(focusedDate)));
+        absentCounter.setText(String.valueOf(openClass.getAbsentCount(focusedDate)));
     }
 
     private String getCurrentDate(){

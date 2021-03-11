@@ -74,28 +74,95 @@ public class ClassesModel {
         return classCounter;
     }
 
-    public void setClassCounter(){
+    public int getPresentCount(){
         JSONObject history;
         try {
             history = new JSONObject(this.getClassHistory());
         } catch (JSONException e) {
-            this.classCounter = "0/0";
-            return;
+            return 0;
         }
         // UPDATE NEW ATTENDANCE
         int present = 0;
-        int absent = 0;
         try {
             Iterator<String> keys = history.keys();
             while (keys.hasNext()){
                 JSONArray dateData = (JSONArray) history.get(keys.next());
                 present += dateData.getInt(0);
+            }
+        }catch (JSONException e) {
+            return 0;
+        }
+        return present;
+    }
+
+    public int getPresentCount(String date){
+        JSONObject history;
+        try {
+            history = new JSONObject(this.getClassHistory());
+        } catch (JSONException e) {
+            return 0;
+        }
+        // INITIALIZING INITIAL DATE HISTORY
+        JSONArray dateHistory;
+        try {
+            dateHistory = (JSONArray) history.get(date);
+        } catch (JSONException e) {
+            return 0;
+        }
+
+        try {
+            return dateHistory.getInt(0);
+        } catch (JSONException e) {
+            return 0;
+        }
+    }
+
+    public int getAbsentCount(){
+        JSONObject history;
+        try {
+            history = new JSONObject(this.getClassHistory());
+        } catch (JSONException e) {
+            return 0;
+        }
+        int absent = 0;
+        try {
+            Iterator<String> keys = history.keys();
+            while (keys.hasNext()){
+                JSONArray dateData = (JSONArray) history.get(keys.next());
                 absent += dateData.getInt(1);
             }
-            int total = present + absent;
-            this.classCounter = present + "/" + total;
         }catch (JSONException e) {
-            this.classCounter = "0/0";
+            return 0;
         }
+        return absent;
+    }
+
+    public int getAbsentCount(String date){
+        JSONObject history;
+        try {
+            history = new JSONObject(this.getClassHistory());
+        } catch (JSONException e) {
+            return 0;
+        }
+
+        JSONArray dateHistory;
+        try {
+            dateHistory = (JSONArray) history.get(date);
+        } catch (JSONException e) {
+            return 0;
+        }
+
+        try {
+            return dateHistory.getInt(1);
+        } catch (JSONException e) {
+            return 0;
+        }
+    }
+
+    public void setClassCounter(){
+        int present = this.getPresentCount();
+        int absent = this.getAbsentCount();
+        int total = present + absent;
+        this.classCounter = present + "/" + total;
     }
 }
