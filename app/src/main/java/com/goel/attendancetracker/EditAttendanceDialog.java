@@ -47,7 +47,7 @@ public class EditAttendanceDialog extends AppCompatDialogFragment {
         try {
             submitListener = (EditAttendanceDialog.SubmitNewAttendance) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must Implement SubmitAttendance");
+            throw new ClassCastException(context.toString() + " must Implement MarkAttendanceActions");
         }
     }
 

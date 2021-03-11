@@ -28,11 +28,15 @@ import com.goel.attendancetracker.classes.ClassesModel;
 import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class OrganisationActivity extends AppCompatActivity implements EditDialogBox.EditDialogListener, AddDialogBox.AddDialogListener, MarkDialogBox.SubmitAttendance {
+public class OrganisationActivity extends AppCompatActivity implements EditDialogBox.EditDialogListener, AddDialogBox.AddDialogListener, MarkDialogBox.MarkAttendanceActions {
 
     private String organisationName;
     private String organisationId;
@@ -255,6 +259,38 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
 
         cursor.close();
         rootReadable.close();
+    }
+
+    @Override
+    public void setCounters(TextView presentCounter, TextView absentCounter) {
+        int presentCount, absentCount;
+        JSONObject history;
+        try {
+            history = new JSONObject(focusedClass.getClassHistory());
+        } catch (JSONException e) {
+            return;
+        }
+        // INITIALIZING INITIAL DATE HISTORY
+        JSONArray dateHistory;
+        try {
+            dateHistory = (JSONArray) history.get(getCurrentDate());
+        } catch (JSONException e) {
+            dateHistory = new JSONArray();
+            try {
+                dateHistory.put(0, 0);
+                dateHistory.put(1, 0);
+            } catch (JSONException ignored) {
+            }
+        }
+        try {
+            presentCount = dateHistory.getInt(0);
+            absentCount = dateHistory.getInt(1);
+        } catch (JSONException e) {
+            Toast.makeText(this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        presentCounter.setText(String.valueOf(presentCount));
+        absentCounter.setText(String.valueOf(absentCount));
     }
 
     @Override
