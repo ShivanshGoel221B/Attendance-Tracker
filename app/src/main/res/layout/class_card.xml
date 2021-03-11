@@ -20,23 +20,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/list_background"
-            android:paddingStart="30dp"
+            android:paddingStart="10dp"
             android:paddingTop="10dp"
-            android:paddingEnd="30dp"
+            android:paddingEnd="10dp"
             android:paddingBottom="10dp">
 
             <TextView
                 android:id="@+id/class_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:fontFamily="@font/poly"
                 android:textAlignment="center"
                 android:textColor="?attr/text_color"
                 android:textSize="26sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/context_menu_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/context_menu_button"
+                android:layout_width="20dp"
+                android:layout_height="70dp"
+                app:layout_constraintBottom_toBottomOf="@+id/class_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/class_name"
+                app:srcCompat="@drawable/context_menu_icon"
+                app:tint="?attr/text_color" />
 
             <TextView
                 android:id="@+id/class_counter"
@@ -94,7 +104,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -104,15 +115,15 @@
 
                 <ImageView
                     android:id="@+id/class_edit_icon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/icon_edit" />
 
                 <ImageView
                     android:id="@+id/class_mark_icon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
                     android:layout_weight="1"
@@ -120,8 +131,8 @@
 
                 <ImageView
                     android:id="@+id/class_delete_icon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/icon_delete" />

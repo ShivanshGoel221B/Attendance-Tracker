@@ -178,7 +178,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     private void setClickListeners(){
         classAdapter.setOnItemClickListener(new ClassesAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onHistoryClick(int position) {
                 Intent intent = new Intent(OrganisationActivity.this, CalendarActivity.class);
                 String[] dataArray = {organisationName, String.valueOf(classList.get(position).getId()), classList.get(position).getClassName()};
                 intent.putExtra(Params.CLASS_DATA_ARRAY, dataArray);
@@ -199,6 +199,11 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
             @Override
             public void onMarkClick(int position) {
                 markAttendance(position);
+            }
+
+            @Override
+            public void onDownloadClick(int position) {
+
             }
         });
 

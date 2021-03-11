@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,10 +70,11 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
 
     // ITEM CLICK LISTENER
     public interface OnItemClickListener{
-        void onItemClick(int position);
+        void onHistoryClick(int position);
         void onDeleteClick(int position);
         void onEditClick(int position);
         void onMarkClick(int position);
+        void onDownloadClick(int position);
     }
     public void setOnItemClickListener(ClassesAdapter.OnItemClickListener listener){ clickListener = listener; }
 
@@ -86,6 +89,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
         ImageView editIcon;
         ImageView deleteIcon;
         ImageView markIcon;
+        ImageView menuIcon;
 
 
         public viewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -98,15 +102,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
             editIcon = itemView.findViewById(R.id.class_edit_icon);
             deleteIcon = itemView.findViewById(R.id.class_delete_icon);
             markIcon = itemView.findViewById(R.id.class_mark_icon);
-
-            itemView.setOnClickListener(v -> {
-                if (listener != null)
-                {
-                    int position = getAdapterPosition();
-                    if (position !=RecyclerView.NO_POSITION)
-                        listener.onItemClick(position);
-                }
-            });
+            menuIcon = itemView.findViewById(R.id.context_menu_button);
 
             editIcon.setOnClickListener(v -> {
                 if (listener != null)
@@ -132,6 +128,39 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.viewHold
                     int position = getAdapterPosition();
                     if (position !=RecyclerView.NO_POSITION)
                         listener.onMarkClick(position);
+                }
+            });
+
+            menuIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                    popupMenu.inflate(R.menu.class_context_menu);
+                    int position = getAdapterPosition();
+                    setMenuItemClickListeners(popupMenu, position, listener);
+                    popupMenu.show();
+                }
+            });
+        }
+
+        private void setMenuItemClickListeners(PopupMenu popupMenu, int position, OnItemClickListener listener) {
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @SuppressLint("NonConstantResourceId")
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (listener != null)
+                    {
+                        if (position !=RecyclerView.NO_POSITION)
+                            switch (item.getItemId()){
+                                case R.id.edit_history:
+                                    listener.onHistoryClick(position);
+                                    break;
+                                case R.id.download_class_attendance:
+                                    listener.onDownloadClick(position);
+                                    break;
+                            }
+                    }
+                    return true;
                 }
             });
         }

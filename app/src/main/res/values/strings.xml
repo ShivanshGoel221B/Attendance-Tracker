@@ -25,4 +25,6 @@
     <string name="backup">Backup</string>
     <string name="target_text">Target:</string>
     <string name="delete_all_classes">Delete All Classes</string>
+    <string name="edit_past_attendance">Edit Past Attendance</string>
+    <string name="download_attendance">Download Attendance</string>
 </resources>
