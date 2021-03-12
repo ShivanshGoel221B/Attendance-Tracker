@@ -1,8 +1,10 @@
 package com.goel.attendancetracker;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +30,7 @@ import com.goel.attendancetracker.classes.ClassesAdapter;
 import com.goel.attendancetracker.classes.ClassesModel;
 import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;
+import com.goel.attendancetracker.downloadmanager.DownloadManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +42,8 @@ import java.util.Objects;
 
 public class OrganisationActivity extends AppCompatActivity implements EditDialogBox.EditDialogListener, AddDialogBox.AddDialogListener, MarkDialogBox.MarkAttendanceActions {
 
+
+    private static final int STORAGE_PERMISSION_TOKEN = 1;
     private String organisationName;
     private String organisationId;
     private DatabaseHandler databaseHandler;
@@ -207,13 +213,53 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
 
             @Override
             public void onDownloadClick(int position) {
-
+                focusedClass = classList.get(position);
+                downloadClassAttendance();
             }
         });
 
     }
+    
+    //========== DOWNLOAD ATTENDANCE ============//
 
+    private boolean hasStoragePermission(){
+        return ContextCompat.checkSelfPermission(OrganisationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(OrganisationActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+    
+    private void requestStoragePermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(OrganisationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            ActivityCompat.requestPermissions(OrganisationActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_TOKEN);
+        }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == STORAGE_PERMISSION_TOKEN){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                downloadClassAttendance();
+            else
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void downloadClassAttendance(){
+        if (hasStoragePermission()){
+            DownloadManager downloadManager = new DownloadManager(focusedClass);
+            switch (downloadManager.downloadAttendance()){
+                case DownloadManager.DOWNLOAD_FAILED:
+                    Toast.makeText(OrganisationActivity.this, "Download Failed", Toast.LENGTH_SHORT).show();
+                    break;
+                case DownloadManager.DOWNLOAD_SUCCESSFUL:
+                    Toast.makeText(OrganisationActivity.this, "File Saved as " + downloadManager.getFilePath(), Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+        else{
+            requestStoragePermission();
+        }
+    }
+    //=======================================================================//
     // Button methods
 
     private void markAttendance(int position) {
