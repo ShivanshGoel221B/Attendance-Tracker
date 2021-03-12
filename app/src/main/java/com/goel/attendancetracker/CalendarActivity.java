@@ -67,7 +67,7 @@ public class CalendarActivity extends AppCompatActivity implements EditAttendanc
     private void initializeViews() {
         CalendarView calendarView = findViewById(R.id.class_calendar);
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            focusedDate = String.valueOf(year) + month + dayOfMonth;
+            focusedDate = getFormattedDate(year, month, dayOfMonth);
             setAttendance();
         });
         presentCounter = findViewById(R.id.present_counter);
@@ -81,7 +81,13 @@ public class CalendarActivity extends AppCompatActivity implements EditAttendanc
 
     private String getCurrentDate(){
         Calendar calendar = Calendar.getInstance();
-        return String.valueOf(calendar.get(Calendar.YEAR)) + calendar.get(Calendar.MONTH) + calendar.get(Calendar.DATE);
+        return getFormattedDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+    }
+
+    private String getFormattedDate(int year, int month, int date){
+        String formattedDate = (date > 10)? String.valueOf(date): "0" + date;
+        String formattedMonth = (month > 10)? String.valueOf(month): "0" + month;
+        return year + formattedMonth + formattedDate;
     }
 
     public void editAttendance(View view){

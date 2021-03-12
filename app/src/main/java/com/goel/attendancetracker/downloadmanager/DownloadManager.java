@@ -20,14 +20,16 @@ public class DownloadManager {
     public static final int DOWNLOAD_FAILED = -1;
     private String filePath;
     private final ClassesModel model;
-    PdfDocument document;
-    Paint paint;
-    PdfDocument.PageInfo pageInfo;
-    PdfDocument.Page page;
-    Canvas canvas;
+    private PdfDocument document;
+    private Paint paint;
+    private PdfDocument.PageInfo pageInfo;
+    private PdfDocument.Page page;
+    private int pageNumber;
+    private Canvas canvas;
 
     public DownloadManager(ClassesModel model) {
         this.model = model;
+        this.pageNumber = 0;
         this.setFilePath();
     }
 
@@ -42,7 +44,8 @@ public class DownloadManager {
     public int downloadAttendance(){
         this.initializeDocument();
         File file = new File(Environment.getExternalStorageDirectory(), "/" + this.getFilePath());
-        this.createPage();
+        this.addPage();
+        this.writeToPage();
         try {
             downloadFile(file);
             this.document.close();
@@ -58,16 +61,19 @@ public class DownloadManager {
     private void initializeDocument(){
         this.document = new PdfDocument();
         this.paint = new Paint();
-        this.pageInfo = new PdfDocument.PageInfo.Builder(WIDTH, HEIGHT, 1).create();
+    }
+
+    private void addPage()  {
+        this.pageNumber++;
+        this.pageInfo = new PdfDocument.PageInfo.Builder(WIDTH, HEIGHT, this.pageNumber).create();
         this.page = document.startPage(pageInfo);
         this.canvas = page.getCanvas();
     }
 
-    private void createPage()  {
+    private void writeToPage(){
         this.canvas.drawText(TITLE, 10, 10, this.paint);
         this.document.finishPage(this.page);
     }
-
 
     private void downloadFile(File file) throws IOException {
         try {

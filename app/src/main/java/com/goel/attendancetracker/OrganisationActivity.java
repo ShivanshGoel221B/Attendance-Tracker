@@ -429,7 +429,13 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
 
     private String getCurrentDate(){
         Calendar calendar = Calendar.getInstance();
-        return String.valueOf(calendar.get(Calendar.YEAR)) + calendar.get(Calendar.MONTH) + calendar.get(Calendar.DATE);
+        return getFormattedDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+    }
+
+    private String getFormattedDate(int year, int month, int date){
+        String formattedDate = (date > 10)? String.valueOf(date): "0" + date;
+        String formattedMonth = (month > 10)? String.valueOf(month): "0" + month;
+        return year + formattedMonth + formattedDate;
     }
 
     @Override
