@@ -226,12 +226,6 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
         return ContextCompat.checkSelfPermission(OrganisationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(OrganisationActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
-    
-    private void requestStoragePermission(){
-        if (ActivityCompat.shouldShowRequestPermissionRationale(OrganisationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-            ActivityCompat.requestPermissions(OrganisationActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_TOKEN);
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -256,7 +250,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
             }
         }
         else{
-            requestStoragePermission();
+            ActivityCompat.requestPermissions(OrganisationActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_TOKEN);
         }
     }
     //=======================================================================//
