@@ -100,7 +100,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
                 deleteAllClasses();
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     //===========================================
