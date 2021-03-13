@@ -36,7 +36,7 @@ public class ClassDownloadManager extends FileDataModel {
     }
 
     private void setFilePath(){
-        this.filePath = "Attendance Tracker" + "/" + this.model.getClassName() + ".pdf";
+        this.filePath = "Attendance Tracker/" + this.getOrganisationName() + "/" + this.model.getClassName() + ".pdf";
     }
 
     public String getFilePath(){
@@ -84,7 +84,7 @@ public class ClassDownloadManager extends FileDataModel {
             this.document.writeTo(new FileOutputStream(file));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            (new File(Environment.getExternalStorageDirectory(), "/Attendance Tracker")).mkdirs();
+            (new File(Environment.getExternalStorageDirectory(), "/Attendance Tracker/" + this.getOrganisationName())).mkdirs();
             this.document.writeTo(new FileOutputStream(file));
         }
     }

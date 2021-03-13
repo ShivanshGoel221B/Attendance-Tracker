@@ -41,10 +41,9 @@
             <ImageView
                 android:id="@+id/context_menu_button"
                 android:layout_width="20dp"
-                android:layout_height="70dp"
-                app:layout_constraintBottom_toBottomOf="@+id/class_name"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/class_name"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/context_menu_icon"
                 app:tint="?attr/text_color" />
 
