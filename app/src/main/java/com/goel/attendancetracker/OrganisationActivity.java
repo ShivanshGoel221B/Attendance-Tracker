@@ -8,7 +8,11 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +34,8 @@ import com.goel.attendancetracker.classes.ClassesAdapter;
 import com.goel.attendancetracker.classes.ClassesModel;
 import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;
-import com.goel.attendancetracker.downloadmanager.DownloadManager;
+import com.goel.attendancetracker.downloadmanager.ClassDownloadManager;
+import com.goel.attendancetracker.downloadmanager.FileDataModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -239,13 +244,14 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
 
     private void downloadClassAttendance(){
         if (hasStoragePermission()){
-            DownloadManager downloadManager = new DownloadManager(focusedClass);
-            switch (downloadManager.downloadAttendance()){
-                case DownloadManager.DOWNLOAD_FAILED:
+            ClassDownloadManager classDownloadManager = new ClassDownloadManager(focusedClass, organisationName);
+            setFileModelData();
+            switch (classDownloadManager.downloadAttendance()){
+                case ClassDownloadManager.DOWNLOAD_FAILED:
                     Toast.makeText(OrganisationActivity.this, "Download Failed", Toast.LENGTH_SHORT).show();
                     break;
-                case DownloadManager.DOWNLOAD_SUCCESSFUL:
-                    Toast.makeText(OrganisationActivity.this, "File Saved as " + downloadManager.getFilePath(), Toast.LENGTH_LONG).show();
+                case ClassDownloadManager.DOWNLOAD_SUCCESSFUL:
+                    Toast.makeText(OrganisationActivity.this, "File Saved as " + classDownloadManager.getFilePath(), Toast.LENGTH_LONG).show();
                     break;
             }
         }
@@ -427,9 +433,27 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     }
 
     private String getFormattedDate(int year, int month, int date){
-        String formattedDate = (date > 10)? String.valueOf(date): "0" + date;
-        String formattedMonth = (month > 10)? String.valueOf(month): "0" + month;
+        String formattedDate = (date >= 10)? String.valueOf(date): "0" + date;
+        String formattedMonth = (month >= 10)? String.valueOf(month): "0" + month;
         return year + formattedMonth + formattedDate;
+    }
+
+    private void setFileModelData() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            FileDataModel.fonts = new Typeface[]{
+                    getResources().getFont(R.font.halant),
+                    getResources().getFont(R.font.halant_medium),
+                    getResources().getFont(R.font.halant_semibold),
+                    getResources().getFont(R.font.poly),
+                    getResources().getFont(R.font.adamina)
+            };
+        }
+
+        FileDataModel.logo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.logo), 110, 110, false);
+
+        FileDataModel.safeColor = ContextCompat.getColor(OrganisationActivity.this, R.color.green);
+        FileDataModel.lowColor = ContextCompat.getColor(OrganisationActivity.this, R.color.orange);
+        FileDataModel.dangerColor = ContextCompat.getColor(OrganisationActivity.this, R.color.neon_red);
     }
 
     @Override
