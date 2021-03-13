@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ClassDownloadManager extends FileDataModel {
-    public static final int WIDTH = 720;
+    public static final int WIDTH = 740;
     public static final int HEIGHT = 1300;
     public static final int TITLE_PAGE_HEIGHT = 550;
     public static final int DOWNLOAD_SUCCESSFUL = 1;
@@ -26,7 +26,7 @@ public class ClassDownloadManager extends FileDataModel {
     private PdfDocument.Page page;
     private int pageNumber;
     private Canvas canvas;
-    private String organisationName;
+    private final String organisationName;
 
     public ClassDownloadManager(ClassesModel model, String organisationName) {
         this.model = model;
@@ -113,10 +113,6 @@ public class ClassDownloadManager extends FileDataModel {
 
     public PdfDocument.Page getPage() {
         return page;
-    }
-
-    public int getPageNumber() {
-        return pageNumber;
     }
 
     public Canvas getCanvas() {

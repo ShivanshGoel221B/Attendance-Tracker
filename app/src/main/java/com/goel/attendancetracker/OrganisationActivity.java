@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -439,21 +439,16 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     }
 
     private void setFileModelData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            FileDataModel.fonts = new Typeface[]{
-                    getResources().getFont(R.font.halant),
-                    getResources().getFont(R.font.halant_medium),
-                    getResources().getFont(R.font.halant_semibold),
-                    getResources().getFont(R.font.poly),
-                    getResources().getFont(R.font.adamina)
-            };
-        }
+        FileDataModel.fonts = new Typeface[]{
+                ResourcesCompat.getFont(OrganisationActivity.this, R.font.halant),
+                ResourcesCompat.getFont(OrganisationActivity.this, R.font.halant_medium),
+                ResourcesCompat.getFont(OrganisationActivity.this, R.font.halant_semibold),
+                ResourcesCompat.getFont(OrganisationActivity.this, R.font.poly),
+                ResourcesCompat.getFont(OrganisationActivity.this, R.font.adamina)
+        };
 
         FileDataModel.logo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.logo), 110, 110, false);
         FileDataModel.table = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.attendance_table), 700, 1000, false);
-        FileDataModel.safeColor = ContextCompat.getColor(OrganisationActivity.this, R.color.green);
-        FileDataModel.lowColor = ContextCompat.getColor(OrganisationActivity.this, R.color.orange);
-        FileDataModel.dangerColor = ContextCompat.getColor(OrganisationActivity.this, R.color.neon_red);
     }
 
     @Override
