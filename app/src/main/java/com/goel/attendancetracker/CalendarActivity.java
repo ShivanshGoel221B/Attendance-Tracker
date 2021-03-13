@@ -75,8 +75,10 @@ public class CalendarActivity extends AppCompatActivity implements EditAttendanc
     }
 
     private void setAttendance() {
-        presentCounter.setText(String.valueOf(openClass.getPresentCount(focusedDate)));
-        absentCounter.setText(String.valueOf(openClass.getAbsentCount(focusedDate)));
+        present = openClass.getPresentCount(focusedDate);
+        absent = openClass.getAbsentCount(focusedDate);
+        presentCounter.setText(String.valueOf(present));
+        absentCounter.setText(String.valueOf(absent));
     }
 
     private String getCurrentDate(){
