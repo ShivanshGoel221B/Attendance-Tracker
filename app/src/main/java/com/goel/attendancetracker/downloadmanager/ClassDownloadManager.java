@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ClassDownloadManager extends FileDataModel {
     public static final int WIDTH = 720;
-    public static final int HEIGHT = 1280;
+    public static final int HEIGHT = 1300;
     public static final int TITLE_PAGE_HEIGHT = 550;
     public static final int DOWNLOAD_SUCCESSFUL = 1;
     public static final int DOWNLOAD_FAILED = -1;

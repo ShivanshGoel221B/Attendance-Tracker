@@ -450,7 +450,7 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
         }
 
         FileDataModel.logo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.logo), 110, 110, false);
-
+        FileDataModel.table = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.attendance_table), 700, 1000, false);
         FileDataModel.safeColor = ContextCompat.getColor(OrganisationActivity.this, R.color.green);
         FileDataModel.lowColor = ContextCompat.getColor(OrganisationActivity.this, R.color.orange);
         FileDataModel.dangerColor = ContextCompat.getColor(OrganisationActivity.this, R.color.neon_red);
