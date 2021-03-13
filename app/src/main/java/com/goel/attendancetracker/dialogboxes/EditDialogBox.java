@@ -1,4 +1,4 @@
-package com.goel.attendancetracker;
+package com.goel.attendancetracker.dialogboxes;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +11,8 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.goel.attendancetracker.R;
 
 import java.util.Objects;
 

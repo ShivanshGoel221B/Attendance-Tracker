@@ -34,6 +34,9 @@ import com.goel.attendancetracker.classes.ClassesAdapter;
 import com.goel.attendancetracker.classes.ClassesModel;
 import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;
+import com.goel.attendancetracker.dialogboxes.AddDialogBox;
+import com.goel.attendancetracker.dialogboxes.EditDialogBox;
+import com.goel.attendancetracker.dialogboxes.MarkDialogBox;
 import com.goel.attendancetracker.downloadmanager.ClassDownloadManager;
 import com.goel.attendancetracker.downloadmanager.FileDataModel;
 
