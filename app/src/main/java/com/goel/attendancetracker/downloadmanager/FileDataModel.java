@@ -5,8 +5,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.util.Log;
 
 import com.goel.attendancetracker.R;
+import com.google.android.gms.common.util.ArrayUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class FileDataModel {
 
@@ -85,6 +97,42 @@ public abstract class FileDataModel {
     }
 
     public void writeAttendance(ClassDownloadManager manager){
+        int[][] attendanceDate = getSortedAttendanceData(manager);
+    }
 
+    private int[][] getSortedAttendanceData(ClassDownloadManager manager){
+        int days = 0, months = 0;
+        int[] years = getSortedYears(manager);
+        HashMap<Integer, int[]> monthData = new HashMap<>();
+        return new int[][] {{}, {}};
+    }
+
+    private int[] getSortedYears(ClassDownloadManager manager){
+        HashSet<Integer> tempSet = new HashSet<>();
+        JSONObject history;
+        try {
+            history = new JSONObject(manager.getModel().getClassHistory());
+        } catch (JSONException e) {
+            return new int[]{};
+        }
+        Iterator<String> keys = history.keys();
+        while (keys.hasNext()){
+            String year = keys.next().substring(0, 4);
+            tempSet.add(Integer.valueOf(year));
+        }
+
+        int[] years = ArrayUtils.toPrimitiveArray(tempSet);
+        sort(years);
+        return years;
+    }
+
+    private void sort(int[] array){
+        for (int i = 0; i < array.length-1; i++) {
+            if (array[i] > array[i+1]){
+                int temp = array[i];
+                array[i] = array[i+1];
+                array[i+1] = temp;
+            }
+        }
     }
 }

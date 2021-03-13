@@ -433,8 +433,8 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
     }
 
     private String getFormattedDate(int year, int month, int date){
-        String formattedDate = (date > 10)? String.valueOf(date): "0" + date;
-        String formattedMonth = (month > 10)? String.valueOf(month): "0" + month;
+        String formattedDate = (date >= 10)? String.valueOf(date): "0" + date;
+        String formattedMonth = (month >= 10)? String.valueOf(month): "0" + month;
         return year + formattedMonth + formattedDate;
     }
 
