@@ -12,10 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class DownloadManager {
-    public static final String TITLE = "Attendance Tracker";
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 600;
+public class ClassDownloadManager extends FileDataModel {
+    public static final int WIDTH = 720;
+    public static final int HEIGHT = 1280;
+    public static final int TITLE_PAGE_HEIGHT = 550;
     public static final int DOWNLOAD_SUCCESSFUL = 1;
     public static final int DOWNLOAD_FAILED = -1;
     private String filePath;
@@ -26,9 +26,11 @@ public class DownloadManager {
     private PdfDocument.Page page;
     private int pageNumber;
     private Canvas canvas;
+    private String organisationName;
 
-    public DownloadManager(ClassesModel model) {
+    public ClassDownloadManager(ClassesModel model, String organisationName) {
         this.model = model;
+        this.organisationName = organisationName;
         this.pageNumber = 0;
         this.setFilePath();
     }
@@ -63,16 +65,18 @@ public class DownloadManager {
         this.paint = new Paint();
     }
 
-    private void addPage()  {
+    public void addPage()  {
         this.pageNumber++;
-        this.pageInfo = new PdfDocument.PageInfo.Builder(WIDTH, HEIGHT, this.pageNumber).create();
+        int height = this.pageNumber == 1 ? TITLE_PAGE_HEIGHT : HEIGHT;
+        this.pageInfo = new PdfDocument.PageInfo.Builder(WIDTH, height, this.pageNumber).create();
         this.page = document.startPage(pageInfo);
         this.canvas = page.getCanvas();
     }
 
     private void writeToPage(){
-        this.canvas.drawText(TITLE, 10, 10, this.paint);
+        this.createFirstPage(this);
         this.document.finishPage(this.page);
+        this.writeAttendance(this);
     }
 
     private void downloadFile(File file) throws IOException {
@@ -83,5 +87,39 @@ public class DownloadManager {
             (new File(Environment.getExternalStorageDirectory(), "/Attendance Tracker")).mkdirs();
             this.document.writeTo(new FileOutputStream(file));
         }
+    }
+
+    // ===================== GETTERS AND SETTERS ===================== //
+
+    public ClassesModel getModel() {
+        return model;
+    }
+
+    public String getOrganisationName() {
+        return organisationName;
+    }
+
+    public PdfDocument getDocument() {
+        return document;
+    }
+
+    public Paint getPaint() {
+        return paint;
+    }
+
+    public PdfDocument.PageInfo getPageInfo() {
+        return pageInfo;
+    }
+
+    public PdfDocument.Page getPage() {
+        return page;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public Canvas getCanvas() {
+        return canvas;
     }
 }
