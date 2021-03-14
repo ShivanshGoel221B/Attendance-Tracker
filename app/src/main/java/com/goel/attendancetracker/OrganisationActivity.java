@@ -36,6 +36,7 @@ import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;
 import com.goel.attendancetracker.dialogboxes.AddDialogBox;
 import com.goel.attendancetracker.dialogboxes.EditDialogBox;
+import com.goel.attendancetracker.dialogboxes.LoadingDialogBox;
 import com.goel.attendancetracker.dialogboxes.MarkDialogBox;
 import com.goel.attendancetracker.downloadmanager.ClassDownloadManager;
 import com.goel.attendancetracker.downloadmanager.FileDataModel;
@@ -221,8 +222,12 @@ public class OrganisationActivity extends AppCompatActivity implements EditDialo
 
             @Override
             public void onDownloadClick(int position) {
+                LoadingDialogBox.loadingText = "Downloading Class Attendance";
+                LoadingDialogBox loadingDialogBox = new LoadingDialogBox();
+                loadingDialogBox.show(getSupportFragmentManager(), "loading dialog");
                 focusedClass = classList.get(position);
                 downloadClassAttendance();
+                loadingDialogBox.dismiss();
             }
         });
 
