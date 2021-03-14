@@ -13,9 +13,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ClassDownloadManager extends FileDataModel {
-    public static final int WIDTH = 740;
-    public static final int HEIGHT = 1300;
-    public static final int TITLE_PAGE_HEIGHT = 550;
+    private static final int WIDTH = 740;
+    private static final int HEIGHT = 1300;
+    private static final int TITLE_PAGE_HEIGHT = 550;
+    private static final int Last_PAGE_HEIGHT = 300;
     public static final int DOWNLOAD_SUCCESSFUL = 1;
     public static final int DOWNLOAD_FAILED = -1;
     private String filePath;
@@ -46,7 +47,7 @@ public class ClassDownloadManager extends FileDataModel {
     public int downloadAttendance(){
         this.initializeDocument();
         File file = new File(Environment.getExternalStorageDirectory(), "/" + this.getFilePath());
-        this.addPage();
+        this.addPage(false);
         this.writeToPage();
         try {
             downloadFile(file);
@@ -65,9 +66,16 @@ public class ClassDownloadManager extends FileDataModel {
         this.paint = new Paint();
     }
 
-    public void addPage()  {
+    public void addPage(boolean isLastPage)  {
         this.pageNumber++;
-        int height = this.pageNumber == 1 ? TITLE_PAGE_HEIGHT : HEIGHT;
+        int height;
+        if (this.pageNumber == 1){
+            height = TITLE_PAGE_HEIGHT;
+        } else if (isLastPage){
+            height = Last_PAGE_HEIGHT;
+        } else {
+            height = HEIGHT;
+        }
         this.pageInfo = new PdfDocument.PageInfo.Builder(WIDTH, height, this.pageNumber).create();
         this.page = document.startPage(pageInfo);
         this.canvas = page.getCanvas();
