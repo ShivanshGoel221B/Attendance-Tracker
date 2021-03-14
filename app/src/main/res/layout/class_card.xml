@@ -114,8 +114,9 @@
 
                 <ImageView
                     android:id="@+id/class_edit_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/icon_edit" />
 
@@ -123,6 +124,7 @@
                     android:id="@+id/class_mark_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
                     android:layout_weight="1"
