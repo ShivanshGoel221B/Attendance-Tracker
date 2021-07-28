@@ -1,4 +1,4 @@
-package com.goel.attendancetracker;
+package com.goel.attendancetracker.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.goel.attendancetracker.R;
 import com.goel.attendancetracker.classes.ClassesModel;
 import com.goel.attendancetracker.database.DatabaseHandler;
 import com.goel.attendancetracker.database.Params;

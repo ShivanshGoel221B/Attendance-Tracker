@@ -1,4 +1,4 @@
-package com.goel.attendancetracker;
+package com.goel.attendancetracker.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.goel.attendancetracker.R;
 import com.goel.attendancetracker.database.Params;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

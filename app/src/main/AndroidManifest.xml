@@ -23,28 +23,28 @@
             android:value="ca-app-pub-1920879049161492~1834069036" />
 
         <activity
-            android:name=".BackupRestoreActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".activities.BackupRestoreActivity"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".SignInActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".activities.SignInActivity"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".CalendarActivity"
-            android:parentActivityName=".OrganisationActivity" />
+            android:name=".activities.CalendarActivity"
+            android:parentActivityName=".activities.OrganisationActivity" />
         <activity
-            android:name=".OrganisationActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".activities.OrganisationActivity"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".NewOrganisationActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".SplashActivity">
+            android:name=".activities.NewOrganisationActivity"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.MainActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

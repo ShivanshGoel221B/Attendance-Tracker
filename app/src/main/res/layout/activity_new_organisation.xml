@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/base_background"
-    tools:context=".NewOrganisationActivity">
+    tools:context=".activities.NewOrganisationActivity">
 
     <TextView
         android:id="@+id/new_organisation_title"

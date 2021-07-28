@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/base_background"
-    tools:context=".BackupRestoreActivity">
+    tools:context=".activities.BackupRestoreActivity">
 
     <LinearLayout
         android:id="@+id/email_title"

@@ -1,4 +1,4 @@
-package com.goel.attendancetracker
+package com.goel.attendancetracker.activities
 
 import android.content.ContentValues
 import android.content.Intent
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.goel.attendancetracker.R
 import com.goel.attendancetracker.database.DatabaseHandler
 import com.goel.attendancetracker.database.Params
 import com.goel.attendancetracker.dialogboxes.EditDialogBox
