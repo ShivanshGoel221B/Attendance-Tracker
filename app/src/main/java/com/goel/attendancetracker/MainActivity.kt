@@ -1,219 +1,205 @@
-package com.goel.attendancetracker;
+package com.goel.attendancetracker
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.content.ContentValues
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.goel.attendancetracker.database.DatabaseHandler
+import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.dialogboxes.EditDialogBox
+import com.goel.attendancetracker.dialogboxes.EditDialogBox.EditDialogListener
+import com.goel.attendancetracker.organisations.OrganisationsAdapter
+import com.goel.attendancetracker.organisations.OrganisationsModel
+import java.util.*
+import kotlin.system.exitProcess
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class MainActivity : AppCompatActivity(), EditDialogListener {
+    private lateinit var databaseHandler: DatabaseHandler
+    private lateinit var organisationContainer: RecyclerView
+    private lateinit var organisationsAdapter: OrganisationsAdapter
+    private lateinit var organisationList: ArrayList<OrganisationsModel>
+    private var focusedOrganisation: OrganisationsModel? = null
 
-import com.goel.attendancetracker.database.DatabaseHandler;
-import com.goel.attendancetracker.database.Params;
-import com.goel.attendancetracker.dialogboxes.EditDialogBox;
-import com.goel.attendancetracker.organisations.OrganisationsAdapter;
-import com.goel.attendancetracker.organisations.OrganisationsModel;
+    private val APP_URL = "https://play.google.com/store/apps/details?id=com.goel.attendancetracker"
 
-import java.util.ArrayList;
-
-
-public class MainActivity extends AppCompatActivity implements EditDialogBox.EditDialogListener {
-    private DatabaseHandler databaseHandler;
-    private RecyclerView organisationContainer;
-    private OrganisationsAdapter organisationsAdapter;
-    private ArrayList<OrganisationsModel> organisationList;
-    private OrganisationsModel focusedOrganisation;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        organisationContainer = findViewById(R.id.organisations_container);
-        organisationList = new ArrayList<>();
-        databaseHandler = new DatabaseHandler(MainActivity.this);
-        setOrganisationAdapter();
-        getOrganisationList();
-        setClickListeners();
-        Params.OPEN_ORG = null;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        organisationContainer = findViewById(R.id.organisations_container)
+        organisationList = ArrayList()
+        databaseHandler = DatabaseHandler(this@MainActivity)
+        setOrganisationAdapter()
+        getOrganisationList()
+        setClickListeners()
+        Params.OPEN_ORG = null
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_toolbar_menu, menu)
+        return true
     }
 
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        String APP_URL = "https://play.google.com/store/apps/details?id=com.goel.attendancetracker";
-        switch(item.getItemId()){
-            case R.id.menu_backup_restore:
-                startActivity(new Intent(MainActivity.this, SignInActivity.class));
-                break;
-            case R.id.menu_share:
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, APP_URL);
-                shareIntent.setType("text/plain");
-                Intent.createChooser(shareIntent,"Share via");
-                startActivity(shareIntent);
-                break;
-            case R.id.menu_rate_us:
-                Uri appUri = Uri.parse(APP_URL);
-                Intent rateIntent = new Intent(Intent.ACTION_VIEW, appUri);
-                startActivity(rateIntent);
-                break;
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_backup_restore -> startActivity(
+                Intent(
+                    this@MainActivity,
+                    SignInActivity::class.java
+                )
+            )
+            R.id.menu_share -> {
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.putExtra(Intent.EXTRA_TEXT, APP_URL)
+                shareIntent.type = "text/plain"
+                Intent.createChooser(shareIntent, "Share via")
+                startActivity(shareIntent)
+            }
+            R.id.menu_rate_us -> {
+                val appUri = Uri.parse(APP_URL)
+                val rateIntent = Intent(Intent.ACTION_VIEW, appUri)
+                startActivity(rateIntent)
+            }
         }
-        return true;
+        return true
     }
 
-    private void setOrganisationAdapter() {
-        organisationsAdapter = new OrganisationsAdapter(organisationList, this);
-        organisationContainer.setAdapter(organisationsAdapter);
-
-        LinearLayoutManager organisationLayout = new LinearLayoutManager(this);
-        organisationContainer.setLayoutManager(organisationLayout);
+    private fun setOrganisationAdapter() {
+        organisationsAdapter = OrganisationsAdapter(organisationList, this)
+        organisationContainer.adapter = organisationsAdapter
+        val organisationLayout = LinearLayoutManager(this)
+        organisationContainer.layoutManager = organisationLayout
     }
 
-    private void getOrganisationList() {
-        SQLiteDatabase organisationsRef =  databaseHandler.getReadableDatabase();
-        String getCommand = "SELECT * FROM " + Params.ORGANISATIONS;
-        Cursor cursor = organisationsRef.rawQuery(getCommand, null);
-
-        if (cursor.moveToFirst())
-        {
+    private fun getOrganisationList() {
+        val organisationsRef = databaseHandler.readableDatabase
+        val getCommand = "SELECT * FROM " + Params.ORGANISATIONS
+        val cursor = organisationsRef.rawQuery(getCommand, null)
+        if (cursor.moveToFirst()) {
             do {
-                OrganisationsModel organisation = new OrganisationsModel();
-                organisation.setId(cursor.getInt(0));
-                organisation.setOrganisationName(cursor.getString(1));
-                organisation.setOrganisationAttendancePercentage(cursor.getInt(2));
-                organisation.setRequiredAttendance(cursor.getInt(3));
-                organisationList.add(organisation);
-                organisationsAdapter.notifyItemInserted(organisationsAdapter.getItemCount()-1);
-            }while (cursor.moveToNext());
+                val organisation = OrganisationsModel()
+                organisation.id = cursor.getInt(0)
+                organisation.organisationName = cursor.getString(1)
+                organisation.organisationAttendancePercentage = cursor.getInt(2)
+                organisation.requiredAttendance = cursor.getInt(3)
+                organisationList.add(organisation)
+                organisationsAdapter.notifyItemInserted(organisationsAdapter.itemCount - 1)
+            } while (cursor.moveToNext())
         }
-        cursor.close();
-        organisationsRef.close();
+        cursor.close()
+        organisationsRef.close()
     }
 
-    private void setClickListeners()
-    {
-        organisationsAdapter.setOnItemClickListener(new OrganisationsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Params.OPEN_ORG = String.valueOf(organisationList.get(position).getId());
-                openOrganisation();
+    private fun setClickListeners() {
+        organisationsAdapter.setOnItemClickListener(object :
+            OrganisationsAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                Params.OPEN_ORG = organisationList[position].id.toString()
+                openOrganisation()
             }
 
-            @Override
-            public void onEditClick(int position) {
-                focusedOrganisation = organisationList.get(position);
-                editOrganisation();
+            override fun onEditClick(position: Int) {
+                focusedOrganisation = organisationList[position]
+                editOrganisation()
             }
 
-            @Override
-            public void onDeleteClick(int position) {
-                deleteOrganisation(position);
+            override fun onDeleteClick(position: Int) {
+                deleteOrganisation(position)
             }
-
-        });
+        })
     }
 
-
-    private void openOrganisation() {
-        Intent intent = new Intent(getApplicationContext(), OrganisationActivity.class);
-        startActivity(intent);
+    private fun openOrganisation() {
+        val intent = Intent(applicationContext, OrganisationActivity::class.java)
+        startActivity(intent)
     }
 
-    private void editOrganisation() {
-        EditDialogBox editDialogBox = new EditDialogBox();
-        editDialogBox.show(getSupportFragmentManager(), "edit dialog");
-        EditDialogBox.name = focusedOrganisation.getOrganisationName();
-        EditDialogBox.target = focusedOrganisation.getRequiredAttendance();
+    private fun editOrganisation() {
+        val editDialogBox = EditDialogBox()
+        editDialogBox.show(supportFragmentManager, "edit dialog")
+        EditDialogBox.name = focusedOrganisation!!.organisationName
+        EditDialogBox.target = focusedOrganisation!!.requiredAttendance
     }
 
-    private void deleteOrganisation(int position) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setMessage("Are you sure you want to delete " + organisationList.get(position).getOrganisationName() + " ?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    organisationsAdapter.notifyItemRemoved(position);
-                    databaseHandler.deleteOrganisation(String.valueOf(organisationList.get(position).getId()), organisationList.get(position).getOrganisationName());
-                    Toast.makeText(MainActivity.this, "Deleted " + organisationList.get(position).getOrganisationName(), Toast.LENGTH_LONG).show();
-                    organisationList.remove(position);
-                })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                .show();
+    private fun deleteOrganisation(position: Int) {
+        AlertDialog.Builder(this@MainActivity)
+            .setMessage("Are you sure you want to delete " + organisationList[position].organisationName + " ?")
+            .setPositiveButton("Yes") { _, _ ->
+                organisationsAdapter.notifyItemRemoved(position)
+                databaseHandler.deleteOrganisation(
+                    organisationList[position].id.toString(),
+                    organisationList[position].organisationName
+                )
+                Toast.makeText(
+                    this@MainActivity,
+                    "Deleted " + organisationList[position].organisationName,
+                    Toast.LENGTH_LONG
+                ).show()
+                organisationList.removeAt(position)
+            }
+            .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
-    public void addOrganisationButton(View view) {
-        Intent intent = new Intent(MainActivity.this, NewOrganisationActivity.class);
-        startActivity(intent);
+    fun addOrganisationButton(view: View?) {
+        val intent = Intent(this@MainActivity, NewOrganisationActivity::class.java)
+        startActivity(intent)
     }
 
-    @Override
-    public void submitDetails(EditText newNameText, EditText newTargetText) {
-        if (isDataValid(newNameText, newTargetText))
-        {
-            ContentValues values = new ContentValues();
-            values.put("name", newNameText.getText().toString());
-            values.put("target", Integer.parseInt(newTargetText.getText().toString()));
-            databaseHandler.updateOrganisation(values, focusedOrganisation.getOrganisationName());
-            if (!newNameText.getText().toString().equals(focusedOrganisation.getOrganisationName()))
-                databaseHandler.renameOrganisationTable(focusedOrganisation.getOrganisationName(), newNameText.getText().toString());
-            focusedOrganisation.setOrganisationName(newNameText.getText().toString());
-            focusedOrganisation.setRequiredAttendance(Integer.parseInt(newTargetText.getText().toString()));
-            organisationsAdapter.notifyItemChanged(organisationList.indexOf(focusedOrganisation));
-            Toast.makeText(this, "Updated Successfully", Toast.LENGTH_LONG).show();
-            focusedOrganisation = null;
+    override fun submitDetails(newNameText: EditText, newTargetText: EditText) {
+        if (isDataValid(newNameText, newTargetText)) {
+            val values = ContentValues()
+            values.put("name", newNameText.text.toString())
+            values.put("target", newTargetText.text.toString().toInt())
+            databaseHandler.updateOrganisation(values, focusedOrganisation!!.organisationName)
+            if (newNameText.text.toString() != focusedOrganisation!!.organisationName) databaseHandler.renameOrganisationTable(
+                focusedOrganisation!!.organisationName, newNameText.text.toString()
+            )
+            focusedOrganisation?.organisationName = newNameText.text.toString()
+            focusedOrganisation?.requiredAttendance = newTargetText.text.toString().toInt()
+            organisationsAdapter.notifyItemChanged(organisationList.indexOf(focusedOrganisation!!))
+            Toast.makeText(this, "Updated Successfully", Toast.LENGTH_LONG).show()
+            focusedOrganisation = null
         }
     }
 
-    private boolean isDataValid(EditText newNameText, EditText newTargetText) {
-        String name;
-        int target;
-        try {
-            name = newNameText.getText().toString();
-        } catch (Exception e) {
-            name = "";
+    private fun isDataValid(newNameText: EditText, newTargetText: EditText): Boolean {
+        val name: String = try {
+            newNameText.text.toString()
+        } catch (e: Exception) {
+            ""
         }
-        try {
-            target = Integer.parseInt(newTargetText.getText().toString());
-        } catch (NumberFormatException e) {
-            target = 101;
+        val target: Int = try {
+            newTargetText.text.toString().toInt()
+        } catch (e: NumberFormatException) {
+            101
         }
         if (name.isEmpty()) {
-            newNameText.setError("Please Enter a valid name");
-            return false;
+            newNameText.error = "Please Enter a valid name"
+            return false
         }
-        if (name.length()>30){
-            newNameText.setError("The length of the name should be less than or equal to 30");
-            return false;
+        if (name.length > 30) {
+            newNameText.error = "The length of the name should be less than or equal to 30"
+            return false
         }
-        if (target>100 || target<0){
-            newTargetText.setError("Enter a valid number from 0 to 100");
+        if (target > 100 || target < 0) {
+            newTargetText.error = "Enter a valid number from 0 to 100"
         }
-        return true;
+        return true
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finishAffinity();
-        System.exit(0);
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+        exitProcess(0)
     }
 }
