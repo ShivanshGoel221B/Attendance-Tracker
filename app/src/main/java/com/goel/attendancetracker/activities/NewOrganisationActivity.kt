@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.goel.attendancetracker.R
 import com.goel.attendancetracker.database.DatabaseHandler
-import com.goel.attendancetracker.database.OrganisationsDataModel
 import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.models.OrganisationsModel
 
 class NewOrganisationActivity : AppCompatActivity() {
     private lateinit var databaseHandler: DatabaseHandler
@@ -42,7 +42,7 @@ class NewOrganisationActivity : AppCompatActivity() {
             target.error = "Please enter a number from 0 to 100"
             return
         }
-        val newOrganisation = OrganisationsDataModel(organisationName, organisationTarget)
+        val newOrganisation = OrganisationsModel(name = organisationName, target = organisationTarget)
         try {
             databaseHandler.createNewOrganisation(newOrganisation)
             insertOrganisation(newOrganisation)
@@ -52,7 +52,7 @@ class NewOrganisationActivity : AppCompatActivity() {
         }
     }
 
-    private fun insertOrganisation(newOrganisation: OrganisationsDataModel) {
+    private fun insertOrganisation(newOrganisation: OrganisationsModel) {
         val values = ContentValues()
         values.put(Params.NAME, newOrganisation.name)
         values.put(Params.TARGET, newOrganisation.target)

@@ -30,8 +30,8 @@ class OrganisationsAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: OrganisationViewHolder, position: Int) {
         val model = organisationList[position]
-        val percentage = model.organisationAttendancePercentage
-        val requiredPercentage = model.requiredAttendance
+        val percentage = model.attendance
+        val requiredPercentage = model.target
         progress = when {
             percentage >= requiredPercentage -> ContextCompat.getDrawable(
                 context,
@@ -49,7 +49,7 @@ class OrganisationsAdapter(
         holder.attendanceProgressBar.progress = 0
         holder.attendanceProgressBar.progress = percentage
         holder.requiredAttendanceBar.progress = requiredPercentage
-        holder.organisationName.text = model.organisationName
+        holder.organisationName.text = model.name
         holder.editIcon.setImageResource(R.drawable.icon_edit)
         holder.deleteIcon.setImageResource(R.drawable.icon_delete)
     }

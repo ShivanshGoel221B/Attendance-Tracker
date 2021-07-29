@@ -89,9 +89,9 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
             do {
                 val organisation = OrganisationsModel()
                 organisation.id = cursor.getInt(0)
-                organisation.organisationName = cursor.getString(1)
-                organisation.organisationAttendancePercentage = cursor.getInt(2)
-                organisation.requiredAttendance = cursor.getInt(3)
+                organisation.name = cursor.getString(1)
+                organisation.attendance = cursor.getInt(2)
+                organisation.target = cursor.getInt(3)
                 organisationList.add(organisation)
                 organisationsAdapter.notifyItemInserted(organisationsAdapter.itemCount - 1)
             } while (cursor.moveToNext())
@@ -127,22 +127,22 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
     private fun editOrganisation() {
         val editDialogBox = EditDialogBox()
         editDialogBox.show(supportFragmentManager, "edit dialog")
-        EditDialogBox.name = focusedOrganisation!!.organisationName
-        EditDialogBox.target = focusedOrganisation!!.requiredAttendance
+        EditDialogBox.name = focusedOrganisation!!.name
+        EditDialogBox.target = focusedOrganisation!!.target
     }
 
     private fun deleteOrganisation(position: Int) {
         AlertDialog.Builder(this@MainActivity)
-            .setMessage("Are you sure you want to delete " + organisationList[position].organisationName + " ?")
+            .setMessage("Are you sure you want to delete " + organisationList[position].name + " ?")
             .setPositiveButton("Yes") { _, _ ->
                 organisationsAdapter.notifyItemRemoved(position)
                 databaseHandler.deleteOrganisation(
                     organisationList[position].id.toString(),
-                    organisationList[position].organisationName
+                    organisationList[position].name
                 )
                 Toast.makeText(
                     this@MainActivity,
-                    "Deleted " + organisationList[position].organisationName,
+                    "Deleted " + organisationList[position].name,
                     Toast.LENGTH_LONG
                 ).show()
                 organisationList.removeAt(position)
@@ -161,12 +161,12 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
             val values = ContentValues()
             values.put("name", newNameText.text.toString())
             values.put("target", newTargetText.text.toString().toInt())
-            databaseHandler.updateOrganisation(values, focusedOrganisation!!.organisationName)
-            if (newNameText.text.toString() != focusedOrganisation!!.organisationName) databaseHandler.renameOrganisationTable(
-                focusedOrganisation!!.organisationName, newNameText.text.toString()
+            databaseHandler.updateOrganisation(values, focusedOrganisation!!.name)
+            if (newNameText.text.toString() != focusedOrganisation!!.name) databaseHandler.renameOrganisationTable(
+                focusedOrganisation!!.name, newNameText.text.toString()
             )
-            focusedOrganisation?.organisationName = newNameText.text.toString()
-            focusedOrganisation?.requiredAttendance = newTargetText.text.toString().toInt()
+            focusedOrganisation?.name = newNameText.text.toString()
+            focusedOrganisation?.target = newTargetText.text.toString().toInt()
             organisationsAdapter.notifyItemChanged(organisationList.indexOf(focusedOrganisation!!))
             Toast.makeText(this, "Updated Successfully", Toast.LENGTH_LONG).show()
             focusedOrganisation = null

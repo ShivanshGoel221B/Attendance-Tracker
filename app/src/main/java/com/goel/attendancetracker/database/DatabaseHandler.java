@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.goel.attendancetracker.models.ClassesModel;
+import com.goel.attendancetracker.models.OrganisationsModel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         database.close();
     }
 
-    public void createNewOrganisation(OrganisationsDataModel newOrganisation){
+    public void createNewOrganisation(OrganisationsModel newOrganisation){
         try (SQLiteDatabase writableDatabase = this.getWritableDatabase()) {
             String tableCommand = "CREATE TABLE " + "\"" + newOrganisation.getName() + "\"" + Params.NEW_TABLE;
             writableDatabase.execSQL(tableCommand);
