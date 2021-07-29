@@ -1,119 +1,103 @@
-package com.goel.attendancetracker.organisations;
+package com.goel.attendancetracker.adapters
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import com.goel.attendancetracker.R;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.drawable.Drawable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.goel.attendancetracker.R
+import com.goel.attendancetracker.models.OrganisationsModel
+import com.goel.attendancetracker.adapters.OrganisationsAdapter.OrganisationViewHolder
+import java.util.*
 
-import java.util.ArrayList;
-
-public class OrganisationsAdapter extends RecyclerView.Adapter<OrganisationsAdapter.viewHolder> {
-
-    ArrayList<OrganisationsModel> organisationList;
-    Context context;
-    Drawable progress;
-    private OnItemClickListener clickListener;
-
-    public OrganisationsAdapter(ArrayList<OrganisationsModel> organisationList, Context context) {
-        this.organisationList = organisationList;
-        this.context = context;
-    }
-
-    @NonNull
-    @Override
-    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.organisation_card, parent, false);
-        return new viewHolder(view, clickListener);
+class OrganisationsAdapter(
+    private var organisationList: ArrayList<OrganisationsModel>,
+    var context: Context
+) : RecyclerView.Adapter<OrganisationViewHolder>() {
+    private var progress: Drawable? = null
+    private var clickListener: OnItemClickListener? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganisationViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.organisation_card, parent, false)
+        return OrganisationViewHolder(view, clickListener)
     }
 
     @SuppressLint("SetTextI18n")
-    @Override
-    public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        OrganisationsModel model = organisationList.get(position);
-        int percentage = model.getOrganisationAttendancePercentage();
-        int requiredPercentage = model.getRequiredAttendance();
-        if (percentage>=requiredPercentage)
-            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress);
-        else if (percentage > requiredPercentage*0.75f)
-            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress_low);
-        else
-            progress = ContextCompat.getDrawable(context, R.drawable.attendance_progress_danger);
-        holder.attendancePercentage.setText(percentage + "%");
-        holder.attendanceProgressBar.setProgressDrawable(progress);
-        holder.attendanceProgressBar.setProgress(0);
-        holder.attendanceProgressBar.setProgress(percentage);
-        holder.requiredAttendanceBar.setProgress(requiredPercentage);
-        holder.organisationName.setText(model.getOrganisationName());
-        holder.editIcon.setImageResource(R.drawable.icon_edit);
-        holder.deleteIcon.setImageResource(R.drawable.icon_delete);
+    override fun onBindViewHolder(holder: OrganisationViewHolder, position: Int) {
+        val model = organisationList[position]
+        val percentage = model.organisationAttendancePercentage
+        val requiredPercentage = model.requiredAttendance
+        progress = when {
+            percentage >= requiredPercentage -> ContextCompat.getDrawable(
+                context,
+                R.drawable.attendance_progress
+            )
+            percentage > requiredPercentage * 0.75f -> ContextCompat.getDrawable(
+                context, R.drawable.attendance_progress_low
+            )
+            else -> ContextCompat.getDrawable(
+                context, R.drawable.attendance_progress_danger
+            )
+        }
+        holder.attendancePercentage.text = "$percentage%"
+        holder.attendanceProgressBar.progressDrawable = progress
+        holder.attendanceProgressBar.progress = 0
+        holder.attendanceProgressBar.progress = percentage
+        holder.requiredAttendanceBar.progress = requiredPercentage
+        holder.organisationName.text = model.organisationName
+        holder.editIcon.setImageResource(R.drawable.icon_edit)
+        holder.deleteIcon.setImageResource(R.drawable.icon_delete)
     }
 
-    @Override
-    public int getItemCount() {
-        return organisationList.size();
+    override fun getItemCount(): Int {
+        return organisationList.size
     }
 
     // ITEM CLICK LISTENER
-    public interface OnItemClickListener{
-        void onItemClick(int position);
-        void onDeleteClick(int position);
-        void onEditClick(int position);
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+        fun onDeleteClick(position: Int)
+        fun onEditClick(position: Int)
     }
-    public void setOnItemClickListener(OnItemClickListener listener){ clickListener = listener; }
+
+    fun setOnItemClickListener(listener: OnItemClickListener?) {
+        clickListener = listener
+    }
 
     //VIEW HOLDER CLASS
-    public static class viewHolder extends RecyclerView.ViewHolder{
+    class OrganisationViewHolder(itemView: View, listener: OnItemClickListener?) :
+        RecyclerView.ViewHolder(itemView) {
+        var attendanceProgressBar: ProgressBar = itemView.findViewById(R.id.organisation_attendance_progress_bar)
+        var requiredAttendanceBar: ProgressBar = itemView.findViewById(R.id.required_attendance_progress)
+        var attendancePercentage: TextView = itemView.findViewById(R.id.organisation_attendance_percentage)
+        var organisationName: TextView = itemView.findViewById(R.id.organisation_name)
+        var editIcon: ImageView = itemView.findViewById(R.id.edit_organisation_icon)
+        var deleteIcon: ImageView = itemView.findViewById(R.id.delete_organisation_icon)
 
-        ProgressBar attendanceProgressBar;
-        ProgressBar requiredAttendanceBar;
-        TextView attendancePercentage;
-        TextView organisationName;
-        ImageView editIcon;
-        ImageView deleteIcon;
-
-        public viewHolder(@NonNull View itemView, OnItemClickListener listener) {
-            super(itemView);
-            attendanceProgressBar = itemView.findViewById(R.id.organisation_attendance_progress_bar);
-            requiredAttendanceBar = itemView.findViewById(R.id.required_attendance_progress);
-            attendancePercentage = itemView.findViewById(R.id.organisation_attendance_percentage);
-            organisationName = itemView.findViewById(R.id.organisation_name);
-            editIcon = itemView.findViewById(R.id.edit_organisation_icon);
-            deleteIcon = itemView.findViewById(R.id.delete_organisation_icon);
-            itemView.setOnClickListener(v -> {
-                if (listener != null)
-                {
-                    int position = getAdapterPosition();
-                    if (position !=RecyclerView.NO_POSITION)
-                        listener.onItemClick(position);
+        init {
+            itemView.setOnClickListener {
+                if (listener != null) {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) listener.onItemClick(position)
                 }
-            });
-
-            deleteIcon.setOnClickListener(v -> {
-                if (listener != null)
-                {
-                    int position = getAdapterPosition();
-                    if (position !=RecyclerView.NO_POSITION)
-                        listener.onDeleteClick(position);
+            }
+            deleteIcon.setOnClickListener {
+                if (listener != null) {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) listener.onDeleteClick(position)
                 }
-            });
-
-            editIcon.setOnClickListener(v -> {
-                if (listener != null)
-                {
-                    int position = getAdapterPosition();
-                    if (position !=RecyclerView.NO_POSITION)
-                        listener.onEditClick(position);
+            }
+            editIcon.setOnClickListener {
+                if (listener != null) {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) listener.onEditClick(position)
                 }
-            });
+            }
         }
     }
 }

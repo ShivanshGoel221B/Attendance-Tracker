@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.goel.attendancetracker.classes.ClassesModel;
+import com.goel.attendancetracker.models.ClassesModel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

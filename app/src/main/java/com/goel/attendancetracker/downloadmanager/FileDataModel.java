@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import com.goel.attendancetracker.classes.ClassesModel;
+import com.goel.attendancetracker.models.ClassesModel;
 import com.google.android.gms.common.util.ArrayUtils;
 
 import org.json.JSONArray;

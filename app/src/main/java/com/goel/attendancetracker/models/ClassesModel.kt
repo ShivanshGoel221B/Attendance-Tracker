@@ -1,168 +1,117 @@
-package com.goel.attendancetracker.classes;
+package com.goel.attendancetracker.models
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 
-import java.util.Iterator;
+class ClassesModel {
+    var id = 0
+    var className: String
+    var classCounter: String
+        private set
+    var classAttendancePercentage: Int
+    var requiredAttendance: Int
+    var classHistory: String
 
-public class ClassesModel {
-    private int id;
-    private String className;
-    private String classCounter;
-    private int classAttendancePercentage;
-    private int requiredAttendance;
-    private String classHistory;
-
-    public ClassesModel() {
-        this.className = " ";
-        this.classCounter = "0/0";
-        this.classAttendancePercentage = 100;
-        this.requiredAttendance = 100;
-        this.classHistory = "{}";
+    constructor() {
+        className = " "
+        classCounter = "0/0"
+        classAttendancePercentage = 100
+        requiredAttendance = 100
+        classHistory = "{}"
     }
 
-    public ClassesModel(String className, int requiredAttendance) {
-        this.className = className;
-        this.classCounter = "0/0";
-        this.classAttendancePercentage = 100;
-        this.requiredAttendance = requiredAttendance;
-        this.classHistory = "{}";
+    constructor(className: String, requiredAttendance: Int) {
+        this.className = className
+        classCounter = "0/0"
+        classAttendancePercentage = 100
+        this.requiredAttendance = requiredAttendance
+        classHistory = "{}"
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public int getClassAttendancePercentage() {
-        return classAttendancePercentage;
-    }
-
-    public int getRequiredAttendance() {
-        return requiredAttendance;
-    }
-
-    public String getClassHistory() {
-        return classHistory;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public void setClassAttendancePercentage(int classAttendancePercentage) {
-        this.classAttendancePercentage = classAttendancePercentage;
-    }
-
-    public void setRequiredAttendance(int requiredAttendance) {
-        this.requiredAttendance = requiredAttendance;
-    }
-
-    public void setClassHistory(String classHistory) {
-        this.classHistory = classHistory;
-    }
-
-    public String getClassCounter() {
-        return classCounter;
-    }
-
-    public int getPresentCount(){
-        JSONObject history;
-        try {
-            history = new JSONObject(this.getClassHistory());
-        } catch (JSONException e) {
-            return 0;
-        }
-        // UPDATE NEW ATTENDANCE
-        int present = 0;
-        try {
-            Iterator<String> keys = history.keys();
-            while (keys.hasNext()){
-                JSONArray dateData = (JSONArray) history.get(keys.next());
-                present += dateData.getInt(0);
+    // UPDATE NEW ATTENDANCE
+    val presentCount: Int
+        get() {
+            val history: JSONObject = try {
+                JSONObject(classHistory)
+            } catch (e: JSONException) {
+                return 0
             }
-        }catch (JSONException e) {
-            return 0;
+            // UPDATE NEW ATTENDANCE
+            var present = 0
+            try {
+                val keys = history.keys()
+                while (keys.hasNext()) {
+                    val dateData = history[keys.next()] as JSONArray
+                    present += dateData.getInt(0)
+                }
+            } catch (e: JSONException) {
+                return 0
+            }
+            return present
         }
-        return present;
-    }
 
-    public int getPresentCount(String date){
-        JSONObject history;
-        try {
-            history = new JSONObject(this.getClassHistory());
-        } catch (JSONException e) {
-            return 0;
+    fun getPresentCount(date: String?): Int {
+        val history: JSONObject = try {
+            JSONObject(classHistory)
+        } catch (e: JSONException) {
+            return 0
         }
         // INITIALIZING INITIAL DATE HISTORY
-        JSONArray dateHistory;
-        try {
-            dateHistory = (JSONArray) history.get(date);
-        } catch (JSONException e) {
-            return 0;
+        val dateHistory: JSONArray = try {
+            history[date!!] as JSONArray
+        } catch (e: Exception) {
+            return 0
         }
-
-        try {
-            return dateHistory.getInt(0);
-        } catch (JSONException e) {
-            return 0;
+        return try {
+            dateHistory.getInt(0)
+        } catch (e: JSONException) {
+            0
         }
     }
 
-    public int getAbsentCount(){
-        JSONObject history;
-        try {
-            history = new JSONObject(this.getClassHistory());
-        } catch (JSONException e) {
-            return 0;
-        }
-        int absent = 0;
-        try {
-            Iterator<String> keys = history.keys();
-            while (keys.hasNext()){
-                JSONArray dateData = (JSONArray) history.get(keys.next());
-                absent += dateData.getInt(1);
+    val absentCount: Int
+        get() {
+            val history: JSONObject = try {
+                JSONObject(classHistory)
+            } catch (e: JSONException) {
+                return 0
             }
-        }catch (JSONException e) {
-            return 0;
+            var absent = 0
+            try {
+                val keys = history.keys()
+                while (keys.hasNext()) {
+                    val dateData = history[keys.next()] as JSONArray
+                    absent += dateData.getInt(1)
+                }
+            } catch (e: JSONException) {
+                return 0
+            }
+            return absent
         }
-        return absent;
+
+    fun getAbsentCount(date: String?): Int {
+        val history: JSONObject = try {
+            JSONObject(classHistory)
+        } catch (e: JSONException) {
+            return 0
+        }
+        val dateHistory: JSONArray = try {
+            history[date!!] as JSONArray
+        } catch (e: Exception) {
+            return 0
+        }
+        return try {
+            dateHistory.getInt(1)
+        } catch (e: JSONException) {
+            0
+        }
     }
 
-    public int getAbsentCount(String date){
-        JSONObject history;
-        try {
-            history = new JSONObject(this.getClassHistory());
-        } catch (JSONException e) {
-            return 0;
-        }
-
-        JSONArray dateHistory;
-        try {
-            dateHistory = (JSONArray) history.get(date);
-        } catch (JSONException e) {
-            return 0;
-        }
-
-        try {
-            return dateHistory.getInt(1);
-        } catch (JSONException e) {
-            return 0;
-        }
-    }
-
-    public void setClassCounter(){
-        int present = this.getPresentCount();
-        int absent = this.getAbsentCount();
-        int total = present + absent;
-        this.classCounter = present + "/" + total;
+    fun setClassCounter() {
+        val present = presentCount
+        val absent = absentCount
+        val total = present + absent
+        classCounter = "$present/$total"
     }
 }

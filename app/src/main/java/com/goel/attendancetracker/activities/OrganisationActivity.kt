@@ -23,8 +23,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
-import com.goel.attendancetracker.classes.ClassesAdapter
-import com.goel.attendancetracker.classes.ClassesModel
+import com.goel.attendancetracker.adapters.ClassesAdapter
+import com.goel.attendancetracker.models.ClassesModel
 import com.goel.attendancetracker.database.DatabaseHandler
 import com.goel.attendancetracker.database.Params
 import com.goel.attendancetracker.dialogboxes.AddDialogBox

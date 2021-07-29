@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
 
-import com.goel.attendancetracker.classes.ClassesModel;
+import com.goel.attendancetracker.models.ClassesModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
