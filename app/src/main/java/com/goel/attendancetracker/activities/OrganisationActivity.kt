@@ -57,7 +57,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_organisation)
-        organisationId = Params.OPEN_ORG
+        organisationId = Params.OPEN_ORG!!
         classContainer = findViewById(R.id.class_grid)
         classList = ArrayList()
         databaseHandler = DatabaseHandler(this@OrganisationActivity)
@@ -338,7 +338,9 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         val dateHistory = IntArray(2)
         dateHistory[0] = presentCount
         dateHistory[1] = absentCount
-        databaseHandler.markAttendance(organisationName, focusedClass, currentDate, dateHistory)
+        focusedClass?.let {
+            databaseHandler.markAttendance(organisationName, it, currentDate, dateHistory)
+        }
         classAdapter.notifyItemChanged(classList.indexOf(focusedClass))
         refreshProgress()
         Toast.makeText(this, "Attendance Marked", Toast.LENGTH_SHORT).show()
@@ -392,22 +394,26 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         (findViewById<View>(R.id.overall_percentage_counter) as TextView).text =
             "$overallAttendance%"
         overallProgress.progress = 0
-        if (overallAttendance >= overallRequiredAttendance) {
-            overallProgress.progressDrawable =
-                ContextCompat.getDrawable(this@OrganisationActivity, R.drawable.attendance_progress)
-            flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#00CF60"))
-        } else if (overallAttendance > overallRequiredAttendance * 0.75f) {
-            overallProgress.progressDrawable = ContextCompat.getDrawable(
-                this@OrganisationActivity,
-                R.drawable.attendance_progress_low
-            )
-            flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#F56600"))
-        } else {
-            overallProgress.progressDrawable = ContextCompat.getDrawable(
-                this@OrganisationActivity,
-                R.drawable.attendance_progress_danger
-            )
-            flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#FF073A"))
+        when {
+            overallAttendance >= overallRequiredAttendance -> {
+                overallProgress.progressDrawable =
+                    ContextCompat.getDrawable(this@OrganisationActivity, R.drawable.attendance_progress)
+                flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#00CF60"))
+            }
+            overallAttendance > overallRequiredAttendance * 0.75f -> {
+                overallProgress.progressDrawable = ContextCompat.getDrawable(
+                    this@OrganisationActivity,
+                    R.drawable.attendance_progress_low
+                )
+                flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#F56600"))
+            }
+            else -> {
+                overallProgress.progressDrawable = ContextCompat.getDrawable(
+                    this@OrganisationActivity,
+                    R.drawable.attendance_progress_danger
+                )
+                flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#FF073A"))
+            }
         }
         if (overallAttendance > 0) overallProgress.progress = overallAttendance
     }
