@@ -24,18 +24,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
 import com.goel.attendancetracker.adapters.ClassesAdapter
-import com.goel.attendancetracker.models.ClassesModel
 import com.goel.attendancetracker.database.DatabaseHandler
 import com.goel.attendancetracker.database.Params
 import com.goel.attendancetracker.dialogboxes.AddDialogBox
 import com.goel.attendancetracker.dialogboxes.AddDialogBox.AddDialogListener
 import com.goel.attendancetracker.dialogboxes.EditDialogBox
 import com.goel.attendancetracker.dialogboxes.EditDialogBox.EditDialogListener
-import com.goel.attendancetracker.dialogboxes.LoadingDialogBox
 import com.goel.attendancetracker.dialogboxes.MarkDialogBox
 import com.goel.attendancetracker.dialogboxes.MarkDialogBox.MarkAttendanceActions
 import com.goel.attendancetracker.downloadmanager.ClassDownloadManager
 import com.goel.attendancetracker.downloadmanager.FileDataModel
+import com.goel.attendancetracker.models.ClassesModel
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -184,12 +183,8 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             }
 
             override fun onDownloadClick(position: Int) {
-                LoadingDialogBox.loadingText = "Downloading Class Attendance"
-                val loadingDialogBox = LoadingDialogBox()
-                loadingDialogBox.show(supportFragmentManager, "loading dialog")
                 focusedClass = classList[position]
                 downloadClassAttendance()
-                loadingDialogBox.dismiss()
             }
         })
     }
