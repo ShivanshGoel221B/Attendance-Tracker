@@ -218,7 +218,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
     private fun downloadClassAttendance() {
         if (hasStoragePermission()) {
-            val classDownloadManager = ClassDownloadManager(focusedClass, organisationName)
+            val classDownloadManager = ClassDownloadManager(focusedClass!!, organisationName)
             setFileModelData()
             when (classDownloadManager.downloadAttendance()) {
                 ClassDownloadManager.DOWNLOAD_FAILED -> Toast.makeText(
@@ -228,7 +228,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                 ).show()
                 ClassDownloadManager.DOWNLOAD_SUCCESSFUL -> Toast.makeText(
                     this@OrganisationActivity,
-                    "File Saved as " + classDownloadManager.filePath,
+                    "File Saved as ${classDownloadManager.filePath}",
                     Toast.LENGTH_LONG
                 ).show()
             }
