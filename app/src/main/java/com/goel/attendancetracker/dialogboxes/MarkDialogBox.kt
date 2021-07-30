@@ -1,90 +1,73 @@
-package com.goel.attendancetracker.dialogboxes;
+package com.goel.attendancetracker.dialogboxes
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatDialogFragment
+import com.goel.attendancetracker.R
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
+class MarkDialogBox(private val listener: MarkAttendanceListener) : AppCompatDialogFragment() {
+    private lateinit var markPresent: ImageView
+    private lateinit var markAbsent: ImageView
+    private var presentCount = 0
+    private var absentCount = 0
+    private lateinit var presentCounter: TextView
+    private lateinit var absentCounter: TextView
 
-import com.goel.attendancetracker.R;
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val builder = AlertDialog.Builder(activity)
 
-import java.util.Objects;
+        val inflater = requireActivity().layoutInflater
+        val view = inflater.inflate(R.layout.mark_attendance, null)
 
-public class MarkDialogBox extends AppCompatDialogFragment {
+        setViews(view)
 
-    ImageView markPresent, markAbsent;
-    MarkAttendanceActions markListener;
-    private int presentCount, absentCount;
-    TextView presentCounter, absentCounter;
-    View view;
-    LayoutInflater inflater;
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        presentCount = 0;
-        absentCount = 0;
-
-        markPresent = view.findViewById(R.id.attendance_check);
-        markAbsent = view.findViewById(R.id.attendance_cross);
-
-        markPresent.setOnClickListener(v -> {
-            v.performHapticFeedback(1);
-            presentCount++;
-            setCounters(presentCounter);
-
-        });
-
-        markAbsent.setOnClickListener(v -> {
-            v.performHapticFeedback(1);
-            absentCount++;
-            setCounters(absentCounter);
-        });
-
+        setClickListeners()
 
         builder.setView(view)
-                .setTitle("Mark Today's Attendance")
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .setPositiveButton("Mark", (dialog, which) -> markListener.submitAttendance(presentCount, absentCount));
-
-
-        return builder.create();
+            .setTitle("Mark Today's Attendance")
+            .setNegativeButton("Cancel") { dialog: DialogInterface, _ -> dialog.dismiss() }
+            .setPositiveButton("Mark") { _, _ ->
+                listener.submitAttendance(
+                    presentCount,
+                    absentCount
+                )
+            }
+        return builder.create()
     }
 
-    private void setCounters(TextView view){
-        int initialCount = Integer.parseInt(view.getText().toString());
-        view.setText(String.valueOf(initialCount+1));
+    private fun setViews (view: View) {
+        markPresent = view.findViewById(R.id.attendance_check)
+        markAbsent = view.findViewById(R.id.attendance_cross)
+        presentCounter = view.findViewById(R.id.mark_present_counter)
+        absentCounter = view.findViewById(R.id.mark_absent_counter)
+        listener.setCounters(presentCounter, absentCounter)
     }
 
-    @SuppressLint("InflateParams")
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            markListener = (MarkAttendanceActions) context;
-            inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
-            view = inflater.inflate(R.layout.mark_attendance, null);
-            presentCounter = view.findViewById(R.id.mark_present_counter);
-            absentCounter = view.findViewById(R.id.mark_absent_counter);
-            markListener.setCounters(presentCounter, absentCounter);
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must Implement MarkAttendanceActions");
+    private fun setClickListeners() {
+        markPresent.setOnClickListener {
+            it.performHapticFeedback(1)
+            presentCount++
+            setCounters(presentCounter)
+        }
+        markAbsent.setOnClickListener {
+            it.performHapticFeedback(1)
+            absentCount++
+            setCounters(absentCounter)
         }
     }
 
-    public interface MarkAttendanceActions {
-        void submitAttendance(int presentCount, int absentCount);
-        void setCounters(TextView presentCounter, TextView absentCounter);
+    private fun setCounters(textView: TextView) {
+        val initialCount = textView.text.toString().toInt()
+        textView.text = (initialCount + 1).toString()
     }
 
+    interface MarkAttendanceListener {
+        fun submitAttendance(presentCount: Int, absentCount: Int)
+        fun setCounters(presentCounter: TextView, absentCounter: TextView)
+    }
 }

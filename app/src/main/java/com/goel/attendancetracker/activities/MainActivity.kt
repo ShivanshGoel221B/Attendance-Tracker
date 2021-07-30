@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
     }
 
     private fun editOrganisation() {
-        val editDialogBox = EditDialogBox()
+        val editDialogBox = EditDialogBox(this)
         editDialogBox.show(supportFragmentManager, "edit dialog")
         EditDialogBox.name = focusedOrganisation!!.name
         EditDialogBox.target = focusedOrganisation!!.target

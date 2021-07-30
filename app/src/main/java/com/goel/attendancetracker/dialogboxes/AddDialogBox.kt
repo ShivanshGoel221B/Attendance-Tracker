@@ -1,62 +1,38 @@
-package com.goel.attendancetracker.dialogboxes;
+package com.goel.attendancetracker.dialogboxes
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
+import android.os.Bundle
+import android.widget.EditText
+import androidx.appcompat.app.AppCompatDialogFragment
+import com.goel.attendancetracker.R
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
+class AddDialogBox(private val listener: AddDialogListener) : AppCompatDialogFragment() {
+    private lateinit var newNameText: EditText
+    private lateinit var newTargetText: EditText
 
-import com.goel.attendancetracker.R;
-
-import java.util.Objects;
-
-public class AddDialogBox extends AppCompatDialogFragment {
-
-    private EditText newNameText;
-    private EditText newTargetText;
-    private AddDialogBox.AddDialogListener listener;
-    public static int overallAttendance = 100;
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.edit_dialog_box, null);
-        newNameText = view.findViewById(R.id.edit_name);
-        newTargetText = view.findViewById(R.id.edit_target);
-
-
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val builder = AlertDialog.Builder(activity)
+        val inflater = requireActivity().layoutInflater
+        val view = inflater.inflate(R.layout.edit_dialog_box, null)
+        newNameText = view.findViewById(R.id.edit_name)
+        newTargetText = view.findViewById(R.id.edit_target)
         builder.setView(view)
-                .setTitle("Add New Class")
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .setPositiveButton("Save", (dialog, which) -> listener.addSubmitDetails(newNameText, newTargetText));
-
-        newTargetText.setText(String.valueOf(overallAttendance));
-
-        return builder.create();
+            .setTitle("Add New Class")
+            .setNegativeButton("Cancel") { dialog: DialogInterface, _ -> dialog.dismiss() }
+            .setPositiveButton("Save") { _, _ ->
+                listener.addSubmitDetails(newNameText, newTargetText)
+            }
+        newTargetText.setText(overallAttendance.toString())
+        return builder.create()
     }
 
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            listener = (AddDialogBox.AddDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must Implement AddDialogListener");
-        }
+    interface AddDialogListener {
+        fun addSubmitDetails(newNameText: EditText, newTargetText: EditText)
     }
 
-    public interface AddDialogListener{
-        void addSubmitDetails(EditText newNameText, EditText newTargetText);
+    companion object {
+        var overallAttendance = 100
     }
-
 }

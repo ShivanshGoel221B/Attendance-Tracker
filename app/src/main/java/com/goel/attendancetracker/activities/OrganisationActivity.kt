@@ -31,7 +31,7 @@ import com.goel.attendancetracker.dialogboxes.AddDialogBox.AddDialogListener
 import com.goel.attendancetracker.dialogboxes.EditDialogBox
 import com.goel.attendancetracker.dialogboxes.EditDialogBox.EditDialogListener
 import com.goel.attendancetracker.dialogboxes.MarkDialogBox
-import com.goel.attendancetracker.dialogboxes.MarkDialogBox.MarkAttendanceActions
+import com.goel.attendancetracker.dialogboxes.MarkDialogBox.MarkAttendanceListener
 import com.goel.attendancetracker.downloadmanager.ClassDownloadManager
 import com.goel.attendancetracker.downloadmanager.FileDataModel
 import com.goel.attendancetracker.models.ClassesModel
@@ -41,7 +41,7 @@ import org.json.JSONObject
 import java.util.*
 
 class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogListener,
-    MarkAttendanceActions {
+    MarkAttendanceListener {
     private lateinit var organisationName: String
     private lateinit var organisationId: String
     private lateinit var databaseHandler: DatabaseHandler
@@ -115,7 +115,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
     //  ===============  ADD CLASS METHODS  =============== //
     private fun addNewClass() {
-        val addDialogBox = AddDialogBox()
+        val addDialogBox = AddDialogBox(this)
         addDialogBox.show(supportFragmentManager, "add dialog")
         AddDialogBox.overallAttendance = overallRequiredAttendance
     }
@@ -247,13 +247,13 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     //=======================================================================//
     // Button methods
     private fun markAttendance(position: Int) {
-        val markDialogBox = MarkDialogBox()
+        val markDialogBox = MarkDialogBox(this)
         markDialogBox.show(supportFragmentManager, "mark attendance")
         focusedClass = classList[position]
     }
 
     private fun editClass() {
-        val editDialogBox = EditDialogBox()
+        val editDialogBox = EditDialogBox(this)
         editDialogBox.show(supportFragmentManager, "edit dialog")
         EditDialogBox.name = focusedClass!!.className
         EditDialogBox.target = focusedClass!!.requiredAttendance
