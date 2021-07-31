@@ -36,7 +36,7 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
         focusedDate = currentDate
         initializeClassData()
         supportActionBar?.title = organisationName.uppercase(Locale.getDefault())
-        binding.classNameCalendar.text = className.uppercase(Locale.getDefault())
+        binding.classNameCalendar.text = className
         initializeDatabase()
         initializeViews()
         setAttendance()
