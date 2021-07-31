@@ -6,12 +6,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.goel.attendancetracker.R
 import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.databinding.ActivityBackupRestoreBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
@@ -20,17 +22,34 @@ import java.io.File
 import java.util.*
 
 class BackupRestoreActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityBackupRestoreBinding
     private lateinit var storageRef: StorageReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_backup_restore)
+        binding = ActivityBackupRestoreBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.title = "Backup & Restore"
-        (findViewById<View>(R.id.user_email) as TextView).text =
-            user!!.email
-        storageRef = FirebaseStorage.getInstance().getReference(user!!.uid + "/" + Params.DB_NAME)
+        binding.userEmail.text = user.email
+        storageRef = FirebaseStorage.getInstance().getReference("${user.uid}/${Params.DB_NAME}")
+        setClickListeners()
     }
 
-    fun createBackup(view: View?) {
+    private fun setClickListeners() {
+        binding.backupButton.setOnClickListener {
+            createBackup()
+        }
+        binding.restoreBackup.setOnClickListener {
+            createRestore()
+        }
+
+        binding.logoutButton.setOnClickListener {
+            logOut()
+        }
+    }
+
+    private fun createBackup() {
         AlertDialog.Builder(this@BackupRestoreActivity)
             .setTitle("Confirm Backup")
             .setMessage("Creating the backup will overwrite the existing backup. Do want to continue?")
@@ -67,7 +86,7 @@ class BackupRestoreActivity : AppCompatActivity() {
         }
     }
 
-    fun createRestore(view: View?) {
+    private fun createRestore() {
         AlertDialog.Builder(this@BackupRestoreActivity)
             .setTitle("Confirm Restore")
             .setMessage("Performing the restore will overwrite the existing data. Do want to continue?")
@@ -116,25 +135,29 @@ class BackupRestoreActivity : AppCompatActivity() {
             .show()
     }
 
-    fun logOut(view: View?) {
+    private fun logOut() {
         FirebaseAuth.getInstance().signOut()
-        startActivity(
-            Intent(this@BackupRestoreActivity, SignInActivity::class.java).putExtra(
-                SIGN_OUT, true
-            )
-        )
-        finish()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        GoogleSignIn.getClient(this, gso).signOut()
+            .addOnSuccessListener {
+                Toast.makeText(this, R.string.signed_out, Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, SignInActivity::class.java))
+                finish()
+            }
+
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this@BackupRestoreActivity, MainActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
     companion object {
-        @JvmField
-        var user: FirebaseUser? = null
-        const val SIGN_OUT = "com.goel.attendancetracker.signout"
+        @JvmStatic
+        lateinit var user: FirebaseUser
     }
 }

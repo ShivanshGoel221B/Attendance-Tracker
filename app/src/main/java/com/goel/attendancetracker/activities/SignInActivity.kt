@@ -6,10 +6,11 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.goel.attendancetracker.R
-import com.goel.attendancetracker.activities.BackupRestoreActivity
+import com.goel.attendancetracker.databinding.ActivitySignInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -21,49 +22,59 @@ import com.google.firebase.auth.GoogleAuthProvider
 import java.util.*
 
 class SignInActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySignInBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 50
+    private val signInResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val data = it.data
+            data?.let { intent ->
+                val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    val account = task.getResult(ApiException::class.java)
+                    Log.d("Error", "firebaseAuthWithGoogle:" + account.id)
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    // Google Sign In failed, update UI appropriately
+                    Log.w("Error", "Google sign in failed", e)
+                    val toast =
+                        Toast.makeText(this@SignInActivity, "Sign in failed", Toast.LENGTH_LONG)
+                    toast.setGravity(Gravity.CENTER, 0, 50)
+                    toast.show()
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in)
-        supportActionBar?.title = "Sign In"
 
-        // Configure Google Sign In
+        binding = ActivitySignInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        supportActionBar?.title = getString(R.string.sign_in)
+        configureGoogleSignIn()
+        setClickListeners()
+    }
+
+    private fun configureGoogleSignIn() {
         auth = FirebaseAuth.getInstance()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-        if (intent.getBooleanExtra(BackupRestoreActivity.SIGN_OUT, false)) logOut()
     }
 
-    fun signIn(view: View?) {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)
-                Log.d("Error", "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("Error", "Google sign in failed", e)
-                val toast = Toast.makeText(this@SignInActivity, "Sign in failed", Toast.LENGTH_LONG)
-                toast.setGravity(Gravity.CENTER, 0, 50)
-                toast.show()
-                // ...
-            }
+    private fun setClickListeners() {
+        binding.signInButton.setOnClickListener {
+            signIn()
         }
+    }
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        signInResult.launch(signInIntent)
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -79,7 +90,7 @@ class SignInActivity : AppCompatActivity() {
                     BackupRestoreActivity.user = user
                     val toast = Toast.makeText(
                         this@SignInActivity,
-                        "Signed in as " + user.displayName,
+                        "Signed in as ${user.displayName}",
                         Toast.LENGTH_LONG
                     )
                     toast.setGravity(Gravity.CENTER, 0, 50)
@@ -99,25 +110,14 @@ class SignInActivity : AppCompatActivity() {
             }
     }
 
-    private fun logOut() {
-        auth.signOut()
-        googleSignInClient.signOut().addOnSuccessListener(this) {
-            Toast.makeText(
-                this@SignInActivity,
-                "Signed out successfully",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
+    public override fun onResume() {
+        super.onResume()
+        // Check if user is signed in already
         val currentUser = auth.currentUser
         if (currentUser != null) {
             BackupRestoreActivity.user = currentUser
             val toast =
-                Toast.makeText(this, "Signed in as " + currentUser.displayName, Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Signed in as ${currentUser.displayName}", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.CENTER, 0, 50)
             toast.show()
             startActivity(Intent(this@SignInActivity, BackupRestoreActivity::class.java))

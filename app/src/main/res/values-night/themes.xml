@@ -9,11 +9,11 @@
         <item name="colorSecondary">@color/primary_light</item>
         <item name="colorSecondaryVariant">@color/secondary</item>
         <item name="colorOnSecondary">@color/white</item>
+        <item name="android:textColor">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="card_background">@color/mild_dark</item>
-        <item name="text_color">@color/white</item>
         <item name="base_background">@color/dark_black</item>
         <item name="contrast_color">@color/ultra_light_grey</item>
         <item name="progress_background">@color/progress_dark</item>

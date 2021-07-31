@@ -29,8 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/poly"
-            android:textColor="?attr/text_color"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/logout_button"
@@ -38,18 +37,17 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_gradient"
             android:fontFamily="@font/halant_semibold"
-            android:onClick="logOut"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:text="@string/sign_out"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="50dp"
@@ -72,14 +70,13 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_gradient"
             android:fontFamily="@font/poly"
-            android:onClick="createBackup"
             android:paddingStart="40dp"
             android:paddingTop="15dp"
             android:paddingEnd="40dp"
             android:paddingBottom="15dp"
             android:text="@string/backup"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/restore_backup"
@@ -88,14 +85,13 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/button_gradient"
             android:fontFamily="@font/poly"
-            android:onClick="createRestore"
             android:paddingStart="40dp"
             android:paddingTop="15dp"
             android:paddingEnd="40dp"
             android:paddingBottom="15dp"
             android:text="@string/restore"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,11 +119,10 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="15dp"
             android:fontFamily="@font/poly"
             android:text="@string/please_wait"
-            android:textColor="?attr/text_color"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/spinLoader"
             app:layout_constraintTop_toTopOf="parent" />

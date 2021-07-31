@@ -32,7 +32,6 @@
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/poly"
                 android:textAlignment="center"
-                android:textColor="?attr/text_color"
                 android:textSize="26sp"
                 app:layout_constraintEnd_toStartOf="@+id/context_menu_button"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +43,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/context_menu_icon"
-                app:tint="?attr/text_color" />
+                app:srcCompat="@drawable/context_menu_icon" />
 
             <TextView
                 android:id="@+id/class_counter"
@@ -53,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/halant_semibold"
-                android:textColor="?attr/text_color"
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -92,7 +89,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/halant_semibold"
-                android:textColor="?attr/text_color"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@+id/required_class_progress"
                 app:layout_constraintEnd_toEndOf="@+id/required_class_progress"

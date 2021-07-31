@@ -15,7 +15,6 @@
         android:fontFamily="@font/lily_script_one"
         android:text="@string/add_new_organisation"
         android:textSize="36sp"
-        android:textColor="?attr/text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
