@@ -3,7 +3,6 @@
     <declare-styleable name="attributes">
         <attr name="card_background" format="color" />
         <attr name="base_background" format="color" />
-        <attr name="contrast_color" format="color" />
         <attr name="progress_background" format="color" />
         <attr name="progress_target" format="color" />
     </declare-styleable>

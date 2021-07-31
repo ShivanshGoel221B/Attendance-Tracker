@@ -15,7 +15,6 @@
         <!-- Customize your theme here. -->
         <item name="card_background">@color/ultra_light_grey</item>
         <item name="base_background">@color/ultra_light_grey</item>
-        <item name="contrast_color">@color/mild_dark</item>
         <item name="progress_background">@color/light_grey</item>
         <item name="progress_target">@color/primary_light</item>
     </style>
