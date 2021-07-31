@@ -18,7 +18,7 @@ import java.util.*
 
 class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context: Context) :
     RecyclerView.Adapter<ClassesAdapter.ClassViewHolder>() {
-    private var clickListener: OnItemClickListener? = null
+    private val clickListener = context as OnItemClickListener
     private var progress: Drawable? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.class_card, parent, false)
@@ -58,21 +58,8 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
         return classList.size
     }
 
-    // ITEM CLICK LISTENER
-    interface OnItemClickListener {
-        fun onHistoryClick(position: Int)
-        fun onDeleteClick(position: Int)
-        fun onEditClick(position: Int)
-        fun onMarkClick(position: Int)
-        fun onDownloadClick(position: Int)
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener?) {
-        clickListener = listener
-    }
-
     //VIEW HOLDER CLASS
-    inner class ClassViewHolder(itemView: View, listener: OnItemClickListener?) :
+    inner class ClassViewHolder(itemView: View, listener: OnItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
         var attendanceProgressBar: ProgressBar = itemView.findViewById(R.id.class_progress)
         var requiredAttendanceBar: ProgressBar = itemView.findViewById(R.id.required_class_progress)
@@ -86,37 +73,28 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
         private fun setMenuItemClickListeners(
             popupMenu: PopupMenu,
             position: Int,
-            listener: OnItemClickListener?
+            listener: OnItemClickListener
         ) {
             popupMenu.setOnMenuItemClickListener { item ->
-                if (listener != null) {
-                    if (position != RecyclerView.NO_POSITION) when (item.itemId) {
-                        R.id.edit_history -> listener.onHistoryClick(position)
-                        R.id.download_class_attendance -> listener.onDownloadClick(position)
-                    }
+                if (position != RecyclerView.NO_POSITION) when (item.itemId) {
+                    R.id.edit_history -> listener.onHistoryClick(position)
+                    R.id.download_class_attendance -> listener.onDownloadClick(position)
                 }
                 true
             }
         }
-
         init {
             editIcon.setOnClickListener {
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) listener.onEditClick(position)
-                }
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) listener.onEditClick(position)
             }
             deleteIcon.setOnClickListener {
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) listener.onDeleteClick(position)
-                }
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) listener.onDeleteClick(position)
             }
             markIcon.setOnClickListener {
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) listener.onMarkClick(position)
-                }
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) listener.onMarkClick(position)
             }
             menuIcon.setOnClickListener { v ->
                 val popupMenu = PopupMenu(v.context, v)
@@ -126,5 +104,15 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
                 popupMenu.show()
             }
         }
+
+    }
+
+    // ITEM CLICK LISTENER
+    interface OnItemClickListener {
+        fun onHistoryClick(position: Int)
+        fun onDeleteClick(position: Int)
+        fun onEditClick(position: Int)
+        fun onMarkClick(position: Int)
+        fun onDownloadClick(position: Int)
     }
 }

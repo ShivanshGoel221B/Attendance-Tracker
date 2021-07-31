@@ -40,7 +40,7 @@ import org.json.JSONObject
 import java.util.*
 
 class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogListener,
-    MarkAttendanceListener {
+    MarkAttendanceListener, ClassesAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityOrganisationBinding
     private lateinit var organisationName: String
@@ -67,7 +67,6 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         getClassList()
         refreshProgress()
         binding.targetValue.text = "$overallRequiredAttendance%"
-        setClickListeners()
     }
 
     //-- Context Menu
@@ -153,40 +152,6 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             classAdapter.notifyItemInserted(classList.indexOf(model))
             refreshProgress()
         }
-    }
-
-    //=================================================================================//
-    // Click Listeners
-    private fun setClickListeners() {
-        classAdapter.setOnItemClickListener(object : ClassesAdapter.OnItemClickListener {
-            override fun onHistoryClick(position: Int) {
-                val intent = Intent(this@OrganisationActivity, CalendarActivity::class.java)
-                val dataArray = arrayOf(
-                    organisationName, classList[position]
-                        .id.toString(), classList[position].className
-                )
-                intent.putExtra(Constants.CLASS_DATA_ARRAY, dataArray)
-                startActivity(intent)
-            }
-
-            override fun onDeleteClick(position: Int) {
-                deleteClass(position)
-            }
-
-            override fun onEditClick(position: Int) {
-                focusedClass = classList[position]
-                editClass()
-            }
-
-            override fun onMarkClick(position: Int) {
-                markAttendance(position)
-            }
-
-            override fun onDownloadClick(position: Int) {
-                focusedClass = classList[position]
-                downloadClassAttendance()
-            }
-        })
     }
 
     //========== DOWNLOAD ATTENDANCE ============//
@@ -446,6 +411,34 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                 R.drawable.attendance_table
             ), 700, 1000, false
         )
+    }
+
+    override fun onHistoryClick(position: Int) {
+        val intent = Intent(this@OrganisationActivity, CalendarActivity::class.java)
+        val dataArray = arrayOf(
+            organisationName, classList[position]
+                .id.toString(), classList[position].className
+        )
+        intent.putExtra(Constants.CLASS_DATA_ARRAY, dataArray)
+        startActivity(intent)
+    }
+
+    override fun onDeleteClick(position: Int) {
+        deleteClass(position)
+    }
+
+    override fun onEditClick(position: Int) {
+        focusedClass = classList[position]
+        editClass()
+    }
+
+    override fun onMarkClick(position: Int) {
+        markAttendance(position)
+    }
+
+    override fun onDownloadClick(position: Int) {
+        focusedClass = classList[position]
+        downloadClassAttendance()
     }
 
     override fun onBackPressed() {

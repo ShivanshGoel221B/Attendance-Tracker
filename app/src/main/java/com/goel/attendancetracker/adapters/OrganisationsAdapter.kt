@@ -21,7 +21,7 @@ class OrganisationsAdapter(
     var context: Context
 ) : RecyclerView.Adapter<OrganisationViewHolder>() {
     private var progress: Drawable? = null
-    private var clickListener: OnItemClickListener? = null
+    private val clickListener = context as OnItemClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganisationViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.organisation_card, parent, false)
         return OrganisationViewHolder(view, clickListener)
@@ -65,12 +65,8 @@ class OrganisationsAdapter(
         fun onEditClick(position: Int)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener?) {
-        clickListener = listener
-    }
-
     //VIEW HOLDER CLASS
-    class OrganisationViewHolder(itemView: View, listener: OnItemClickListener?) :
+    class OrganisationViewHolder(itemView: View, listener: OnItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
         var attendanceProgressBar: ProgressBar = itemView.findViewById(R.id.organisation_attendance_progress_bar)
         var requiredAttendanceBar: ProgressBar = itemView.findViewById(R.id.required_attendance_progress)
@@ -81,22 +77,16 @@ class OrganisationsAdapter(
 
         init {
             itemView.setOnClickListener {
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) listener.onItemClick(position)
-                }
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) listener.onItemClick(position)
             }
             deleteIcon.setOnClickListener {
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) listener.onDeleteClick(position)
-                }
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) listener.onDeleteClick(position)
             }
             editIcon.setOnClickListener {
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) listener.onEditClick(position)
-                }
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) listener.onEditClick(position)
             }
         }
     }

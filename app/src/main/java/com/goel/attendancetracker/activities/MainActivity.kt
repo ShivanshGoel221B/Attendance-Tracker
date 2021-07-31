@@ -23,7 +23,7 @@ import com.goel.attendancetracker.utils.database.DatabaseHandler
 import java.util.*
 import kotlin.system.exitProcess
 
-class MainActivity : AppCompatActivity(), EditDialogListener {
+class MainActivity : AppCompatActivity(), EditDialogListener, OrganisationsAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var databaseHandler: DatabaseHandler
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
         databaseHandler = DatabaseHandler(this@MainActivity)
         setOrganisationAdapter()
         getOrganisationList()
-        setClickListeners()
+        binding.newOrganisationButton.setOnClickListener { addOrganisation() }
         Constants.OPEN_ORG = null
     }
 
@@ -98,26 +98,6 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
         }
         cursor.close()
         organisationsRef.close()
-    }
-
-    private fun setClickListeners() {
-        binding.newOrganisationButton.setOnClickListener { addOrganisation() }
-        organisationsAdapter.setOnItemClickListener(object :
-            OrganisationsAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                Constants.OPEN_ORG = organisationList[position].id.toString()
-                openOrganisation()
-            }
-
-            override fun onEditClick(position: Int) {
-                focusedOrganisation = organisationList[position]
-                editOrganisation()
-            }
-
-            override fun onDeleteClick(position: Int) {
-                deleteOrganisation(position)
-            }
-        })
     }
 
     private fun openOrganisation() {
@@ -197,6 +177,20 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
             newTargetText.error = "Enter a valid number from 0 to 100"
         }
         return true
+    }
+
+    override fun onItemClick(position: Int) {
+        Constants.OPEN_ORG = organisationList[position].id.toString()
+        openOrganisation()
+    }
+
+    override fun onEditClick(position: Int) {
+        focusedOrganisation = organisationList[position]
+        editOrganisation()
+    }
+
+    override fun onDeleteClick(position: Int) {
+        deleteOrganisation(position)
     }
 
     override fun onBackPressed() {
