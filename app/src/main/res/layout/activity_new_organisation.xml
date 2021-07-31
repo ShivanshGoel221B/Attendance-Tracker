@@ -93,7 +93,6 @@
             android:layout_marginEnd="50dp"
             android:background="@drawable/button_gradient"
             android:fontFamily="@font/poly"
-            android:onClick="submitNewOrganisation"
             android:paddingTop="17dp"
             android:paddingBottom="17dp"
             android:text="@string/add"

@@ -4,26 +4,30 @@ import android.content.ContentValues
 import android.content.Intent
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
-import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.goel.attendancetracker.R
+import com.goel.attendancetracker.databinding.ActivityNewOrganisationBinding
 import com.goel.attendancetracker.utils.database.DatabaseHandler
 import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.models.OrganisationsModel
 
 class NewOrganisationActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityNewOrganisationBinding
     private lateinit var databaseHandler: DatabaseHandler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_organisation)
+
+        binding = ActivityNewOrganisationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         databaseHandler = DatabaseHandler(this@NewOrganisationActivity)
+        binding.newOrganisationSubmit.setOnClickListener { submitNewOrganisation() }
     }
 
-    fun submitNewOrganisation(view: View?) {
-        val name = findViewById<EditText>(R.id.edit_new_organisation_name)
-        val target = findViewById<EditText>(R.id.edit_new_organisation_target)
+    private fun submitNewOrganisation() {
+        val name = binding.editNewOrganisationName
+        val target = binding.editNewOrganisationTarget
         if (name.text.toString().isEmpty()) {
             name.error = "Please enter a valid name"
             return

@@ -3,20 +3,20 @@ package com.goel.attendancetracker.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
-import android.widget.CalendarView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.goel.attendancetracker.R
-import com.goel.attendancetracker.models.ClassesModel
-import com.goel.attendancetracker.database.DatabaseHandler
-import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.utils.database.DatabaseHandler
+import com.goel.attendancetracker.utils.Constants
+import com.goel.attendancetracker.databinding.ActivityCalendarBinding
 import com.goel.attendancetracker.dialogboxes.EditAttendanceDialog
 import com.goel.attendancetracker.dialogboxes.EditAttendanceDialog.SubmitNewAttendance
+import com.goel.attendancetracker.models.ClassesModel
 import java.util.*
 
 class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
+
+    private lateinit var binding: ActivityCalendarBinding
     private lateinit var classId: String
     private lateinit var className: String
     private lateinit var organisationName: String
@@ -27,21 +27,27 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
     private var absent = 0
     private lateinit var databaseHandler: DatabaseHandler
     private lateinit var openClass: ClassesModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar)
+
+        binding = ActivityCalendarBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         focusedDate = currentDate
         initializeClassData()
         supportActionBar?.title = organisationName.uppercase(Locale.getDefault())
-        findViewById<TextView>(R.id.class_name_calendar).text = className.uppercase(Locale.getDefault())
+        binding.classNameCalendar.text = className.uppercase(Locale.getDefault())
         initializeDatabase()
         initializeViews()
         setAttendance()
+        binding.editAttendance.setOnClickListener {
+            editAttendance()
+        }
     }
 
     private fun initializeClassData() {
         val classData = intent.extras
-        val dataArray = classData!!.getStringArray(Params.CLASS_DATA_ARRAY)
+        val dataArray = classData!!.getStringArray(Constants.CLASS_DATA_ARRAY)
         organisationName = dataArray!![0]
         classId = dataArray[1]
         className = dataArray[2]
@@ -62,13 +68,13 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
     }
 
     private fun initializeViews() {
-        val calendarView = findViewById<CalendarView>(R.id.class_calendar)
+        val calendarView = binding.classCalendar
         calendarView.setOnDateChangeListener { _, year: Int, month: Int, dayOfMonth: Int ->
             focusedDate = getFormattedDate(year, month, dayOfMonth)
             setAttendance()
         }
-        presentCounter = findViewById(R.id.present_counter)
-        absentCounter = findViewById(R.id.absent_counter)
+        presentCounter = binding.presentCounter
+        absentCounter = binding.absentCounter
     }
 
     private fun setAttendance() {
@@ -94,7 +100,7 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
         return year.toString() + formattedMonth + formattedDate
     }
 
-    fun editAttendance(view: View?) {
+    private fun editAttendance() {
         EditAttendanceDialog.presentCount = present
         EditAttendanceDialog.absentCount = absent
         val attendanceDialog = EditAttendanceDialog()

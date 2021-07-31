@@ -30,7 +30,6 @@
         android:background="@drawable/button_gradient"
         android:elevation="7dp"
         android:fontFamily="@font/halant_medium"
-        android:onClick="addOrganisationButton"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"

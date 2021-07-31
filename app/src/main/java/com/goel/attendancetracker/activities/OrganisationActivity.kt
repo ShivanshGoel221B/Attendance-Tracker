@@ -13,7 +13,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,11 +20,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
 import com.goel.attendancetracker.adapters.ClassesAdapter
-import com.goel.attendancetracker.utils.database.DatabaseHandler
-import com.goel.attendancetracker.utils.Constants
+import com.goel.attendancetracker.databinding.ActivityOrganisationBinding
 import com.goel.attendancetracker.dialogboxes.AddDialogBox
 import com.goel.attendancetracker.dialogboxes.AddDialogBox.AddDialogListener
 import com.goel.attendancetracker.dialogboxes.EditDialogBox
@@ -35,6 +32,8 @@ import com.goel.attendancetracker.dialogboxes.MarkDialogBox.MarkAttendanceListen
 import com.goel.attendancetracker.downloadmanager.ClassDownloadManager
 import com.goel.attendancetracker.downloadmanager.FileDataModel
 import com.goel.attendancetracker.models.ClassesModel
+import com.goel.attendancetracker.utils.Constants
+import com.goel.attendancetracker.utils.database.DatabaseHandler
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -42,30 +41,32 @@ import java.util.*
 
 class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogListener,
     MarkAttendanceListener {
+
+    private lateinit var binding: ActivityOrganisationBinding
     private lateinit var organisationName: String
     private lateinit var organisationId: String
     private lateinit var databaseHandler: DatabaseHandler
-    private lateinit var overallProgress: ProgressBar
     private var overallAttendance = 0
     private var overallRequiredAttendance = 0
-    private lateinit var classContainer: RecyclerView
     private lateinit var classAdapter: ClassesAdapter
     private lateinit var classList: ArrayList<ClassesModel>
     private var focusedClass: ClassesModel? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_organisation)
+
+        binding = ActivityOrganisationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         organisationId = Constants.OPEN_ORG!!
-        classContainer = findViewById(R.id.class_grid)
         classList = ArrayList()
-        databaseHandler = DatabaseHandler(this@OrganisationActivity)
+        databaseHandler = DatabaseHandler(this)
         initializeOrganisation()
         supportActionBar?.title = organisationName.uppercase(Locale.getDefault())
         setAdapter()
         getClassList()
         refreshProgress()
-        findViewById<TextView>(R.id.target_value).text = "$overallRequiredAttendance%"
+        binding.targetValue.text = "$overallRequiredAttendance%"
         setClickListeners()
     }
 
@@ -75,7 +76,6 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         return true
     }
 
-    @SuppressLint("NonConstantResourceId")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_new_class -> addNewClass()
@@ -87,9 +87,9 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     //===========================================
     private fun setAdapter() {
         classAdapter = ClassesAdapter(classList, this)
-        classContainer.adapter = classAdapter
+        binding.classGrid.adapter = classAdapter
         val layoutManager = GridLayoutManager(this, 2)
-        classContainer.layoutManager = layoutManager
+        binding.classGrid.layoutManager = layoutManager
     }
 
     private fun getClassList() {
@@ -121,7 +121,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     }
 
     private fun deleteAllClasses() {
-        AlertDialog.Builder(this@OrganisationActivity)
+        AlertDialog.Builder(this)
             .setMessage("This will delete all the Classes in the organisation. Continue?")
             .setPositiveButton("Yes") { _, _ ->
                 for (model in classList) databaseHandler.deleteClass(
@@ -130,7 +130,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                 )
                 classList.clear()
                 classAdapter.notifyDataSetChanged()
-                Toast.makeText(this@OrganisationActivity, "Deleted All Classes", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Deleted All Classes", Toast.LENGTH_LONG)
                     .show()
                 refreshProgress()
             }
@@ -192,12 +192,10 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     //========== DOWNLOAD ATTENDANCE ============//
     private fun hasStoragePermission(): Boolean {
         return (ContextCompat.checkSelfPermission(
-            this@OrganisationActivity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            this, Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-            this@OrganisationActivity,
-            Manifest.permission.READ_EXTERNAL_STORAGE
+            this, Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED)
     }
 
@@ -222,19 +220,19 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             setFileModelData()
             when (classDownloadManager.downloadAttendance()) {
                 ClassDownloadManager.DOWNLOAD_FAILED -> Toast.makeText(
-                    this@OrganisationActivity,
+                    this,
                     "Download Failed",
                     Toast.LENGTH_SHORT
                 ).show()
                 ClassDownloadManager.DOWNLOAD_SUCCESSFUL -> Toast.makeText(
-                    this@OrganisationActivity,
+                    this,
                     "File Saved as ${classDownloadManager.filePath}",
                     Toast.LENGTH_LONG
                 ).show()
             }
         } else {
             ActivityCompat.requestPermissions(
-                this@OrganisationActivity,
+                this,
                 arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -260,7 +258,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     }
 
     private fun deleteClass(position: Int) {
-        AlertDialog.Builder(this@OrganisationActivity)
+        AlertDialog.Builder(this)
             .setMessage("Are you sure you want to delete " + classList[position].className + " ?")
             .setPositiveButton("Yes") { _, _ ->
                 databaseHandler.deleteClass(
@@ -269,7 +267,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                 )
                 classAdapter.notifyItemRemoved(position)
                 Toast.makeText(
-                    this@OrganisationActivity,
+                    this,
                     "Deleted " + classList[position].className,
                     Toast.LENGTH_LONG
                 ).show()
@@ -283,8 +281,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     //==================================================================//
     @SuppressLint("SetTextI18n")
     private fun initializeOrganisation() {
-        val requiredOverallProgress = findViewById<ProgressBar>(R.id.overall_required_attendance)
-        overallProgress = findViewById(R.id.overall_attendance)
+        val requiredOverallProgress = binding.overallRequiredAttendance
         val getCommand =
             "SELECT * FROM " + Constants.ORGANISATIONS + " WHERE " + "s_no" + "=" + organisationId
         val rootReadable = databaseHandler.readableDatabase
@@ -384,27 +381,27 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
     @SuppressLint("SetTextI18n")
     private fun refreshProgress() {
-        val flag = findViewById<ImageView>(R.id.target_flag)
+        val overallProgress = binding.overallAttendance
+        val flag = binding.targetFlag
         overallAttendance = databaseHandler.refreshOverAttendance(organisationName)
-        (findViewById<View>(R.id.overall_percentage_counter) as TextView).text =
-            "$overallAttendance%"
+        binding.overallPercentageCounter.text = "$overallAttendance%"
         overallProgress.progress = 0
         when {
             overallAttendance >= overallRequiredAttendance -> {
                 overallProgress.progressDrawable =
-                    ContextCompat.getDrawable(this@OrganisationActivity, R.drawable.attendance_progress)
+                    ContextCompat.getDrawable(this, R.drawable.attendance_progress)
                 flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#00CF60"))
             }
             overallAttendance > overallRequiredAttendance * 0.75f -> {
                 overallProgress.progressDrawable = ContextCompat.getDrawable(
-                    this@OrganisationActivity,
+                    this,
                     R.drawable.attendance_progress_low
                 )
                 flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#F56600"))
             }
             else -> {
                 overallProgress.progressDrawable = ContextCompat.getDrawable(
-                    this@OrganisationActivity,
+                    this,
                     R.drawable.attendance_progress_danger
                 )
                 flag.imageTintList = ColorStateList.valueOf(Color.parseColor("#FF073A"))
@@ -431,11 +428,11 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
     private fun setFileModelData() {
         FileDataModel.fonts = arrayOf(
-            ResourcesCompat.getFont(this@OrganisationActivity, R.font.halant),
-            ResourcesCompat.getFont(this@OrganisationActivity, R.font.halant_medium),
-            ResourcesCompat.getFont(this@OrganisationActivity, R.font.halant_semibold),
-            ResourcesCompat.getFont(this@OrganisationActivity, R.font.poly),
-            ResourcesCompat.getFont(this@OrganisationActivity, R.font.adamina)
+            ResourcesCompat.getFont(this, R.font.halant),
+            ResourcesCompat.getFont(this, R.font.halant_medium),
+            ResourcesCompat.getFont(this, R.font.halant_semibold),
+            ResourcesCompat.getFont(this, R.font.poly),
+            ResourcesCompat.getFont(this, R.font.adamina)
         )
         FileDataModel.logo = Bitmap.createScaledBitmap(
             BitmapFactory.decodeResource(resources, R.drawable.logo),
@@ -453,7 +450,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this@OrganisationActivity, MainActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     companion object {

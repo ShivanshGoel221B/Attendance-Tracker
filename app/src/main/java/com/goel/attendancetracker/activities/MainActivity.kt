@@ -6,35 +6,36 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
-import com.goel.attendancetracker.utils.database.DatabaseHandler
-import com.goel.attendancetracker.utils.Constants
+import com.goel.attendancetracker.adapters.OrganisationsAdapter
+import com.goel.attendancetracker.databinding.ActivityMainBinding
 import com.goel.attendancetracker.dialogboxes.EditDialogBox
 import com.goel.attendancetracker.dialogboxes.EditDialogBox.EditDialogListener
-import com.goel.attendancetracker.adapters.OrganisationsAdapter
 import com.goel.attendancetracker.models.OrganisationsModel
+import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.utils.Constants.APP_URL
+import com.goel.attendancetracker.utils.database.DatabaseHandler
 import java.util.*
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), EditDialogListener {
+
+    private lateinit var binding: ActivityMainBinding
     private lateinit var databaseHandler: DatabaseHandler
-    private lateinit var organisationContainer: RecyclerView
     private lateinit var organisationsAdapter: OrganisationsAdapter
     private lateinit var organisationList: ArrayList<OrganisationsModel>
     private var focusedOrganisation: OrganisationsModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        organisationContainer = findViewById(R.id.organisations_container)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         organisationList = ArrayList()
         databaseHandler = DatabaseHandler(this@MainActivity)
         setOrganisationAdapter()
@@ -75,9 +76,9 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
 
     private fun setOrganisationAdapter() {
         organisationsAdapter = OrganisationsAdapter(organisationList, this)
-        organisationContainer.adapter = organisationsAdapter
+        binding.organisationsContainer.adapter = organisationsAdapter
         val organisationLayout = LinearLayoutManager(this)
-        organisationContainer.layoutManager = organisationLayout
+        binding.organisationsContainer.layoutManager = organisationLayout
     }
 
     private fun getOrganisationList() {
@@ -100,6 +101,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
     }
 
     private fun setClickListeners() {
+        binding.newOrganisationButton.setOnClickListener { addOrganisation() }
         organisationsAdapter.setOnItemClickListener(object :
             OrganisationsAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -150,7 +152,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
             .show()
     }
 
-    fun addOrganisationButton(view: View?) {
+    private fun addOrganisation() {
         val intent = Intent(this@MainActivity, NewOrganisationActivity::class.java)
         startActivity(intent)
     }
