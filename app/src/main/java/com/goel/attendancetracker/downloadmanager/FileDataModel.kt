@@ -12,8 +12,8 @@ abstract class FileDataModel {
     fun createFirstPage(manager: ClassDownloadManager) {
         val paint = manager.paint
         val canvas = manager.canvas
-        val attendance = manager.model.classAttendancePercentage
-        val target = manager.model.requiredAttendance
+        val attendance = manager.model.attendance
+        val target = manager.model.target
         val color = if (attendance >= target) safeColor else if (attendance > target * 0.75f) lowColor else dangerColor
 
         // SET IMAGE
@@ -52,7 +52,7 @@ abstract class FileDataModel {
         canvas.drawText("Attendance: ", 200f, 360f, paint)
         paint.typeface = Typeface.create(fonts[3], Typeface.NORMAL)
         paint.textAlign = Paint.Align.LEFT
-        canvas.drawText(manager.model.className.uppercase(Locale.getDefault()), 170f, 240f, paint)
+        canvas.drawText(manager.model.name.uppercase(Locale.getDefault()), 170f, 240f, paint)
         paint.typeface = Typeface.create(fonts[2], Typeface.BOLD)
         canvas.drawText("$target%", 170f, 290f, paint)
 

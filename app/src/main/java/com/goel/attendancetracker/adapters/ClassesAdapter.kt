@@ -28,8 +28,8 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ClassViewHolder, position: Int) {
         val model = classList[position]
-        val percentage = model.classAttendancePercentage
-        val requiredPercentage = model.requiredAttendance
+        val percentage = model.attendance
+        val requiredPercentage = model.target
         progress = when {
             percentage >= requiredPercentage -> ContextCompat.getDrawable(
                 context,
@@ -47,7 +47,7 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
         holder.attendanceProgressBar.progress = 0
         holder.attendanceProgressBar.progress = percentage
         holder.requiredAttendanceBar.progress = requiredPercentage
-        holder.className.text = model.className
+        holder.className.text = model.name
         holder.classCounter.text = model.classCounter
         holder.editIcon.setImageResource(R.drawable.icon_edit)
         holder.deleteIcon.setImageResource(R.drawable.icon_delete)

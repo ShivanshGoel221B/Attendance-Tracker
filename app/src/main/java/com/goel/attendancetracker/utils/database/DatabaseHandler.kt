@@ -145,7 +145,7 @@ class DatabaseHandler(context: Context) :
         if (present != 0 || absent != 0) {
             newAttendance = present * 100 / (present + absent)
         }
-        model.classAttendancePercentage = newAttendance
+        model.attendance = newAttendance
         model.setClassCounter()
 
         // UPDATE IN DATABASE

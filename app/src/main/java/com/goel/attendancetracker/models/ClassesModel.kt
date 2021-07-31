@@ -4,30 +4,14 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-class ClassesModel {
-    var id = 0
-    var className: String
-    var classCounter: String
-        private set
-    var classAttendancePercentage: Int
-    var requiredAttendance: Int
-    var classHistory: String
-
-    constructor() {
-        className = " "
-        classCounter = "0/0"
-        classAttendancePercentage = 100
-        requiredAttendance = 100
-        classHistory = "{}"
-    }
-
-    constructor(className: String, requiredAttendance: Int) {
-        this.className = className
-        classCounter = "0/0"
-        classAttendancePercentage = 100
-        this.requiredAttendance = requiredAttendance
-        classHistory = "{}"
-    }
+data class ClassesModel (
+    var id: Int = 0,
+    var name: String = "",
+    var classCounter: String = "0/0",
+    var attendance: Int = 100,
+    var target: Int = 100,
+    var classHistory: String = "{}"
+    ){
 
     // UPDATE NEW ATTENDANCE
     val presentCount: Int

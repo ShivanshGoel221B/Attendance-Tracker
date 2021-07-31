@@ -14,7 +14,7 @@ import java.io.IOException
 class ClassDownloadManager(// ===================== GETTERS AND SETTERS ===================== //
     val model: ClassesModel, val organisationName: String
 ) : FileDataModel() {
-    val filePath = "Attendance Tracker/$organisationName/${model.className}.pdf"
+    val filePath = "Attendance Tracker/$organisationName/${model.name}.pdf"
     var document: PdfDocument? = null
         private set
     lateinit var paint: Paint

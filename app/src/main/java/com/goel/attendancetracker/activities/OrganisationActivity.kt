@@ -99,9 +99,9 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             do {
                 val model = ClassesModel()
                 model.id = cursor.getInt(0)
-                model.className = cursor.getString(1)
-                model.classAttendancePercentage = cursor.getInt(2)
-                model.requiredAttendance = cursor.getInt(3)
+                model.name = cursor.getString(1)
+                model.attendance = cursor.getInt(2)
+                model.target = cursor.getInt(3)
                 model.classHistory = cursor.getString(4)
                 model.setClassCounter()
                 classList.add(model)
@@ -140,11 +140,12 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     override fun addSubmitDetails(newNameText: EditText, newTargetText: EditText) {
         if (isDataValid(newNameText, newTargetText)) {
             val values = ContentValues()
-            val model =
-                ClassesModel(newNameText.text.toString(), newTargetText.text.toString().toInt())
-            values.put(Constants.NAME, model.className)
-            values.put(Constants.TARGET, model.requiredAttendance)
-            values.put(Constants.ATTENDANCE, model.classAttendancePercentage)
+            val name = newNameText.text.toString()
+            val target = newTargetText.text.toString().toInt()
+            val model = ClassesModel(name = name, target = target)
+            values.put(Constants.NAME, model.name)
+            values.put(Constants.TARGET, model.target)
+            values.put(Constants.ATTENDANCE, model.attendance)
             values.put(Constants.HISTORY, model.classHistory)
             val classId = databaseHandler.addNewClass(organisationName, values)
             model.id = classId
@@ -218,13 +219,13 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     private fun editClass() {
         val editDialogBox = EditDialogBox(this)
         editDialogBox.show(supportFragmentManager, "edit dialog")
-        EditDialogBox.name = focusedClass!!.className
-        EditDialogBox.target = focusedClass!!.requiredAttendance
+        EditDialogBox.name = focusedClass!!.name
+        EditDialogBox.target = focusedClass!!.target
     }
 
     private fun deleteClass(position: Int) {
         AlertDialog.Builder(this)
-            .setMessage("Are you sure you want to delete " + classList[position].className + " ?")
+            .setMessage("Are you sure you want to delete " + classList[position].name + " ?")
             .setPositiveButton("Yes") { _, _ ->
                 databaseHandler.deleteClass(
                     organisationName, classList[position]
@@ -233,7 +234,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                 classAdapter.notifyItemRemoved(position)
                 Toast.makeText(
                     this,
-                    "Deleted " + classList[position].className,
+                    "Deleted " + classList[position].name,
                     Toast.LENGTH_LONG
                 ).show()
                 classList.removeAt(position)
@@ -310,8 +311,8 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             values.put(Constants.NAME, newNameText.text.toString())
             values.put(Constants.TARGET, newTargetText.text.toString().toInt())
             databaseHandler.updateClass(organisationName, values, focusedClass!!.id.toString())
-            focusedClass!!.className = newNameText.text.toString()
-            focusedClass!!.requiredAttendance = newTargetText.text.toString().toInt()
+            focusedClass!!.name = newNameText.text.toString()
+            focusedClass!!.target = newTargetText.text.toString().toInt()
             classAdapter.notifyItemChanged(classList.indexOf(focusedClass))
             Toast.makeText(this, "Updated Successfully", Toast.LENGTH_LONG).show()
             focusedClass = null
@@ -417,7 +418,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         val intent = Intent(this@OrganisationActivity, CalendarActivity::class.java)
         val dataArray = arrayOf(
             organisationName, classList[position]
-                .id.toString(), classList[position].className
+                .id.toString(), classList[position].name
         )
         intent.putExtra(Constants.CLASS_DATA_ARRAY, dataArray)
         startActivity(intent)
