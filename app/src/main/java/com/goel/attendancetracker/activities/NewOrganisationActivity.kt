@@ -9,8 +9,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.goel.attendancetracker.R
-import com.goel.attendancetracker.database.DatabaseHandler
-import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.utils.database.DatabaseHandler
+import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.models.OrganisationsModel
 
 class NewOrganisationActivity : AppCompatActivity() {
@@ -54,9 +54,9 @@ class NewOrganisationActivity : AppCompatActivity() {
 
     private fun insertOrganisation(newOrganisation: OrganisationsModel) {
         val values = ContentValues()
-        values.put(Params.NAME, newOrganisation.name)
-        values.put(Params.TARGET, newOrganisation.target)
-        values.put(Params.ATTENDANCE, newOrganisation.attendance)
+        values.put(Constants.NAME, newOrganisation.name)
+        values.put(Constants.TARGET, newOrganisation.target)
+        values.put(Constants.ATTENDANCE, newOrganisation.attendance)
         databaseHandler.insertOrganisation(values)
         Toast.makeText(this, "Added " + newOrganisation.name + " Successfully", Toast.LENGTH_LONG)
             .show()

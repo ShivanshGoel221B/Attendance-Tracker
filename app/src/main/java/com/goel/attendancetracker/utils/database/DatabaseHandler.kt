@@ -1,4 +1,4 @@
-package com.goel.attendancetracker.database
+package com.goel.attendancetracker.utils.database
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
@@ -8,28 +8,29 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import com.goel.attendancetracker.models.ClassesModel
 import com.goel.attendancetracker.models.OrganisationsModel
+import com.goel.attendancetracker.utils.Constants
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
 class DatabaseHandler(context: Context) :
-    SQLiteOpenHelper(context, Params.DB_NAME, null, Params.DB_VERSION) {
+    SQLiteOpenHelper(context, Constants.DB_NAME, null, Constants.DB_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
-        val createTable = "CREATE TABLE ${Params.ROOT_TABLE}"
+        val createTable = "CREATE TABLE ${Constants.ROOT_TABLE}"
         db.execSQL(createTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
     fun deleteOrganisation(organisationId: String, organisationName: String) {
         val writableDatabase = this.writableDatabase
-        writableDatabase.delete(Params.ORGANISATIONS, "s_no=?", arrayOf(organisationId))
+        writableDatabase.delete(Constants.ORGANISATIONS, "s_no=?", arrayOf(organisationId))
         writableDatabase.execSQL("DROP TABLE IF EXISTS \"$organisationName\"")
         writableDatabase.close()
     }
 
     fun updateOrganisation(values: ContentValues, organisationName: String) {
         val writableDatabase = this.writableDatabase
-        writableDatabase.update(Params.ORGANISATIONS, values, "name=?", arrayOf(organisationName))
+        writableDatabase.update(Constants.ORGANISATIONS, values, "name=?", arrayOf(organisationName))
         writableDatabase.close()
     }
 
@@ -43,7 +44,7 @@ class DatabaseHandler(context: Context) :
         try {
             this.writableDatabase.use { writableDatabase ->
                 val tableCommand =
-                    "CREATE TABLE \"${newOrganisation.name}\"${Params.NEW_TABLE}"
+                    "CREATE TABLE \"${newOrganisation.name}\"${Constants.NEW_TABLE}"
                 writableDatabase.execSQL(tableCommand)
             }
         } catch (e: SQLiteException) {
@@ -53,7 +54,7 @@ class DatabaseHandler(context: Context) :
 
     fun insertOrganisation(values: ContentValues) {
         val writableDatabase = this.writableDatabase
-        writableDatabase.insert(Params.ORGANISATIONS, null, values)
+        writableDatabase.insert(Constants.ORGANISATIONS, null, values)
         writableDatabase.close()
     }
 
@@ -150,8 +151,8 @@ class DatabaseHandler(context: Context) :
         // UPDATE IN DATABASE
         val writableDatabase = this.writableDatabase
         val values = ContentValues()
-        values.put(Params.HISTORY, history.toString())
-        values.put(Params.ATTENDANCE, newAttendance)
+        values.put(Constants.HISTORY, history.toString())
+        values.put(Constants.ATTENDANCE, newAttendance)
         updateClass(organisationName, values, java.lang.String.valueOf(model.id))
         writableDatabase.close()
     }
@@ -175,7 +176,7 @@ class DatabaseHandler(context: Context) :
         cursor.close()
         readable.close()
         val newOrganisationValues = ContentValues()
-        newOrganisationValues.put(Params.ATTENDANCE, overallAttendance)
+        newOrganisationValues.put(Constants.ATTENDANCE, overallAttendance)
         updateOrganisation(newOrganisationValues, organisationName)
         return overallAttendance
     }

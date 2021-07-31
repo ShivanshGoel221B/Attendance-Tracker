@@ -8,9 +8,8 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.goel.attendancetracker.R
-import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.databinding.ActivityBackupRestoreBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -32,7 +31,7 @@ class BackupRestoreActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.title = "Backup & Restore"
         binding.userEmail.text = user.email
-        storageRef = FirebaseStorage.getInstance().getReference("${user.uid}/${Params.DB_NAME}")
+        storageRef = FirebaseStorage.getInstance().getReference("${user.uid}/${Constants.DB_NAME}")
         setClickListeners()
     }
 
@@ -63,9 +62,9 @@ class BackupRestoreActivity : AppCompatActivity() {
     }
 
     private fun backupDatabase() {
-        val loading = findViewById<ConstraintLayout>(R.id.backup_restore_loading)
+        val loading = binding.backupRestoreLoading
         loading.visibility = View.VISIBLE
-        val databaseUri = Uri.fromFile(getDatabasePath(Params.DB_NAME))
+        val databaseUri = Uri.fromFile(getDatabasePath(Constants.DB_NAME))
         val backupTask = storageRef.putFile(databaseUri)
         backupTask.addOnSuccessListener {
             val toast = Toast.makeText(
@@ -100,9 +99,9 @@ class BackupRestoreActivity : AppCompatActivity() {
     }
 
     private fun restoreDatabase() {
-        val loading = findViewById<ConstraintLayout>(R.id.backup_restore_loading)
+        val loading = binding.backupRestoreLoading
         loading.visibility = View.VISIBLE
-        val databaseFile = File(getDatabasePath(Params.DB_NAME).path)
+        val databaseFile = File(getDatabasePath(Constants.DB_NAME).path)
         storageRef.getFile(databaseFile)
             .addOnSuccessListener {
                 val toast = Toast.makeText(

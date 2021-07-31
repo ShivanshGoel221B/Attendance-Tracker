@@ -24,8 +24,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
 import com.goel.attendancetracker.adapters.ClassesAdapter
-import com.goel.attendancetracker.database.DatabaseHandler
-import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.utils.database.DatabaseHandler
+import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.dialogboxes.AddDialogBox
 import com.goel.attendancetracker.dialogboxes.AddDialogBox.AddDialogListener
 import com.goel.attendancetracker.dialogboxes.EditDialogBox
@@ -56,7 +56,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_organisation)
-        organisationId = Params.OPEN_ORG!!
+        organisationId = Constants.OPEN_ORG!!
         classContainer = findViewById(R.id.class_grid)
         classList = ArrayList()
         databaseHandler = DatabaseHandler(this@OrganisationActivity)
@@ -143,10 +143,10 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             val values = ContentValues()
             val model =
                 ClassesModel(newNameText.text.toString(), newTargetText.text.toString().toInt())
-            values.put(Params.NAME, model.className)
-            values.put(Params.TARGET, model.requiredAttendance)
-            values.put(Params.ATTENDANCE, model.classAttendancePercentage)
-            values.put(Params.HISTORY, model.classHistory)
+            values.put(Constants.NAME, model.className)
+            values.put(Constants.TARGET, model.requiredAttendance)
+            values.put(Constants.ATTENDANCE, model.classAttendancePercentage)
+            values.put(Constants.HISTORY, model.classHistory)
             val classId = databaseHandler.addNewClass(organisationName, values)
             model.id = classId
             classList.add(model)
@@ -165,7 +165,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                     organisationName, classList[position]
                         .id.toString(), classList[position].className
                 )
-                intent.putExtra(Params.CLASS_DATA_ARRAY, dataArray)
+                intent.putExtra(Constants.CLASS_DATA_ARRAY, dataArray)
                 startActivity(intent)
             }
 
@@ -286,7 +286,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         val requiredOverallProgress = findViewById<ProgressBar>(R.id.overall_required_attendance)
         overallProgress = findViewById(R.id.overall_attendance)
         val getCommand =
-            "SELECT * FROM " + Params.ORGANISATIONS + " WHERE " + "s_no" + "=" + organisationId
+            "SELECT * FROM " + Constants.ORGANISATIONS + " WHERE " + "s_no" + "=" + organisationId
         val rootReadable = databaseHandler.readableDatabase
         val cursor = rootReadable.rawQuery(getCommand, null)
         cursor.moveToFirst()
@@ -345,8 +345,8 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     override fun submitDetails(newNameText: EditText, newTargetText: EditText) {
         if (isDataValid(newNameText, newTargetText)) {
             val values = ContentValues()
-            values.put(Params.NAME, newNameText.text.toString())
-            values.put(Params.TARGET, newTargetText.text.toString().toInt())
+            values.put(Constants.NAME, newNameText.text.toString())
+            values.put(Constants.TARGET, newTargetText.text.toString().toInt())
             databaseHandler.updateClass(organisationName, values, focusedClass!!.id.toString())
             focusedClass!!.className = newNameText.text.toString()
             focusedClass!!.requiredAttendance = newTargetText.text.toString().toInt()

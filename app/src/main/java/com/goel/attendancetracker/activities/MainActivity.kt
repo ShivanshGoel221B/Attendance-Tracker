@@ -14,12 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
-import com.goel.attendancetracker.database.DatabaseHandler
-import com.goel.attendancetracker.database.Params
+import com.goel.attendancetracker.utils.database.DatabaseHandler
+import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.dialogboxes.EditDialogBox
 import com.goel.attendancetracker.dialogboxes.EditDialogBox.EditDialogListener
 import com.goel.attendancetracker.adapters.OrganisationsAdapter
 import com.goel.attendancetracker.models.OrganisationsModel
+import com.goel.attendancetracker.utils.Constants.APP_URL
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -30,8 +31,6 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
     private lateinit var organisationList: ArrayList<OrganisationsModel>
     private var focusedOrganisation: OrganisationsModel? = null
 
-    private val APP_URL = "https://play.google.com/store/apps/details?id=com.goel.attendancetracker"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
         setOrganisationAdapter()
         getOrganisationList()
         setClickListeners()
-        Params.OPEN_ORG = null
+        Constants.OPEN_ORG = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,7 +82,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
 
     private fun getOrganisationList() {
         val organisationsRef = databaseHandler.readableDatabase
-        val getCommand = "SELECT * FROM " + Params.ORGANISATIONS
+        val getCommand = "SELECT * FROM " + Constants.ORGANISATIONS
         val cursor = organisationsRef.rawQuery(getCommand, null)
         if (cursor.moveToFirst()) {
             do {
@@ -104,7 +103,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener {
         organisationsAdapter.setOnItemClickListener(object :
             OrganisationsAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                Params.OPEN_ORG = organisationList[position].id.toString()
+                Constants.OPEN_ORG = organisationList[position].id.toString()
                 openOrganisation()
             }
 
