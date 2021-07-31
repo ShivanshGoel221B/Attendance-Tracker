@@ -62,7 +62,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         classList = ArrayList()
         databaseHandler = DatabaseHandler(this)
         initializeOrganisation()
-        supportActionBar?.title = organisationName.uppercase(Locale.getDefault())
+        supportActionBar?.title = organisationName
         setAdapter()
         getClassList()
         refreshProgress()

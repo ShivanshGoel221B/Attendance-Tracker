@@ -35,7 +35,7 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
         setContentView(binding.root)
         focusedDate = currentDate
         initializeClassData()
-        supportActionBar?.title = organisationName.uppercase(Locale.getDefault())
+        supportActionBar?.title = organisationName
         binding.classNameCalendar.text = className
         initializeDatabase()
         initializeViews()

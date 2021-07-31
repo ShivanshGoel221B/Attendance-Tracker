@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="?attr/base_background"
     tools:context=".activities.MainActivity">
@@ -13,37 +12,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="7dp"
-        android:fontFamily="@font/halant_semibold"
+        android:fontFamily="@font/poly"
         android:paddingStart="25dp"
+        android:paddingEnd="0dp"
         android:paddingTop="15dp"
         android:paddingBottom="10dp"
         android:text="@string/home_page_title"
         android:background="?attr/card_background"
-        android:textSize="26sp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/new_organisation_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/button_background"
         android:elevation="7dp"
-        android:fontFamily="@font/halant_medium"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
         android:text="@string/add_new_organisation"
         android:textColor="@color/white"
-        android:textSize="24sp" />
+        android:textSize="16sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/organisations_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
+        tools:listitem="@layout/organisation_card"
         android:layout_weight="1">
 
     </androidx.recyclerview.widget.RecyclerView>
