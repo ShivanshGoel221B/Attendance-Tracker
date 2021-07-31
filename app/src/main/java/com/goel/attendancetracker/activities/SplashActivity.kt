@@ -16,7 +16,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun loadContent() {
         try {
-            Thread.sleep(500)
+            Thread.sleep(1000)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         } finally {
