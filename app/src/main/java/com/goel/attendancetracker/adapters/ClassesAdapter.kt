@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
@@ -22,7 +21,7 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
     private var progress: Drawable? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.class_card, parent, false)
-        return ClassViewHolder(view, clickListener)
+        return ClassViewHolder(view)
     }
 
     @SuppressLint("SetTextI18n")
@@ -49,59 +48,36 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
         holder.requiredAttendanceBar.progress = requiredPercentage
         holder.className.text = model.name
         holder.classCounter.text = model.classCounter
+        setClickListeners(holder, position)
     }
 
     override fun getItemCount(): Int {
         return classList.size
     }
 
-    //VIEW HOLDER CLASS
-    inner class ClassViewHolder(itemView: View, listener: OnItemClickListener) :
-        RecyclerView.ViewHolder(itemView) {
-        var attendanceProgressBar: ProgressBar = itemView.findViewById(R.id.class_progress)
-        var requiredAttendanceBar: ProgressBar = itemView.findViewById(R.id.required_class_progress)
-        var attendancePercentage: TextView = itemView.findViewById(R.id.class_attendance)
-        var className: TextView = itemView.findViewById(R.id.class_name)
-        var classCounter: TextView = itemView.findViewById(R.id.class_counter)
-        var editIcon: ImageView = itemView.findViewById(R.id.class_edit_icon)
-        var deleteIcon: ImageView = itemView.findViewById(R.id.class_delete_icon)
-        var markIcon: ImageView = itemView.findViewById(R.id.class_mark_icon)
-        private var menuIcon: ImageView = itemView.findViewById(R.id.context_menu_button)
-        private fun setMenuItemClickListeners(
-            popupMenu: PopupMenu,
-            position: Int,
-            listener: OnItemClickListener
-        ) {
-            popupMenu.setOnMenuItemClickListener { item ->
-                if (position != RecyclerView.NO_POSITION) when (item.itemId) {
-                    R.id.edit_history -> listener.onHistoryClick(position)
-                    R.id.download_class_attendance -> listener.onDownloadClick(position)
-                }
-                true
-            }
+    private fun setClickListeners(holder: ClassViewHolder, position: Int) {
+        if (position != RecyclerView.NO_POSITION) {
+            holder.downloadButton.setOnClickListener { clickListener.onDownloadClick(position) }
+            holder.calendarButton.setOnClickListener { clickListener.onHistoryClick(position) }
+            holder.editIcon.setOnClickListener { clickListener.onEditClick(position) }
+            holder.markIcon.setOnClickListener { clickListener.onMarkClick(position) }
+            holder.deleteIcon.setOnClickListener { clickListener.onDeleteClick(position) }
         }
-        init {
-            editIcon.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) listener.onEditClick(position)
-            }
-            deleteIcon.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) listener.onDeleteClick(position)
-            }
-            markIcon.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) listener.onMarkClick(position)
-            }
-            menuIcon.setOnClickListener { v ->
-                val popupMenu = PopupMenu(v.context, v)
-                popupMenu.inflate(R.menu.class_context_menu)
-                val position = adapterPosition
-                setMenuItemClickListeners(popupMenu, position, listener)
-                popupMenu.show()
-            }
-        }
+    }
 
+    //VIEW HOLDER CLASS
+    inner class ClassViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        val attendanceProgressBar: ProgressBar = itemView.findViewById(R.id.class_progress)
+        val requiredAttendanceBar: ProgressBar = itemView.findViewById(R.id.required_class_progress)
+        val attendancePercentage: TextView = itemView.findViewById(R.id.class_attendance)
+        val className: TextView = itemView.findViewById(R.id.class_name)
+        val classCounter: TextView = itemView.findViewById(R.id.class_counter)
+        val editIcon: ImageView = itemView.findViewById(R.id.class_edit_icon)
+        val deleteIcon: ImageView = itemView.findViewById(R.id.class_delete_icon)
+        val markIcon: ImageView = itemView.findViewById(R.id.class_mark_icon)
+        val downloadButton: ImageView = itemView.findViewById(R.id.download_button)
+        val calendarButton: ImageView = itemView.findViewById(R.id.calendar_button)
     }
 
     // ITEM CLICK LISTENER

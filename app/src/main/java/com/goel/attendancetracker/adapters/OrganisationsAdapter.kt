@@ -24,7 +24,7 @@ class OrganisationsAdapter(
     private val clickListener = context as OnItemClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganisationViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.organisation_card, parent, false)
-        return OrganisationViewHolder(view, clickListener)
+        return OrganisationViewHolder(view)
     }
 
     @SuppressLint("SetTextI18n")
@@ -50,10 +50,22 @@ class OrganisationsAdapter(
         holder.attendanceProgressBar.progress = percentage
         holder.requiredAttendanceBar.progress = requiredPercentage
         holder.organisationName.text = model.name
+        setClickListeners(holder, position)
     }
 
     override fun getItemCount(): Int {
         return organisationList.size
+    }
+
+    private fun setClickListeners(
+        holder: OrganisationViewHolder,
+        position: Int
+    ) {
+        if (position != RecyclerView.NO_POSITION) {
+            holder.itemView.setOnClickListener { clickListener.onItemClick(position) }
+            holder.editIcon.setOnClickListener { clickListener.onEditClick(position) }
+            holder.deleteIcon.setOnClickListener { clickListener.onDeleteClick(position) }
+        }
     }
 
     // ITEM CLICK LISTENER
@@ -64,7 +76,7 @@ class OrganisationsAdapter(
     }
 
     //VIEW HOLDER CLASS
-    class OrganisationViewHolder(itemView: View, listener: OnItemClickListener) :
+    class OrganisationViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         var attendanceProgressBar: ProgressBar = itemView.findViewById(R.id.organisation_attendance_progress_bar)
         var requiredAttendanceBar: ProgressBar = itemView.findViewById(R.id.required_attendance_progress)
@@ -72,20 +84,5 @@ class OrganisationsAdapter(
         var organisationName: TextView = itemView.findViewById(R.id.organisation_name)
         var editIcon: ImageView = itemView.findViewById(R.id.edit_organisation_icon)
         var deleteIcon: ImageView = itemView.findViewById(R.id.delete_organisation_icon)
-
-        init {
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) listener.onItemClick(position)
-            }
-            deleteIcon.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) listener.onDeleteClick(position)
-            }
-            editIcon.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) listener.onEditClick(position)
-            }
-        }
     }
 }
