@@ -66,7 +66,7 @@
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/poly"
                 android:includeFontPadding="true"
-                android:textSize="28sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/organisation_attendance_progress_bar"
                 app:layout_constraintTop_toTopOf="parent" />
