@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/attendance_controls"
@@ -22,13 +22,13 @@
             android:id="@+id/present"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/present_increment"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@drawable/list_background"
                 android:backgroundTint="@color/secondary"
@@ -39,21 +39,22 @@
 
             <TextView
                 android:id="@+id/dialog_present_counter"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/list_background"
                 android:backgroundTint="@color/green"
                 android:elevation="5dp"
+                tools:text="2"
                 android:fontFamily="@font/lily_script_one"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="36sp" />
+                android:textSize="28sp" />
 
             <Button
                 android:id="@+id/present_decrement"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@drawable/list_background"
                 android:backgroundTint="@color/secondary"
@@ -67,13 +68,13 @@
             android:id="@+id/absent"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/absent_increment"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@drawable/list_background"
                 android:backgroundTint="@color/secondary"
@@ -84,8 +85,8 @@
 
             <TextView
                 android:id="@+id/dialog_absent_counter"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/list_background"
@@ -93,12 +94,13 @@
                 android:elevation="5dp"
                 android:fontFamily="@font/lily_script_one"
                 android:gravity="center"
+                tools:text="1"
                 android:textColor="@color/white"
-                android:textSize="36sp" />
+                android:textSize="28sp" />
 
             <Button
                 android:id="@+id/absent_decrement"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@drawable/list_background"
                 android:backgroundTint="@color/secondary"
