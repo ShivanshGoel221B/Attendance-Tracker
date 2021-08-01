@@ -49,9 +49,6 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
         holder.requiredAttendanceBar.progress = requiredPercentage
         holder.className.text = model.name
         holder.classCounter.text = model.classCounter
-        holder.editIcon.setImageResource(R.drawable.icon_edit)
-        holder.deleteIcon.setImageResource(R.drawable.icon_delete)
-        holder.markIcon.setImageResource(R.drawable.icon_mark)
     }
 
     override fun getItemCount(): Int {

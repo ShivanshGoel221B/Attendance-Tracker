@@ -50,8 +50,6 @@ class OrganisationsAdapter(
         holder.attendanceProgressBar.progress = percentage
         holder.requiredAttendanceBar.progress = requiredPercentage
         holder.organisationName.text = model.name
-        holder.editIcon.setImageResource(R.drawable.icon_edit)
-        holder.deleteIcon.setImageResource(R.drawable.icon_delete)
     }
 
     override fun getItemCount(): Int {

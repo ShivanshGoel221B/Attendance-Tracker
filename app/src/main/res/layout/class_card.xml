@@ -41,8 +41,8 @@
 
             <ImageView
                 android:id="@+id/context_menu_button"
-                android:layout_width="20dp"
-                android:layout_height="25dp"
+                android:layout_width="15dp"
+                android:layout_height="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/context_menu_icon" />
@@ -63,8 +63,8 @@
             <ProgressBar
                 android:id="@+id/class_progress"
                 style="?android:attr/progressBarStyle"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
                 android:layout_marginTop="5dp"
                 android:indeterminateOnly="false"
                 android:progress="40"
@@ -114,29 +114,29 @@
 
                 <ImageView
                     android:id="@+id/class_edit_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/icon_edit" />
+                    app:srcCompat="@drawable/ic_settings" />
 
                 <ImageView
                     android:id="@+id/class_mark_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/icon_mark" />
+                    app:srcCompat="@drawable/ic_mark" />
 
                 <ImageView
                     android:id="@+id/class_delete_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/icon_delete" />
+                    app:srcCompat="@drawable/ic_delete" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

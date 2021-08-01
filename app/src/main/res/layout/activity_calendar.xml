@@ -91,7 +91,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            app:srcCompat="@drawable/edit" />
+            app:srcCompat="@drawable/ic_edit" />
 
     </LinearLayout>
 
