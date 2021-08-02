@@ -45,4 +45,17 @@
     <string name="backup_not_found_message">No backup found on this account. Please try with a different account</string>
     <string name="ok">OK</string>
     <string name="backup_and_restore"><![CDATA[Backup & Restore]]></string>
+    <string name="updated">Updated Successfully</string>
+    <string name="delete_class_prompt">Are you sure you want to delete %s?</string>
+    <string name="deleted">Deleted %s Successfully</string>
+    <string name="error_message">Some Error Occurred</string>
+    <string name="attendance_marked">Attendance Marked</string>
+    <string name="invalid_name">Please Enter a valid name</string>
+    <string name="too_long_name">The length of the name should be less than or equal to 15</string>
+    <string name="invalid_target">Enter a valid number from 1 to 100</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="download_failed">Download Failed</string>
+    <string name="file_saved">File Saved as %s</string>
+    <string name="delete_all_prompt">This will delete all the Classes in the organisation. Continue?</string>
+    <string name="deleted_all_classes">All classes deleted</string>
 </resources>

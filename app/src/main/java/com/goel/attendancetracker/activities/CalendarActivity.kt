@@ -6,27 +6,30 @@ import android.view.Gravity
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.goel.attendancetracker.utils.database.DatabaseHandler
-import com.goel.attendancetracker.utils.Constants
+import com.goel.attendancetracker.R
 import com.goel.attendancetracker.databinding.ActivityCalendarBinding
 import com.goel.attendancetracker.dialogboxes.EditAttendanceDialog
 import com.goel.attendancetracker.dialogboxes.EditAttendanceDialog.SubmitNewAttendance
 import com.goel.attendancetracker.models.ClassesModel
+import com.goel.attendancetracker.utils.database.DatabaseHandler
 import java.util.*
 
 class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
 
+    companion object {
+        @JvmStatic
+        lateinit var model: ClassesModel
+        @JvmStatic
+        lateinit var organisationName: String
+    }
+
     private lateinit var binding: ActivityCalendarBinding
-    private lateinit var classId: String
-    private lateinit var className: String
-    private lateinit var organisationName: String
     private lateinit var focusedDate: String
     private lateinit var presentCounter: TextView
     private lateinit var absentCounter: TextView
     private var present = 0
     private var absent = 0
     private lateinit var databaseHandler: DatabaseHandler
-    private lateinit var openClass: ClassesModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +37,8 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
         focusedDate = currentDate
-        initializeClassData()
         supportActionBar?.title = organisationName
-        binding.classNameCalendar.text = className
+        binding.classNameCalendar.text = model.name
         initializeDatabase()
         initializeViews()
         setAttendance()
@@ -45,26 +47,17 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
         }
     }
 
-    private fun initializeClassData() {
-        val classData = intent.extras
-        val dataArray = classData!!.getStringArray(Constants.CLASS_DATA_ARRAY)
-        organisationName = dataArray!![0]
-        classId = dataArray[1]
-        className = dataArray[2]
-    }
-
     private fun initializeDatabase() {
         databaseHandler = DatabaseHandler(this@CalendarActivity)
         val database = databaseHandler.readableDatabase
+        val classId = model.id
         val getCommand = "SELECT * FROM \"$organisationName\" WHERE class_sno=$classId"
         val cursor = database.rawQuery(getCommand, null)
         cursor.moveToFirst()
         val history = cursor.getString(4)
         cursor.close()
         database.close()
-        openClass = ClassesModel()
-        openClass.id = classId.toInt()
-        openClass.classHistory = history
+        model.classHistory = history
     }
 
     private fun initializeViews() {
@@ -78,8 +71,8 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
     }
 
     private fun setAttendance() {
-        present = openClass.getPresentCount(focusedDate)
-        absent = openClass.getAbsentCount(focusedDate)
+        present = model.getPresentCount(focusedDate)
+        absent = model.getAbsentCount(focusedDate)
         presentCounter.text = present.toString()
         absentCounter.text = absent.toString()
     }
@@ -111,10 +104,10 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
         val attendance = IntArray(2)
         attendance[0] = newPresent - present
         attendance[1] = newAbsent - absent
-        databaseHandler.markAttendance(organisationName, openClass, focusedDate, attendance)
+        databaseHandler.markAttendance(organisationName, model, focusedDate, attendance)
         databaseHandler.refreshOverAttendance(organisationName)
         setAttendance()
-        val toast = Toast.makeText(this@CalendarActivity, "Updated Successfully", Toast.LENGTH_LONG)
+        val toast = Toast.makeText(this, R.string.updated, Toast.LENGTH_LONG)
         toast.setGravity(Gravity.CENTER, 0, 20)
         toast.show()
     }
@@ -122,6 +115,6 @@ class CalendarActivity : AppCompatActivity(), SubmitNewAttendance {
     //==========================================================================================================//
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this@CalendarActivity, OrganisationActivity::class.java))
+        startActivity(Intent(this, OrganisationActivity::class.java))
     }
 }
