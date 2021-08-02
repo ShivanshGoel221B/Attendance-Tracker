@@ -29,7 +29,7 @@ class BackupRestoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityBackupRestoreBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = "Backup & Restore"
+        supportActionBar?.title = getString(R.string.backup_and_restore)
         binding.userEmail.text = user.email
         storageRef = FirebaseStorage.getInstance().getReference("${user.uid}/${Constants.DB_NAME}")
         setClickListeners()
@@ -50,13 +50,13 @@ class BackupRestoreActivity : AppCompatActivity() {
 
     private fun createBackup() {
         AlertDialog.Builder(this@BackupRestoreActivity)
-            .setTitle("Confirm Backup")
-            .setMessage("Creating the backup will overwrite the existing backup. Do want to continue?")
-            .setPositiveButton("Confirm") { dialog, _ ->
+            .setTitle(R.string.confirm_backup)
+            .setMessage(R.string.backup_prompt)
+            .setPositiveButton(R.string.confirm) { dialog, _ ->
                 dialog.dismiss()
                 backupDatabase()
             }
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .setIcon(android.R.drawable.ic_dialog_info)
             .show()
     }
@@ -69,7 +69,7 @@ class BackupRestoreActivity : AppCompatActivity() {
         backupTask.addOnSuccessListener {
             val toast = Toast.makeText(
                 this@BackupRestoreActivity,
-                "Backed Up Successfully",
+                R.string.backup_successful,
                 Toast.LENGTH_LONG
             )
             toast.setGravity(Gravity.CENTER, 0, 50)
@@ -78,7 +78,7 @@ class BackupRestoreActivity : AppCompatActivity() {
         }
         backupTask.addOnFailureListener {
             val toast =
-                Toast.makeText(this@BackupRestoreActivity, "Back Up Failed", Toast.LENGTH_LONG)
+                Toast.makeText(this@BackupRestoreActivity, R.string.backup_failed, Toast.LENGTH_LONG)
             toast.setGravity(Gravity.CENTER, 0, 50)
             toast.show()
             loading.visibility = View.INVISIBLE
@@ -87,13 +87,13 @@ class BackupRestoreActivity : AppCompatActivity() {
 
     private fun createRestore() {
         AlertDialog.Builder(this@BackupRestoreActivity)
-            .setTitle("Confirm Restore")
-            .setMessage("Performing the restore will overwrite the existing data. Do want to continue?")
-            .setPositiveButton("Confirm") { dialog, _ ->
+            .setTitle(R.string.confirm_restore)
+            .setMessage(R.string.restore_prompt)
+            .setPositiveButton(R.string.confirm) { dialog, _ ->
                 dialog.dismiss()
                 restoreDatabase()
             }
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .setIcon(android.R.drawable.ic_dialog_info)
             .show()
     }
@@ -106,7 +106,7 @@ class BackupRestoreActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 val toast = Toast.makeText(
                     this@BackupRestoreActivity,
-                    "Data Restored Successfully",
+                    R.string.restore_successful,
                     Toast.LENGTH_LONG
                 )
                 toast.setGravity(Gravity.CENTER, 0, 50)
@@ -115,11 +115,11 @@ class BackupRestoreActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e: Exception ->
                 loading.visibility = View.INVISIBLE
-                if (e.message == "Object does not exist at location.") {
+                if (e.message == getString(R.string.backup_not_found_exception)) {
                     backupNotFound()
                 }
                 val toast =
-                    Toast.makeText(this@BackupRestoreActivity, "Restore Failed", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@BackupRestoreActivity, R.string.restore_failed, Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.CENTER, 0, 50)
                 toast.show()
             }
@@ -127,9 +127,9 @@ class BackupRestoreActivity : AppCompatActivity() {
 
     private fun backupNotFound() {
         AlertDialog.Builder(this@BackupRestoreActivity)
-            .setTitle("Backup Not Found")
-            .setMessage("No backup found on this account. Please try with a different account")
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .setTitle(R.string.backup_not_found_title)
+            .setMessage(R.string.backup_not_found_message)
+            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
     }

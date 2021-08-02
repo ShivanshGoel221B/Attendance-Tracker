@@ -30,4 +30,19 @@
     <string name="sign_in">Sign In</string>
     <string name="signed_out">Signed out successfully</string>
     <string name="goel_applications">Goel Applications</string>
+    <string name="confirm_backup">Confirm Backup</string>
+    <string name="backup_prompt">Creating the backup will overwrite the existing backup. Do want to continue?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="backup_successful">Backed Up Successfully</string>
+    <string name="backup_failed">Back Up Failed</string>
+    <string name="confirm_restore">Confirm Restore</string>
+    <string name="restore_prompt">Performing the restore will overwrite the existing data. Do want to continue?</string>
+    <string name="restore_successful">Data Restored Successfully</string>
+    <string name="backup_not_found_exception">Object does not exist at location.</string>
+    <string name="restore_failed">Restore Failed</string>
+    <string name="backup_not_found_title">Backup Not Found</string>
+    <string name="backup_not_found_message">No backup found on this account. Please try with a different account</string>
+    <string name="ok">OK</string>
+    <string name="backup_and_restore"><![CDATA[Backup & Restore]]></string>
 </resources>
