@@ -10,6 +10,7 @@ import com.goel.attendancetracker.databinding.ActivityNewOrganisationBinding
 import com.goel.attendancetracker.models.OrganisationsModel
 import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.utils.database.DatabaseHandler
+import java.lang.NullPointerException
 
 class NewOrganisationActivity : AppCompatActivity() {
 
@@ -26,24 +27,22 @@ class NewOrganisationActivity : AppCompatActivity() {
     }
 
     private fun submitNewOrganisation() {
-        val name = binding.editNewOrganisationName
-        val target = binding.editNewOrganisationTarget
-        if (name.text.toString().isEmpty()) {
-            name.error = "Please enter a valid name"
+        val nameValidity = Constants.getNameValidity(binding.editNewOrganisationName.text.toString())
+        val targetValidity = Constants.getTargetValidity(binding.editNewOrganisationTarget.text.toString())
+
+        if (nameValidity.containsKey(false)) {
+            binding.editNewOrganisationName.error = nameValidity[false]
             return
         }
-        if (target.text.toString().isEmpty()) {
-            target.error = "Please enter a valid number"
+        if (targetValidity.containsKey(false)) {
+            binding.editNewOrganisationTarget.error = targetValidity[false]
             return
         }
-        val organisationName = name.text.toString()
-        val organisationTarget = target.text.toString().toInt()
-        if (organisationName.length > 30) {
-            name.error = "Name length should be less than or equal to 30"
-            return
-        }
-        if (organisationTarget < 0 || organisationTarget > 100) {
-            target.error = "Please enter a number from 0 to 100"
+        val organisationName: String
+        val organisationTarget = try {
+            organisationName = nameValidity[true]!!
+            targetValidity[true]?.toInt()!!
+        } catch (e: NullPointerException) {
             return
         }
         val newOrganisation = OrganisationsModel(name = organisationName, target = organisationTarget)
@@ -51,7 +50,7 @@ class NewOrganisationActivity : AppCompatActivity() {
             databaseHandler.createNewOrganisation(newOrganisation)
             insertOrganisation(newOrganisation)
         } catch (e: SQLiteException) {
-            name.error = "Organisation already exists"
+            binding.editNewOrganisationName.error = "Organisation already exists"
             Toast.makeText(this, "Organisation already exists", Toast.LENGTH_SHORT).show()
         }
     }

@@ -38,6 +38,7 @@ import com.goel.attendancetracker.utils.database.DatabaseHandler
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.lang.NullPointerException
 import java.util.*
 
 class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogListener,
@@ -139,21 +140,35 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     }
 
     override fun addSubmitDetails(newNameText: EditText, newTargetText: EditText) {
-        if (isDataValid(newNameText, newTargetText)) {
-            val values = ContentValues()
-            val name = newNameText.text.toString()
-            val target = newTargetText.text.toString().toInt()
-            val model = ClassesModel(name = name, target = target)
-            values.put(Constants.NAME, model.name)
-            values.put(Constants.TARGET, model.target)
-            values.put(Constants.ATTENDANCE, model.attendance)
-            values.put(Constants.HISTORY, model.classHistory)
-            val classId = databaseHandler.addNewClass(organisationName, values)
-            model.id = classId
-            classList.add(model)
-            classAdapter.notifyItemInserted(classList.indexOf(model))
-            refreshProgress()
+        val nameValidity = Constants.getNameValidity(newNameText.text.toString())
+        val targetValidity = Constants.getTargetValidity(newTargetText.text.toString())
+
+        if (nameValidity.containsKey(false)) {
+            Toast.makeText(this, nameValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
+        if (targetValidity.containsKey(false)) {
+            Toast.makeText(this, targetValidity[false], Toast.LENGTH_SHORT).show()
+            return
+        }
+        val className: String
+        val classTarget = try {
+            className = nameValidity[true]!!
+            targetValidity[true]!!.toInt()
+        } catch (e: NullPointerException) {
+            return
+        }
+        val values = ContentValues()
+        val model = ClassesModel(name = className, target = classTarget)
+        values.put(Constants.NAME, model.name)
+        values.put(Constants.TARGET, model.target)
+        values.put(Constants.ATTENDANCE, model.attendance)
+        values.put(Constants.HISTORY, model.classHistory)
+        val classId = databaseHandler.addNewClass(className, values)
+        model.id = classId
+        classList.add(model)
+        classAdapter.notifyItemInserted(classList.indexOf(model))
+        refreshProgress()
     }
 
     //========== DOWNLOAD ATTENDANCE ============//
@@ -297,43 +312,33 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     }
 
     override fun submitDetails(newNameText: EditText, newTargetText: EditText) {
-        if (isDataValid(newNameText, newTargetText)) {
-            val values = ContentValues()
-            values.put(Constants.NAME, newNameText.text.toString())
-            values.put(Constants.TARGET, newTargetText.text.toString().toInt())
-            databaseHandler.updateClass(organisationName, values, focusedClass!!.id.toString())
-            focusedClass!!.name = newNameText.text.toString()
-            focusedClass!!.target = newTargetText.text.toString().toInt()
-            classAdapter.notifyItemChanged(classList.indexOf(focusedClass))
-            Toast.makeText(this, R.string.updated, Toast.LENGTH_LONG).show()
-            focusedClass = null
-        }
-    }
+        val nameValidity = Constants.getNameValidity(newNameText.text.toString())
+        val targetValidity = Constants.getTargetValidity(newTargetText.text.toString())
 
-    private fun isDataValid(newNameText: EditText, newTargetText: EditText): Boolean {
-        val name: String = try {
-            newNameText.text.toString()
-        } catch (e: Exception) {
-            ""
+        if (nameValidity.containsKey(false)) {
+            Toast.makeText(this, nameValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
-        val target: Int = try {
-            newTargetText.text.toString().toInt()
-        } catch (e: NumberFormatException) {
-            101
+        if (targetValidity.containsKey(false)) {
+            Toast.makeText(this, targetValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
-        if (name.isEmpty()) {
-            newNameText.error = getString(R.string.invalid_name)
-            return false
+        val className: String
+        val classTarget = try {
+            className = nameValidity[true]!!
+            targetValidity[true]!!.toInt()
+        } catch (e: NullPointerException) {
+            return
         }
-        if (name.length > 15) {
-            newNameText.error = getString(R.string.too_long_name)
-            return false
-        }
-        if (target > 100 || target <= 0) {
-            newTargetText.error = getString(R.string.invalid_target)
-            return false
-        }
-        return true
+        val values = ContentValues()
+        values.put(Constants.NAME, className)
+        values.put(Constants.TARGET, classTarget)
+        databaseHandler.updateClass(organisationName, values, focusedClass!!.id.toString())
+        focusedClass!!.name = className
+        focusedClass!!.target = classTarget
+        classAdapter.notifyItemChanged(classList.indexOf(focusedClass))
+        Toast.makeText(this, R.string.updated, Toast.LENGTH_LONG).show()
+        focusedClass = null
     }
 
     @SuppressLint("SetTextI18n")
