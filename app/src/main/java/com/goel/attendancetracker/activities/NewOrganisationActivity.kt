@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.goel.attendancetracker.databinding.ActivityNewOrganisationBinding
-import com.goel.attendancetracker.utils.database.DatabaseHandler
-import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.models.OrganisationsModel
+import com.goel.attendancetracker.utils.Constants
+import com.goel.attendancetracker.utils.database.DatabaseHandler
 
 class NewOrganisationActivity : AppCompatActivity() {
 
