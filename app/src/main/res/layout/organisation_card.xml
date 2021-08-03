@@ -49,8 +49,8 @@
             <ProgressBar
                 android:id="@+id/required_attendance_progress"
                 style="?android:attr/progressBarStyle"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="57dp"
+                android:layout_height="57dp"
                 android:indeterminateOnly="false"
                 android:progress="80"
                 android:progressDrawable="@drawable/required_attendance_progress"

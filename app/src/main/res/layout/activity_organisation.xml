@@ -29,6 +29,18 @@
             app:layout_constraintTop_toTopOf="@+id/textView2">
 
             <ProgressBar
+                android:id="@+id/overall_attendance"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:progressDrawable="@drawable/attendance_progress"
+                android:progress="60"
+                android:indeterminateOnly="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
                 android:id="@+id/overall_required_attendance"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="56dp"
@@ -40,16 +52,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/overall_attendance"
                 app:layout_constraintStart_toStartOf="@+id/overall_attendance"
                 app:layout_constraintTop_toTopOf="@+id/overall_attendance" />
-
-            <ProgressBar
-                android:id="@+id/overall_attendance"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:indeterminateOnly="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/overall_percentage_counter"
