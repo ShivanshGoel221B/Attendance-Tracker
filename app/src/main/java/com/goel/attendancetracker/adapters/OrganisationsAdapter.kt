@@ -17,14 +17,19 @@ import com.goel.attendancetracker.models.OrganisationsModel
 import java.util.*
 
 class OrganisationsAdapter(
-    private var organisationList: ArrayList<OrganisationsModel>,
-    var context: Context
+    private val organisationList: ArrayList<OrganisationsModel>,
+    private val context: Context,
+    private val clickListener: OnItemClickListener
 ) : RecyclerView.Adapter<OrganisationViewHolder>() {
     private var progress: Drawable? = null
-    private val clickListener = context as OnItemClickListener
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganisationViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.organisation_card, parent, false)
-        return OrganisationViewHolder(view)
+        val viewHolder = OrganisationViewHolder(view)
+        view.setOnClickListener { clickListener.onItemClick(viewHolder.adapterPosition) }
+        viewHolder.editIcon.setOnClickListener { clickListener.onEditClick(viewHolder.adapterPosition) }
+        viewHolder.deleteIcon.setOnClickListener { clickListener.onDeleteClick(viewHolder.adapterPosition) }
+        return viewHolder
     }
 
     @SuppressLint("SetTextI18n")
@@ -50,23 +55,9 @@ class OrganisationsAdapter(
         holder.attendanceProgressBar.progress = percentage
         holder.requiredAttendanceBar.progress = requiredPercentage
         holder.organisationName.text = model.name
-        setClickListeners(holder, position)
     }
 
-    override fun getItemCount(): Int {
-        return organisationList.size
-    }
-
-    private fun setClickListeners(
-        holder: OrganisationViewHolder,
-        position: Int
-    ) {
-        if (position != RecyclerView.NO_POSITION) {
-            holder.itemView.setOnClickListener { clickListener.onItemClick(position) }
-            holder.editIcon.setOnClickListener { clickListener.onEditClick(position) }
-            holder.deleteIcon.setOnClickListener { clickListener.onDeleteClick(position) }
-        }
-    }
+    override fun getItemCount(): Int = organisationList.size
 
     // ITEM CLICK LISTENER
     interface OnItemClickListener {
@@ -78,9 +69,12 @@ class OrganisationsAdapter(
     //VIEW HOLDER CLASS
     class OrganisationViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        var attendanceProgressBar: ProgressBar = itemView.findViewById(R.id.organisation_attendance_progress_bar)
-        var requiredAttendanceBar: ProgressBar = itemView.findViewById(R.id.required_attendance_progress)
-        var attendancePercentage: TextView = itemView.findViewById(R.id.organisation_attendance_percentage)
+        var attendanceProgressBar: ProgressBar =
+            itemView.findViewById(R.id.organisation_attendance_progress_bar)
+        var requiredAttendanceBar: ProgressBar =
+            itemView.findViewById(R.id.required_attendance_progress)
+        var attendancePercentage: TextView =
+            itemView.findViewById(R.id.organisation_attendance_percentage)
         var organisationName: TextView = itemView.findViewById(R.id.organisation_name)
         var editIcon: ImageView = itemView.findViewById(R.id.edit_organisation_icon)
         var deleteIcon: ImageView = itemView.findViewById(R.id.delete_organisation_icon)

@@ -15,13 +15,23 @@ import com.goel.attendancetracker.R
 import com.goel.attendancetracker.models.ClassesModel
 import java.util.*
 
-class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context: Context) :
+class ClassesAdapter(
+    private val classList: ArrayList<ClassesModel>,
+    private val context: Context,
+    private val clickListener: OnItemClickListener
+) :
     RecyclerView.Adapter<ClassesAdapter.ClassViewHolder>() {
-    private val clickListener = context as OnItemClickListener
     private var progress: Drawable? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.class_card, parent, false)
-        return ClassViewHolder(view)
+        val viewHolder = ClassViewHolder(view)
+        viewHolder.downloadButton.setOnClickListener { clickListener.onDownloadClick(viewHolder.adapterPosition) }
+        viewHolder.calendarButton.setOnClickListener { clickListener.onHistoryClick(viewHolder.adapterPosition) }
+        viewHolder.editIcon.setOnClickListener { clickListener.onEditClick(viewHolder.adapterPosition) }
+        viewHolder.markIcon.setOnClickListener { clickListener.onMarkClick(viewHolder.adapterPosition) }
+        viewHolder.deleteIcon.setOnClickListener { clickListener.onDeleteClick(viewHolder.adapterPosition) }
+        return viewHolder
     }
 
     @SuppressLint("SetTextI18n")
@@ -48,22 +58,9 @@ class ClassesAdapter(private var classList: ArrayList<ClassesModel>, var context
         holder.requiredAttendanceBar.progress = requiredPercentage
         holder.className.text = model.name
         holder.classCounter.text = model.classCounter
-        setClickListeners(holder, position)
     }
 
-    override fun getItemCount(): Int {
-        return classList.size
-    }
-
-    private fun setClickListeners(holder: ClassViewHolder, position: Int) {
-        if (position != RecyclerView.NO_POSITION) {
-            holder.downloadButton.setOnClickListener { clickListener.onDownloadClick(position) }
-            holder.calendarButton.setOnClickListener { clickListener.onHistoryClick(position) }
-            holder.editIcon.setOnClickListener { clickListener.onEditClick(position) }
-            holder.markIcon.setOnClickListener { clickListener.onMarkClick(position) }
-            holder.deleteIcon.setOnClickListener { clickListener.onDeleteClick(position) }
-        }
-    }
+    override fun getItemCount(): Int = classList.size
 
     //VIEW HOLDER CLASS
     inner class ClassViewHolder(itemView: View) :
