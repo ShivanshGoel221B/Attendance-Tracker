@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener,
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.empty.visibility = View.GONE
         organisationList = ArrayList()
         databaseHandler = DatabaseHandler(this@MainActivity)
         setOrganisationAdapter()
@@ -96,7 +98,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener,
     }
 
     private fun setOrganisationAdapter() {
-        organisationsAdapter = OrganisationsAdapter(organisationList, this)
+        organisationsAdapter = OrganisationsAdapter(organisationList, this, this)
         binding.organisationsContainer.adapter = organisationsAdapter
         val organisationLayout = LinearLayoutManager(this)
         binding.organisationsContainer.layoutManager = organisationLayout
@@ -117,6 +119,7 @@ class MainActivity : AppCompatActivity(), EditDialogListener,
                 organisationsAdapter.notifyItemInserted(organisationsAdapter.itemCount - 1)
             } while (cursor.moveToNext())
         }
+        checkForEmpty()
         cursor.close()
         organisationsRef.close()
     }
@@ -137,7 +140,6 @@ class MainActivity : AppCompatActivity(), EditDialogListener,
         AlertDialog.Builder(this@MainActivity)
             .setMessage("Are you sure you want to delete " + organisationList[position].name + " ?")
             .setPositiveButton("Yes") { _, _ ->
-                organisationsAdapter.notifyItemRemoved(position)
                 databaseHandler.deleteOrganisation(
                     organisationList[position].id.toString(),
                     organisationList[position].name
@@ -148,6 +150,8 @@ class MainActivity : AppCompatActivity(), EditDialogListener,
                     Toast.LENGTH_LONG
                 ).show()
                 organisationList.removeAt(position)
+                organisationsAdapter.notifyItemRemoved(position)
+                checkForEmpty()
             }
             .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
             .show()
@@ -156,6 +160,13 @@ class MainActivity : AppCompatActivity(), EditDialogListener,
     private fun addOrganisation() {
         val intent = Intent(this@MainActivity, NewOrganisationActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun checkForEmpty() {
+        binding.empty.visibility = if (organisationList.isEmpty())
+            View.VISIBLE
+        else
+            View.GONE
     }
 
     override fun submitDetails(newNameText: EditText, newTargetText: EditText) {

@@ -59,4 +59,6 @@
     <string name="about">About</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_amp_condition"><![CDATA[Terms & Condition]]></string>
+    <string name="nothing_found">Nothing Found</string>
+    <string name="no_organisations">No Organisations found. Create one or restore from a backup</string>
 </resources>

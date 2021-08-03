@@ -1,51 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/base_background"
+    android:orientation="vertical"
     tools:context=".activities.MainActivity">
 
     <TextView
         android:id="@+id/text_your_organisations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/card_background"
         android:elevation="7dp"
         android:fontFamily="@font/poly"
         android:paddingStart="25dp"
-        android:paddingEnd="0dp"
         android:paddingTop="15dp"
+        android:paddingEnd="0dp"
         android:paddingBottom="10dp"
         android:text="@string/home_page_title"
-        android:background="?attr/card_background"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/new_organisation_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
         android:background="@drawable/button_background"
         android:elevation="7dp"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/add_new_organisation"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_your_organisations" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/organisations_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        tools:listitem="@layout/organisation_card"
-        android:layout_weight="1">
+        app:layout_constraintTop_toBottomOf="@id/new_organisation_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:itemCount="0"
+        tools:listitem="@layout/organisation_card">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/empty"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/new_organisation_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_empty"
+            android:contentDescription="@string/nothing_found"
+            app:tint="?attr/colorControlNormal" />
+
+        <TextView
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:textColor="?attr/colorControlNormal"
+            android:fontFamily="@font/poly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_organisations"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
