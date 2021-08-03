@@ -18,6 +18,10 @@ object Constants {
 
     /////////////////
     const val APP_URL = "https://play.google.com/store/apps/details?id=com.goel.attendancetracker"
+    const val DEV_URL = "https://play.google.com/store/apps/dev?id=8638438299858248860"
+    const val ABOUT_URL = "https://goelapplications.tech/about"
+    const val PRIVACY_POLICY = "https://goelapplications.tech/privacy-policy/project-1"
+    const val TERMS = "https://goelapplications.tech/terms/project-1"
 
     //Validity
     private const val MAX_NAME_LENGTH = 15

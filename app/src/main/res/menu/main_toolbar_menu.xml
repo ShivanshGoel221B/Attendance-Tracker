@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/share"
-        android:id="@+id/menu_share"
-        android:icon="@android:drawable/ic_menu_share">
+    <item
+        android:title="@string/backup_amp_restore"
+        android:id="@+id/menu_backup_restore" />
 
-    </item>
+    <item
+        android:title="@string/share"
+        android:id="@+id/menu_share" />
 
-    <item android:title="@string/rate_us"
-        android:id="@+id/menu_rate_us"
-        android:icon="@android:drawable/star_big_on">
+    <item
+        android:title="@string/rate_us"
+        android:id="@+id/menu_rate_us" />
 
-    </item>
+    <item
+        android:title="@string/more_apps"
+        android:id="@+id/more_apps" />
 
-    <item android:title="@string/backup_amp_restore"
-        android:id="@+id/menu_backup_restore">
+    <item
+        android:title="@string/about"
+        android:id="@+id/about" />
 
-    </item>
+    <item
+        android:title="@string/privacy_policy"
+        android:id="@+id/privacy_policy" />
+
+    <item
+        android:title="@string/terms_amp_condition"
+        android:id="@+id/terms" />
 
 </menu>

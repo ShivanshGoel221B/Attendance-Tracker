@@ -18,7 +18,11 @@ import com.goel.attendancetracker.dialogboxes.EditDialogBox
 import com.goel.attendancetracker.dialogboxes.EditDialogBox.EditDialogListener
 import com.goel.attendancetracker.models.OrganisationsModel
 import com.goel.attendancetracker.utils.Constants
+import com.goel.attendancetracker.utils.Constants.ABOUT_URL
 import com.goel.attendancetracker.utils.Constants.APP_URL
+import com.goel.attendancetracker.utils.Constants.DEV_URL
+import com.goel.attendancetracker.utils.Constants.PRIVACY_POLICY
+import com.goel.attendancetracker.utils.Constants.TERMS
 import com.goel.attendancetracker.utils.database.DatabaseHandler
 import java.lang.NullPointerException
 import java.util.*
@@ -68,9 +72,24 @@ class MainActivity : AppCompatActivity(), EditDialogListener,
                 startActivity(shareIntent)
             }
             R.id.menu_rate_us -> {
-                val appUri = Uri.parse(APP_URL)
-                val rateIntent = Intent(Intent.ACTION_VIEW, appUri)
-                startActivity(rateIntent)
+                val uri = Uri.parse(APP_URL)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+            R.id.more_apps -> {
+                val uri = Uri.parse(DEV_URL)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+            R.id.about -> {
+                val uri = Uri.parse(ABOUT_URL)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+            R.id.privacy_policy -> {
+                val uri = Uri.parse(PRIVACY_POLICY)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+            R.id.terms -> {
+                val uri = Uri.parse(TERMS)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
             }
         }
         return true
