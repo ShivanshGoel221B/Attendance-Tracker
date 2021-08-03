@@ -3,7 +3,7 @@
     <item>
         <shape
             android:shape="ring"
-            android:thicknessRatio="10"
+            android:thicknessRatio="15"
             android:useLevel="false">
             <solid android:color="#03D6D6D6" />
         </shape>
@@ -14,7 +14,7 @@
             android:toDegrees="270">
             <shape
                 android:shape="ring"
-                android:thicknessRatio="12"
+                android:thicknessRatio="15"
                 android:useLevel="true">
                 <solid android:color="?attr/progress_target" />
             </shape>

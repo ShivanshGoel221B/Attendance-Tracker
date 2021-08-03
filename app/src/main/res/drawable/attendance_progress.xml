@@ -13,11 +13,22 @@
             android:fromDegrees="270"
             android:toDegrees="270">
             <shape
+                android:tint="@color/green"
                 android:shape="ring"
                 android:thicknessRatio="6"
                 android:useLevel="true">
                 <solid android:color="@color/green" />
             </shape>
         </rotate>
+    </item>
+    <item>
+        <shape
+            android:shape="oval"
+            android:useLevel="false">
+            <stroke android:width="15dp"
+                android:color="?attr/card_background"
+                android:dashWidth="1dp"
+                android:dashGap="2dp"/>
+        </shape>
     </item>
 </layer-list>

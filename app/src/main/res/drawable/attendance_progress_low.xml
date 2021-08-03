@@ -20,4 +20,14 @@
             </shape>
         </rotate>
     </item>
+    <item>
+        <shape
+            android:shape="oval"
+            android:useLevel="false">
+            <stroke android:width="15dp"
+                android:color="?attr/card_background"
+                android:dashWidth="1dp"
+                android:dashGap="2dp"/>
+        </shape>
+    </item>
 </layer-list>
