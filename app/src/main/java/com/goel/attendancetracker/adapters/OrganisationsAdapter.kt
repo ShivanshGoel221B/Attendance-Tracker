@@ -12,8 +12,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.goel.attendancetracker.R
-import com.goel.attendancetracker.models.OrganisationsModel
 import com.goel.attendancetracker.adapters.OrganisationsAdapter.OrganisationViewHolder
+import com.goel.attendancetracker.models.OrganisationsModel
 import java.util.*
 
 class OrganisationsAdapter(

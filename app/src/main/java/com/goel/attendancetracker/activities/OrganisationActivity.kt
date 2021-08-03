@@ -3,7 +3,6 @@ package com.goel.attendancetracker.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -13,7 +12,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.*
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -37,6 +38,7 @@ import com.goel.attendancetracker.utils.database.DatabaseHandler
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.lang.NullPointerException
 import java.util.*
 
 class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogListener,
@@ -121,38 +123,52 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
     private fun deleteAllClasses() {
         AlertDialog.Builder(this)
-            .setMessage("This will delete all the Classes in the organisation. Continue?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setMessage(getString(R.string.delete_all_prompt))
+            .setPositiveButton(R.string.confirm) { _, _ ->
                 for (model in classList) databaseHandler.deleteClass(
                     organisationName,
                     model.id.toString()
                 )
                 classList.clear()
                 classAdapter.notifyDataSetChanged()
-                Toast.makeText(this, "Deleted All Classes", Toast.LENGTH_LONG)
+                Toast.makeText(this, R.string.deleted_all_classes, Toast.LENGTH_LONG)
                     .show()
                 refreshProgress()
             }
-            .setNegativeButton("No") { dialog: DialogInterface, _ -> dialog.dismiss() }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .show()
     }
 
     override fun addSubmitDetails(newNameText: EditText, newTargetText: EditText) {
-        if (isDataValid(newNameText, newTargetText)) {
-            val values = ContentValues()
-            val name = newNameText.text.toString()
-            val target = newTargetText.text.toString().toInt()
-            val model = ClassesModel(name = name, target = target)
-            values.put(Constants.NAME, model.name)
-            values.put(Constants.TARGET, model.target)
-            values.put(Constants.ATTENDANCE, model.attendance)
-            values.put(Constants.HISTORY, model.classHistory)
-            val classId = databaseHandler.addNewClass(organisationName, values)
-            model.id = classId
-            classList.add(model)
-            classAdapter.notifyItemInserted(classList.indexOf(model))
-            refreshProgress()
+        val nameValidity = Constants.getNameValidity(newNameText.text.toString())
+        val targetValidity = Constants.getTargetValidity(newTargetText.text.toString())
+
+        if (nameValidity.containsKey(false)) {
+            Toast.makeText(this, nameValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
+        if (targetValidity.containsKey(false)) {
+            Toast.makeText(this, targetValidity[false], Toast.LENGTH_SHORT).show()
+            return
+        }
+        val className: String
+        val classTarget = try {
+            className = nameValidity[true]!!
+            targetValidity[true]!!.toInt()
+        } catch (e: NullPointerException) {
+            return
+        }
+        val values = ContentValues()
+        val model = ClassesModel(name = className, target = classTarget)
+        values.put(Constants.NAME, model.name)
+        values.put(Constants.TARGET, model.target)
+        values.put(Constants.ATTENDANCE, model.attendance)
+        values.put(Constants.HISTORY, model.classHistory)
+        val classId = databaseHandler.addNewClass(className, values)
+        model.id = classId
+        classList.add(model)
+        classAdapter.notifyItemInserted(classList.indexOf(model))
+        refreshProgress()
     }
 
     //========== DOWNLOAD ATTENDANCE ============//
@@ -172,11 +188,10 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == STORAGE_PERMISSION_TOKEN) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) downloadClassAttendance() else Toast.makeText(
-                this,
-                "Permission Denied",
-                Toast.LENGTH_SHORT
-            ).show()
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                downloadClassAttendance()
+            else
+                Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -187,12 +202,12 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             when (classDownloadManager.downloadAttendance()) {
                 ClassDownloadManager.DOWNLOAD_FAILED -> Toast.makeText(
                     this,
-                    "Download Failed",
+                    R.string.download_failed,
                     Toast.LENGTH_SHORT
                 ).show()
                 ClassDownloadManager.DOWNLOAD_SUCCESSFUL -> Toast.makeText(
                     this,
-                    "File Saved as ${classDownloadManager.filePath}",
+                    getString(R.string.file_saved, classDownloadManager.filePath),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -224,32 +239,23 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     }
 
     private fun deleteClass(position: Int) {
-        AlertDialog.Builder(this)
-            .setMessage("Are you sure you want to delete " + classList[position].name + " ?")
-            .setPositiveButton("Yes") { _, _ ->
-                databaseHandler.deleteClass(
-                    organisationName, classList[position]
-                        .id.toString()
-                )
-                classAdapter.notifyItemRemoved(position)
-                Toast.makeText(
-                    this,
-                    "Deleted " + classList[position].name,
-                    Toast.LENGTH_LONG
-                ).show()
-                classList.removeAt(position)
-                refreshProgress()
-            }
-            .setNegativeButton("No") { dialog: DialogInterface, _ -> dialog.dismiss() }
-            .show()
+        val classId = classList[position].id.toString()
+        val className = classList[position].name
+        databaseHandler.deleteClass(organisationName, classId)
+        classAdapter.notifyItemRemoved(position)
+        Toast.makeText(
+            this,
+            getString(R.string.deleted, className),
+            Toast.LENGTH_LONG
+        ).show()
+        classList.removeAt(position)
+        refreshProgress()
     }
 
     //==================================================================//
-    @SuppressLint("SetTextI18n")
     private fun initializeOrganisation() {
         val requiredOverallProgress = binding.overallRequiredAttendance
-        val getCommand =
-            "SELECT * FROM " + Constants.ORGANISATIONS + " WHERE " + "s_no" + "=" + organisationId
+        val getCommand = "SELECT * FROM ${Constants.ORGANISATIONS} WHERE s_no=$organisationId"
         val rootReadable = databaseHandler.readableDatabase
         val cursor = rootReadable.rawQuery(getCommand, null)
         cursor.moveToFirst()
@@ -285,7 +291,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
             presentCount = dateHistory.getInt(0)
             absentCount = dateHistory.getInt(1)
         } catch (e: JSONException) {
-            Toast.makeText(this, "Some Error Occurred", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_message, Toast.LENGTH_SHORT).show()
             return
         }
         presentCounter.text = presentCount.toString()
@@ -301,48 +307,38 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         }
         classAdapter.notifyItemChanged(classList.indexOf(focusedClass))
         refreshProgress()
-        Toast.makeText(this, "Attendance Marked", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.attendance_marked, Toast.LENGTH_SHORT).show()
         focusedClass = null
     }
 
     override fun submitDetails(newNameText: EditText, newTargetText: EditText) {
-        if (isDataValid(newNameText, newTargetText)) {
-            val values = ContentValues()
-            values.put(Constants.NAME, newNameText.text.toString())
-            values.put(Constants.TARGET, newTargetText.text.toString().toInt())
-            databaseHandler.updateClass(organisationName, values, focusedClass!!.id.toString())
-            focusedClass!!.name = newNameText.text.toString()
-            focusedClass!!.target = newTargetText.text.toString().toInt()
-            classAdapter.notifyItemChanged(classList.indexOf(focusedClass))
-            Toast.makeText(this, "Updated Successfully", Toast.LENGTH_LONG).show()
-            focusedClass = null
-        }
-    }
+        val nameValidity = Constants.getNameValidity(newNameText.text.toString())
+        val targetValidity = Constants.getTargetValidity(newTargetText.text.toString())
 
-    private fun isDataValid(newNameText: EditText, newTargetText: EditText): Boolean {
-        val name: String = try {
-            newNameText.text.toString()
-        } catch (e: Exception) {
-            ""
+        if (nameValidity.containsKey(false)) {
+            Toast.makeText(this, nameValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
-        val target: Int = try {
-            newTargetText.text.toString().toInt()
-        } catch (e: NumberFormatException) {
-            101
+        if (targetValidity.containsKey(false)) {
+            Toast.makeText(this, targetValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
-        if (name.isEmpty()) {
-            newNameText.error = "Please Enter a valid name"
-            return false
+        val className: String
+        val classTarget = try {
+            className = nameValidity[true]!!
+            targetValidity[true]!!.toInt()
+        } catch (e: NullPointerException) {
+            return
         }
-        if (name.length > 30) {
-            newNameText.error = "The length of the name should be less than or equal to 30"
-            return false
-        }
-        if (target > 100 || target < 0) {
-            newTargetText.error = "Enter a valid number from 0 to 100"
-            return false
-        }
-        return true
+        val values = ContentValues()
+        values.put(Constants.NAME, className)
+        values.put(Constants.TARGET, classTarget)
+        databaseHandler.updateClass(organisationName, values, focusedClass!!.id.toString())
+        focusedClass!!.name = className
+        focusedClass!!.target = classTarget
+        classAdapter.notifyItemChanged(classList.indexOf(focusedClass))
+        Toast.makeText(this, R.string.updated, Toast.LENGTH_LONG).show()
+        focusedClass = null
     }
 
     @SuppressLint("SetTextI18n")
@@ -415,17 +411,21 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
     }
 
     override fun onHistoryClick(position: Int) {
-        val intent = Intent(this@OrganisationActivity, CalendarActivity::class.java)
-        val dataArray = arrayOf(
-            organisationName, classList[position]
-                .id.toString(), classList[position].name
-        )
-        intent.putExtra(Constants.CLASS_DATA_ARRAY, dataArray)
+        CalendarActivity.model = classList[position]
+        CalendarActivity.organisationName = organisationName
+        val intent = Intent(this, CalendarActivity::class.java)
         startActivity(intent)
     }
 
     override fun onDeleteClick(position: Int) {
-        deleteClass(position)
+        val name = classList[position].name
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.delete_class_prompt, name))
+            .setPositiveButton(R.string.confirm) { _, _ ->
+                deleteClass(position)
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     override fun onEditClick(position: Int) {

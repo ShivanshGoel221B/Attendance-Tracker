@@ -20,10 +20,12 @@ import com.goel.attendancetracker.models.OrganisationsModel
 import com.goel.attendancetracker.utils.Constants
 import com.goel.attendancetracker.utils.Constants.APP_URL
 import com.goel.attendancetracker.utils.database.DatabaseHandler
+import java.lang.NullPointerException
 import java.util.*
 import kotlin.system.exitProcess
 
-class MainActivity : AppCompatActivity(), EditDialogListener, OrganisationsAdapter.OnItemClickListener {
+class MainActivity : AppCompatActivity(), EditDialogListener,
+    OrganisationsAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var databaseHandler: DatabaseHandler
@@ -138,45 +140,36 @@ class MainActivity : AppCompatActivity(), EditDialogListener, OrganisationsAdapt
     }
 
     override fun submitDetails(newNameText: EditText, newTargetText: EditText) {
-        if (isDataValid(newNameText, newTargetText)) {
-            val values = ContentValues()
-            values.put("name", newNameText.text.toString())
-            values.put("target", newTargetText.text.toString().toInt())
-            databaseHandler.updateOrganisation(values, focusedOrganisation!!.name)
-            if (newNameText.text.toString() != focusedOrganisation!!.name) databaseHandler.renameOrganisationTable(
-                focusedOrganisation!!.name, newNameText.text.toString()
-            )
-            focusedOrganisation?.name = newNameText.text.toString()
-            focusedOrganisation?.target = newTargetText.text.toString().toInt()
-            organisationsAdapter.notifyItemChanged(organisationList.indexOf(focusedOrganisation!!))
-            Toast.makeText(this, "Updated Successfully", Toast.LENGTH_LONG).show()
-            focusedOrganisation = null
-        }
-    }
+        val nameValidity = Constants.getNameValidity(newNameText.text.toString())
+        val targetValidity = Constants.getTargetValidity(newTargetText.text.toString())
 
-    private fun isDataValid(newNameText: EditText, newTargetText: EditText): Boolean {
-        val name: String = try {
-            newNameText.text.toString()
-        } catch (e: Exception) {
-            ""
+        if (nameValidity.containsKey(false)) {
+            Toast.makeText(this, nameValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
-        val target: Int = try {
-            newTargetText.text.toString().toInt()
-        } catch (e: NumberFormatException) {
-            101
+        if (targetValidity.containsKey(false)) {
+            Toast.makeText(this, targetValidity[false], Toast.LENGTH_SHORT).show()
+            return
         }
-        if (name.isEmpty()) {
-            newNameText.error = "Please Enter a valid name"
-            return false
+        val organisationName: String
+        val organisationTarget = try {
+            organisationName = nameValidity[true]!!
+            targetValidity[true]!!.toInt()
+        } catch (e: NullPointerException) {
+            return
         }
-        if (name.length > 30) {
-            newNameText.error = "The length of the name should be less than or equal to 30"
-            return false
-        }
-        if (target > 100 || target < 0) {
-            newTargetText.error = "Enter a valid number from 0 to 100"
-        }
-        return true
+        val values = ContentValues()
+        values.put(Constants.NAME, organisationName)
+        values.put(Constants.TARGET, organisationTarget)
+        databaseHandler.updateOrganisation(values, focusedOrganisation!!.name)
+        if (organisationName != focusedOrganisation!!.name) databaseHandler.renameOrganisationTable(
+            focusedOrganisation!!.name, organisationName
+        )
+        focusedOrganisation?.name = organisationName
+        focusedOrganisation?.target = organisationTarget
+        organisationsAdapter.notifyItemChanged(organisationList.indexOf(focusedOrganisation!!))
+        Toast.makeText(this, "Updated Successfully", Toast.LENGTH_LONG).show()
+        focusedOrganisation = null
     }
 
     override fun onItemClick(position: Int) {
