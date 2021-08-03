@@ -30,7 +30,12 @@ class DatabaseHandler(context: Context) :
 
     fun updateOrganisation(values: ContentValues, organisationName: String) {
         val writableDatabase = this.writableDatabase
-        writableDatabase.update(Constants.ORGANISATIONS, values, "name=?", arrayOf(organisationName))
+        writableDatabase.update(
+            Constants.ORGANISATIONS,
+            values,
+            "name=?",
+            arrayOf(organisationName)
+        )
         writableDatabase.close()
     }
 
@@ -65,12 +70,15 @@ class DatabaseHandler(context: Context) :
         writableDatabase.close()
     }
 
-    fun addNewClass(name: String, values: ContentValues): Int {
+    fun addNewClass(organisationName: String, values: ContentValues): Int {
         val writableDatabase = this.writableDatabase
         val readableDatabase = this.readableDatabase
-        writableDatabase.insert("\"$name\"", null, values)
+        writableDatabase.insert("\"$organisationName\"", null, values)
         @SuppressLint("Recycle") val cursor =
-            readableDatabase.rawQuery("SELECT * FROM\"$name\"ORDER BY class_sno DESC LIMIT 1", null)
+            readableDatabase.rawQuery(
+                "SELECT * FROM\"$organisationName\"ORDER BY class_sno DESC LIMIT 1",
+                null
+            )
         cursor.moveToFirst()
         val id = cursor.getInt(0)
         readableDatabase.close()

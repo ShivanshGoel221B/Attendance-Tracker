@@ -164,7 +164,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         values.put(Constants.TARGET, model.target)
         values.put(Constants.ATTENDANCE, model.attendance)
         values.put(Constants.HISTORY, model.classHistory)
-        val classId = databaseHandler.addNewClass(className, values)
+        val classId = databaseHandler.addNewClass(organisationName, values)
         model.id = classId
         classList.add(model)
         classAdapter.notifyItemInserted(classList.indexOf(model))
