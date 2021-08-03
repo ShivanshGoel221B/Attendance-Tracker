@@ -124,4 +124,36 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/organisation_title_box" />
 
+    <LinearLayout
+        android:id="@+id/empty"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organisation_title_box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_empty"
+            android:contentDescription="@string/nothing_found"
+            app:tint="?attr/colorControlNormal" />
+
+        <TextView
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:textColor="?attr/colorControlNormal"
+            android:fontFamily="@font/poly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_classes"/>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

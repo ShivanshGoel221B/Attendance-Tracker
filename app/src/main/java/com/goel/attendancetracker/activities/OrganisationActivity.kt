@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -60,6 +61,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
         binding = ActivityOrganisationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.empty.visibility = View.GONE
         organisationId = Constants.OPEN_ORG!!
         classList = ArrayList()
         databaseHandler = DatabaseHandler(this)
@@ -87,7 +89,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
 
     //===========================================
     private fun setAdapter() {
-        classAdapter = ClassesAdapter(classList, this)
+        classAdapter = ClassesAdapter(classList, this, this)
         binding.classGrid.adapter = classAdapter
         val layoutManager = GridLayoutManager(this, 2)
         binding.classGrid.layoutManager = layoutManager
@@ -110,6 +112,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                 classAdapter.notifyItemInserted(classList.indexOf(model))
             } while (cursor.moveToNext())
         }
+        checkForEmpty()
         cursor.close()
         readable.close()
     }
@@ -131,12 +134,20 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
                 )
                 classList.clear()
                 classAdapter.notifyDataSetChanged()
+                checkForEmpty()
                 Toast.makeText(this, R.string.deleted_all_classes, Toast.LENGTH_LONG)
                     .show()
                 refreshProgress()
             }
             .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .show()
+    }
+
+    private fun checkForEmpty() {
+        binding.empty.visibility = if (classList.isEmpty())
+            View.VISIBLE
+        else
+            View.GONE
     }
 
     override fun addSubmitDetails(newNameText: EditText, newTargetText: EditText) {
@@ -169,6 +180,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         classList.add(model)
         classAdapter.notifyItemInserted(classList.indexOf(model))
         refreshProgress()
+        checkForEmpty()
     }
 
     //========== DOWNLOAD ATTENDANCE ============//
@@ -250,6 +262,7 @@ class OrganisationActivity : AppCompatActivity(), EditDialogListener, AddDialogL
         ).show()
         classList.removeAt(position)
         refreshProgress()
+        checkForEmpty()
     }
 
     //==================================================================//
